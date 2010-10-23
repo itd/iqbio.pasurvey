@@ -96,7 +96,7 @@ def biochem_vocab(context):
     return SimpleVocabulary.fromValues(vocab)
 
 
-def chem_bio_engineering(context):
+def chem_bio_vocab(context):
     vocab = ('Advanced Ceramic Materials',
         'Applied Math and Computers',
         'Biomedical Engineering',
