@@ -1,12 +1,7 @@
 from zope.schema.vocabulary import SimpleVocabulary
 
-def sandia_org_vocabulary(context):
-    sandia_org_vocab= ('09326', '09328', 'unknown/tbd', )
-    return SimpleVocabulary.fromValues(sandia_org_vocab)
-
-
 #----------------------------------------------------------------------
-def  biochem_research_interests_vocab(context):
+def biochem_research_interests_vocab(context):
     """ """
     vocab = ('Bio-Organic and Bio-Inorganic',
         'Informatics and Proteomics',
@@ -31,6 +26,29 @@ def  biochem_research_interests_vocab(context):
         )
 
     return SimpleVocabulary.fromValues(vocab)
+
+
+#
+def facultyofinterest_vocab(context):
+    """ """
+    vocab = ('person1',
+        'person2',
+        'person3',
+        )
+    return SimpleVocabulary.fromValues(vocab)
+
+
+
+def degreeprograms_vocab(context):
+    """ """
+    vocab = ('program1',
+        'program2',
+        'program3',
+        )
+    return SimpleVocabulary.fromValues(vocab)
+
+
+
 
 
 
