@@ -16,7 +16,8 @@ from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab
 
 class IPasurvey(form.Schema):
-    """A conference presenter. Presenters can be added anywhere.
+    """
+    The schema for the survey form
     """
     fname = schema.TextLine(
             title=_(u"First Name"),
