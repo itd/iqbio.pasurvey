@@ -11,7 +11,8 @@ from Products.CMFCore.utils import getToolByName
 
 from iqbio.pasurvey import _
 
-from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab
+from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, \
+    facultyofinterest_vocab, degreeprograms_vocab
 
 class IPasurvey(form.Schema):
     """A conference presenter. Presenters can be added anywhere.
@@ -40,8 +41,10 @@ class IPasurvey(form.Schema):
 
 
     facultyofinterest  = schema.Choice(
-            title=_(u"Faculty of interest"),
-            description=_(u"Optional: Please indicate up to five faculty whose research interests you."),
+        title=_(u"Faculty of interest"),
+        description=_(u"Optional: Please indicate up to five faculty whose research interests you."),
+        vocabulary = facultyofinterest_vocab,
+        required=False,
         )
 
     facultyofinterestother = schema.TextLine(
@@ -51,17 +54,23 @@ class IPasurvey(form.Schema):
         )
 
     degreeprogram1 = schema.Choice(
-            title=_(u"First degree program of interest"),
-            description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
-        )
+        title=_(u"First degree program of interest"),
+        description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
+        vocabulary = degreeprograms_vocab,
+        required=False,
+      )
     degreeprogram2 = schema.Choice(
-            title=_(u"Second degree program of interest"),
-            description=_(u""),
-        )
+        title=_(u"Second degree program of interest"),
+        description=_(u""),
+        vocabulary = degreeprograms_vocab,
+        required=False,
+       )
     degreeprogram3 = schema.Choice(
-            title=_(u"Third degree program of interest"),
-            description=_(u""),
-        )
+        title=_(u"Third degree program of interest"),
+        description=_(u""),
+        vocabulary = degreeprograms_vocab,
+        required=False,
+       )
 
     alsoapply = schema.Bool(
         title = _u("Apply to Department Also"),
@@ -71,6 +80,8 @@ class IPasurvey(form.Schema):
     degreeprograms = schema.Choice(
         title = _u("Which Degree Programs?"),
         description = _(u"If so, please indicate which degree programs you would like your application considered by (up to three)."),
+        vocabulary = degreeprograms_vocab,
+        required=False,
         )
 
     biochem_research_interests = schema.Bool(
@@ -80,11 +91,11 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
-     xxxx = schema.Bool(
-        title = _(u""),
-        description = _(u""),
-        required=False,
-        )
+#     xxxx = schema.Bool(
+#        title = _(u""),
+#        description = _(u""),
+#        required=False,
+#        )
 
 
     description = schema.Text(
