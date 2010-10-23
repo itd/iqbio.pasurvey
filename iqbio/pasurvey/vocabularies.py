@@ -1,4 +1,4 @@
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 #----------------------------------------------------------------------
 def biochem_research_interests_vocab(context):
@@ -56,7 +56,15 @@ def facultyofinterest_vocab(context):
 
 
 def degreeprograms_vocab(context):
-    ''' '''
+    """ maybe switch to this format:
+
+        degreeprograms_vocab = SimpleVocabulary(
+            [SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
+             SimpleTerm(value=u'Bob', title=_(u'Bob')),
+             SimpleTerm(value=u'Jim', title=_(u'Jim'))]
+            )
+
+    """
     vocab = (
         'Applied Mathematics (Arts & Sciences)',
         'Biochemistry (Arts & Sciences)',

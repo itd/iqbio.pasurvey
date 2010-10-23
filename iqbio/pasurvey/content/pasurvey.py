@@ -9,11 +9,14 @@ from plone.namedfile.field import NamedImage
 from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
 
+#from z3c.form.browser import checkbox
+
 from iqbio.pasurvey import _
 
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab
+
 
 class IPasurvey(form.Schema):
     """
@@ -59,24 +62,25 @@ class IPasurvey(form.Schema):
         title=_(u"First degree program of interest"),
         description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
         vocabulary = degreeprograms_vocab,
-        required=False,
+        required=True,
       )
     degreeprogram2 = schema.Choice(
         title=_(u"Second degree program of interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
-        required=False,
+        required=True,
        )
     degreeprogram3 = schema.Choice(
         title=_(u"Third degree program of interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
-        required=False,
+        required=True,
        )
 
-    alsoapply = schema.Bool(
+    alsoapply = schema.Choice(
         title = _u("Apply to Department Also"),
         description = _(u"If you are not accepted by the IQ Biology program, would you like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?"),
+        vocabulary = [u'Yes',u'No'],
         )
 
     degreeprograms = schema.Choice(
@@ -86,34 +90,29 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
-    biochem_research_interests = schema.Bool(
+# ---------- conditional questions if "Biochemistry (Arts & Sciences)" is selected ---------
+    biochem_research_interests = schema.Choice(
         title = _u("Biochemistry Research Interests"),
         description = _(u"Please check off as many of the research areas as interests you."),
         vocabulary = biochem_research_interests_vocab,
         required=False,
         )
 
-#     xxxx = schema.Bool(
-#        title = _(u""),
-#        description = _(u""),
-#        required=False,
-#        )
-
-
-    description = schema.Text(
-            title=_(u""),
-            description=_(u""),
+    biochemteachingexperience = schema.text(
+        title = _u("Teaching Experience"),
+        description = _(u"Please list all previous teaching experience including the subject, start date, end date, and institution."),
         )
 
-    bioteachingexperience = RichText(
-            title=_(u"Teaching Experience"),
-            description=_(u"Please list all previous teaching experience including the subject, start date, end date, and institution."),
-            required=False
+    biochemresearchexperience = schema.Text(
+            title=_(u"Research Experience"),
+            description=_(u"Please list all previous research experience including the project name/short description, start date, end date, and institution/company."),
         )
+
+ # ---------- conditional questions if "Biochemistry (Arts & Sciences)" is selected ---------
 
     picture = NamedImage(
             title=_(u"Picture"),
-            description=_(u"Please upload an image"),
+            description=_(u"(optional) If you wish to include a photo, please add it here."),
             required=False,
         )
 
