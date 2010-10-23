@@ -12,7 +12,8 @@ from Products.CMFCore.utils import getToolByName
 from iqbio.pasurvey import _
 
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, \
-    facultyofinterest_vocab, degreeprograms_vocab
+    facultyofinterest_vocab, degreeprograms_vocab, bio_chem_vocab, comp_sci_vocab
+    chem_bio_vocab,
 
 class IPasurvey(form.Schema):
     """A conference presenter. Presenters can be added anywhere.
