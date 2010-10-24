@@ -1,6 +1,6 @@
 from five import grok
-from zope import schema
-
+#from zope import schema
+from zope.schema import Text, TextLine, Choice, Bool, Datetime
 from plone.directives import form, dexterity
 
 from plone.app.textfield import RichText
@@ -15,6 +15,7 @@ from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from iqbio.pasurvey import _
 
+#import iqbio.pasurvey.vocabularies
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab
@@ -100,7 +101,7 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
-    biochemteachingexperience = schema.text(
+    biochemteachingexperience = schema.Text(
         title = _u("Teaching Experience"),
         description = _(u"Please list all previous teaching experience including the subject, start date, end date, and institution."),
         )
@@ -111,21 +112,21 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
-    form.widget(chembiofellowshipsupport=CheckBoxField)
-    chembiofellowshipsupport = schema.Bool(
+    form.widget(bioengfellowshipsupport=CheckBoxField)
+    bioengfellowshipsupport = schema.Bool(
         title = _(u"Fellowship Support"),
         description = _(u"Have you applied for or do you have any other fellowship support? (check for 'yes')"),
         required = False,
         )
 
-    chembioresearchinterests = schema.Choice(
+    bioengresearchinterests = schema.Choice(
         title = _(u"Research Interests"),
         description = _(u"Check multiple boxes (up to three):"),
         required=False,
         vocabulary = chem_bio_vocab,
         )
 
-    chembioeducationalgoals = schema.Text(
+    bioengducationalgoals = schema.Text(
         title = _(u"Educational Goals"),
         description = _(u"write in - 2,000 characters max"),
         required = False,
@@ -136,13 +137,13 @@ class IPasurvey(form.Schema):
     # ---------- conditional questions if "ComputerScience" is selected ---------
 
     form.widget(csinterests=CheckBoxFieldWidget)
-    compsciinterests = schema.Choice(
+    csinterests = schema.Choice(
         title = _(u"Your Interests"),
         description = _(u"Which areas represented at the University of Colorado are you interested in? Please pick up to three areas."),
         required=False,
         vocabulary = comp_sci_vocab,
         )
-    compscifinancialaid = schema.Choice(
+    csfinancialaid = schema.Choice(
         title = _(u"Financial Aid (select one)"),
         description = _(u"Indicate your need for financial aid (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
         required = False,
@@ -191,64 +192,140 @@ class IPasurvey(form.Schema):
 
     ecocoursebio = schema.Text(
         title = _(u"Biology Courses"),
-        description = _(u""),
+        description = _(u"Please list the names of biology courses you have taken (and your grade in each course). "),
         required = False,
         )
 
 
     ecocoursechem = schema.Text(
         title = _(u"Chemistry Courses"),
-        description = _(u""),
+        description = _(u"Please list the names of chemistry courses you have taken (and your grade in each course). "),
         required = False,
         )
 
 
     ecocoursemath = schema.Text(
         title = _(u"Math and Statistics Courses"),
-        description = _(u""),
+        description = _(u"Please list the names of math and statistics courses you have taken (and your grade in each course). "),
         required = False,
         )
 
     ecocoursephysics = schema.Text(
         title = _(u"Physics Courses"),
-        description = _(u""),
+        description = _(u"Please list the names of physics courses you have taken (and your grade in each course). "),
         required = False,
         )
 
 
     ecocourseother = schema.Text(
         title = _(u"Other Sciences and Relevant Courses"),
-        description = _(u""),
+        description = _(u"Please list the names of other science and relevant courses you have taken and your grade in each course. "),
         required = False,
         )
 
 
     ecoresearchinterests = schema.Text(
         title = _(u"Research Interests"),
-        description = _(u""),
+        description = _(u"In what area or areas of biology would you like to work? Is there any specific topic or group of organisms with which you are most interested? (1-2 paragraphs)"),
         required = False,
         )
 
 
     ecofaculty = schema.Text(
         title = _(u"Faculty"),
-        description = _(u""),
+        description = _(u"Have you made contact with any Ecology or Evolutionary Biology Faculty? Whose research interests you? Please list names of a few faculty."),
         required = False,
         )
 
 
     ecopublications = schema.Text(
         title = _(u"Publications"),
-        description = _(u""),
+        description = _(u"Please list the complete citations of any scientific publication that you have authored."),
         required = False,
         )
 
-#    dexterity.write_permission(track='example.conference.ModifyTrack')
-#    picture = NamedImage(
-#            title=_(u"Picture"),
-#            description=_(u"(optional) If you wish to include a photo, please add it here."),
-#            required=False,
+    #----- if ChemicalPhysics is chosen ----------------------------
+
+    chemphresearchinterests  = schema.Text(
+        title = _(u"Research Interests"),
+        description = _(u"Please write in a few phrases that describe your area(s) of interest or specialization."),
+        required = False,
+        )
+
+    form.widget(chemphexperimental=CheckBoxFieldWidget)
+    chemphexperimental = schema.Choice(
+        title = _(u"Research Interests: Experimental or Theoretical"),
+        description = _(u"Check one or both boxes depending on your interests."),
+        required=False,
+        vocabulary = exp_or_theoretical_vocab,
+        )
+
+    chemphgpaphysics = schema.TextLine(
+        title = _(u"Undergraduate GPA: Physics courses only"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
+        required = False,
+        )
+
+    chemphgpamath = schema.TextLine(
+        title = _(u"Undergraduate GPA: Math courses only"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
+        required = False,
+        )
+
+    chemphgpacombined = schema.TextLine(
+        title = _(u"Undergraduate GPA: Combined math and physics courses "),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
+        required = False,
+        )
+
+    chemphgpaoverall = schema.TextLine(
+        title = _(u"Undergraduate GPA: overall (all courses)"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
+        required = False,
+        )
+
+    chemphgre = schema.Text(
+        title = _(u"GRE SCore: Physics Subject Exam (optional)"),
+        description = _(u"If you have taken a Physics Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test."),
+        required = False,
+        min_length = None,
+        max_length = None,
+        )
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # The following fields are for the various departments to     #
+    # comment and accept/notaccept an applicant                   #
+
+
+    #-- prefix the following with each dept's identifier ------------
+#    accepted = schema.Choice(
+#        title = _(u"Accepted?"),
+#        description = _(u"Would you accept this person into your program?"),
+#        required=False,
+#        vocabulary = yes_no_vocab,
 #        )
+#
+#    acceptancedate = schema.Datetime(
+#        title = _(u"Acceptance Date"),
+#        description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
+#        required = False,
+#        )
+#
+#    notaccepteddate = schema.Datetime(
+#        title = _(u"Not Accepted Date"),
+#        description = _(u"If this person WILL NOT be accepted into your program, please enter the date and time of this determination."),
+#        required = False,
+#        )
+#
+#    comments = schema.TextLine(
+#        title = _(u"PROGRAM Comments"),
+#        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
+#        required = False,
+#        )
+
+
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # The following fields are for the overall management of the process  #
 
 
 
