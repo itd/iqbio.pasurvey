@@ -10,7 +10,7 @@ from zope.event import notify
 from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
 
-from z3c.form.browser import checkbox
+from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from iqbio.pasurvey import _
@@ -19,7 +19,7 @@ from iqbio.pasurvey import _
 #import iqbio.pasurvey.vocabularies
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
-from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab
+from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
 
 
 class IPasurvey(form.Schema):
@@ -49,15 +49,15 @@ class IPasurvey(form.Schema):
         )
 
 
+    form.widget(facultyofinterest=CheckBoxFieldWidget)
     facultyofinterest  = Choice(
         title=_(u"Faculty of interest"),
         description=_(u"Optional: Please indicate up to five faculty whose research interests you."),
         vocabulary = facultyofinterest_vocab,
-        required=False,
         )
 
     facultyofinterestother = TextLine(
-        title = _u("Faculty of Interest (other)"),
+        title = _(u"Faculty of Interest (other)"),
         description = _(u"If you did not see the faculty you were interested in on the list, please write their name in here."),
         required=False,
         )
@@ -66,29 +66,26 @@ class IPasurvey(form.Schema):
         title=_(u"First degree program of interest"),
         description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
         vocabulary = degreeprograms_vocab,
-        required=True,
       )
     degreeprogram2 = Choice(
         title=_(u"Second degree program of interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
-        required=True,
        )
     degreeprogram3 = Choice(
         title=_(u"Third degree program of interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
-        required=True,
        )
 
     alsoapply = Choice(
-        title = _u("Apply to Department Also"),
+        title = _(u"Apply to Department Also"),
         description = _(u"If you are not accepted by the IQ Biology program, would you like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?"),
-        vocabulary = [u'Yes',u'No'],
+        vocabulary = yes_no_vocab,
         )
 
     degreeprograms = Choice(
-        title = _u("Which Degree Programs?"),
+        title = _(u"Which Degree Programs?"),
         description = _(u"If so, please indicate which degree programs you would like your application considered by (up to three)."),
         vocabulary = degreeprograms_vocab,
         required=False,
@@ -96,14 +93,14 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
     biochem_research_interests = Choice(
-        title = _u("Biochemistry Research Interests"),
+        title = _(u"Biochemistry Research Interests"),
         description = _(u"Please check off as many of the research areas as interests you."),
         vocabulary = biochem_research_interests_vocab,
         required=False,
         )
 
     biochemteachingexperience = Text(
-        title = _u("Teaching Experience"),
+        title = _(u"Teaching Experience"),
         description = _(u"Please list all previous teaching experience including the subject, start date, end date, and institution."),
         )
 
@@ -113,7 +110,7 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
-    form.widget(bioengfellowshipsupport=CheckBoxField)
+    form.widget(bioengfellowshipsupport=CheckBoxFieldWidget)
     bioengfellowshipsupport = Bool(
         title = _(u"Fellowship Support"),
         description = _(u"Have you applied for or do you have any other fellowship support? (check for 'yes')"),
