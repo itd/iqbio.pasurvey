@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="iqbio.pasurvey">
+
+    <permission
+        id="iqbio.pasurvey.AddSurvey"
+        title="iqbio.pasurvey: Add survey"
+        />
+
+    <permission
+        id="iqbio.pasurvey.ModifySurvey"
+        title="iqbio.pasurvey: Modify survey"
+        />
+
+</configure>
