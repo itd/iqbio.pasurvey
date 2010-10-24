@@ -66,7 +66,7 @@ def facultyofinterest_vocab(context):
     return SimpleVocabulary.fromValues(vocab)
 
 
-def biochem_vocab(context):
+def bio_chem_vocab(context):
     vocab = (
         'Bio-Organic and Bio-Inorganic',
         'Informatics and Proteomics',
