@@ -1,4 +1,4 @@
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 from iqbio.pasurvey import _
 
 degreeprograms_vocab = SimpleVocabulary.fromItems((
