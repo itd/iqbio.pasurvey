@@ -1,5 +1,5 @@
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-
+from iqbio.pasurvey import _
 
 degreeprograms_vocab = ([
         SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
