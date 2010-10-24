@@ -58,7 +58,7 @@ def facultyofinterest_vocab(context):
 degreeprograms_vocab = ([
         SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
         SimpleTerm(value=u'Biochemistry', title=_(u'Biochemistry (Arts & Sciences)')),
-        SimpleTerm(value=u'Chemical', title=_(u'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)')),
+        SimpleTerm(value=u'ChemBioEngineering', title=_(u'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)')),
         SimpleTerm(value=u'ComputerScience', title=_(u'Computer Science (Engineering & Applied Science)')),
         SimpleTerm(value=u'Ecology', title=_(u'Ecology and Evolutionary Biology (Arts & Sciences)')),
         SimpleTerm(value=u'Mechanical', title=_(u'Mechanical Engineering (Engineering & Applies Science)')),
@@ -137,3 +137,16 @@ def comp_sci_vocab(context):
         'Theory',
     )
     return SimpleVocabulary.fromValues(vocab)
+
+def comp_sci_financial_aid_vocab(context):
+    return ([
+    SimpleTerm(value=u'MustHave', title=_(u'I will not accept admission without financial aid.')),
+    SimpleTerm(value=u'WillConsider', title=_(u'I have my own financial support, but would like to be considered for financial aid.')),
+    SimpleTerm(value=u'DoNotWant', title=_(u'I do not wish to be considered for financial aid.')),
+    ])
+
+def yes_no_vocab (context):
+    return ([
+    SimpleTerm(value=u'Yes', title=_(u'Yes')),
+    SimpleTerm(value=u'No', title=_(u'No')),
+    ])

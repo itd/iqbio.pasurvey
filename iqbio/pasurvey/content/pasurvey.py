@@ -5,16 +5,18 @@ from plone.directives import form, dexterity
 
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
+from zope.event import notify
 
 from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
 
-#from z3c.form.browser import checkbox
+from z3c.form.browser import checkbox
+from z3c.form.browser.textlines import TextLinesFieldWidget
 
 from iqbio.pasurvey import _
 
-from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab
-from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab
+from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
+from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab
 
 
@@ -90,7 +92,7 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
-# ---------- conditional questions if "Biochemistry (Arts & Sciences)" is selected ---------
+    # ---------- conditional questions if "Biochemistry" is selected ---------
     biochem_research_interests = schema.Choice(
         title = _u("Biochemistry Research Interests"),
         description = _(u"Please check off as many of the research areas as interests you."),
@@ -108,13 +110,146 @@ class IPasurvey(form.Schema):
             description=_(u"Please list all previous research experience including the project name/short description, start date, end date, and institution/company."),
         )
 
- # ---------- conditional questions if "Biochemistry (Arts & Sciences)" is selected ---------
-
-    picture = NamedImage(
-            title=_(u"Picture"),
-            description=_(u"(optional) If you wish to include a photo, please add it here."),
-            required=False,
+    # ---------- conditional questions if "ChemBioEngineering" is selected ---------
+    form.widget(chembiofellowshipsupport=CheckBoxField)
+    chembiofellowshipsupport = schema.Bool(
+        title = _(u"Fellowship Support"),
+        description = _(u"Have you applied for or do you have any other fellowship support? (check for 'yes')"),
+        required = False,
         )
+
+    chembioresearchinterests = schema.Choice(
+        title = _(u"Research Interests"),
+        description = _(u"Check multiple boxes (up to three):"),
+        required=False,
+        vocabulary = chem_bio_vocab,
+        )
+
+    chembioeducationalgoals = schema.Text(
+        title = _(u"Educational Goals"),
+        description = _(u"write in - 2,000 characters max"),
+        required = False,
+        min_length = None,
+        max_length = 2000,
+        )
+
+    # ---------- conditional questions if "ComputerScience" is selected ---------
+
+    form.widget(csinterests=CheckBoxFieldWidget)
+    compsciinterests = schema.Choice(
+        title = _(u"Your Interests"),
+        description = _(u"Which areas represented at the University of Colorado are you interested in? Please pick up to three areas."),
+        required=False,
+        vocabulary = comp_sci_vocab,
+        )
+    compscifinancialaid = schema.Choice(
+        title = _(u"Financial Aid (select one)"),
+        description = _(u"Indicate your need for financial aid (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
+        required = False,
+        vocabulary = comp_sci_financial_aid_vocab,
+        )
+
+
+    # ---------- conditional questions if "Ecology" is selected ---------
+
+    ecofinancialaid = schema.Choice(
+        title = _(u"Financial Aid"),
+        description = _(u"Will you be requesting a financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+
+    ecoundergradgpa = schema.TextLine(
+        title = _(u"Undergraduate GPA (overall)"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)"),
+        required = False,
+        )
+    ecoundergradgpabio = schema.TextLine(
+        title = _(u"Undergraduate GPA: biological science courses only"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)"),
+        required = False,
+        )
+
+
+    ecogradgpa = schema.TextLine(
+        title = _(u"Overall Graduate GPA (optional)"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank."),
+        required = False,
+        )
+    ecogradgpabio = schema.TextLine(
+        title = _(u"Graduate GPA: biological science courses only (optional)"),
+        description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank."),
+        required = False,
+        )
+
+    ecogre = schema.TextLine(
+        title = _(u"GRE Score: Biology Subject Exam (optional)"),
+        description = _(u"If you have taken a Biology Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test."),
+        required = False,
+        )
+
+
+    ecocoursebio = schema.Text(
+        title = _(u"Biology Courses"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecocoursechem = schema.Text(
+        title = _(u"Chemistry Courses"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecocoursemath = schema.Text(
+        title = _(u"Math and Statistics Courses"),
+        description = _(u""),
+        required = False,
+        )
+
+    ecocoursephysics = schema.Text(
+        title = _(u"Physics Courses"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecocourseother = schema.Text(
+        title = _(u"Other Sciences and Relevant Courses"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecoresearchinterests = schema.Text(
+        title = _(u"Research Interests"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecofaculty = schema.Text(
+        title = _(u"Faculty"),
+        description = _(u""),
+        required = False,
+        )
+
+
+    ecopublications = schema.Text(
+        title = _(u"Publications"),
+        description = _(u""),
+        required = False,
+        )
+
+#    dexterity.write_permission(track='example.conference.ModifyTrack')
+#    picture = NamedImage(
+#            title=_(u"Picture"),
+#            description=_(u"(optional) If you wish to include a photo, please add it here."),
+#            required=False,
+#        )
+
 
 
 class View(grok.View):
