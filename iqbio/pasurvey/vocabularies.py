@@ -55,27 +55,16 @@ def facultyofinterest_vocab(context):
 
 
 
-def degreeprograms_vocab(context):
-    """ maybe switch to this format:
-
-        degreeprograms_vocab = SimpleVocabulary(
-            [SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
-             SimpleTerm(value=u'Bob', title=_(u'Bob')),
-             SimpleTerm(value=u'Jim', title=_(u'Jim'))]
-            )
-
-    """
-    vocab = (
-        'Applied Mathematics (Arts & Sciences)',
-        'Biochemistry (Arts & Sciences)',
-        'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)',
-        'Computer Science (Engineering & Applied Science)',
-        'Ecology and Evolutionary Biology (Arts & Sciences)',
-        'Mechanical Engineering (Engineering & Applies Science)',
-        'Molecular, Cellular and Developmental Biology (Arts & Sciences)',
-        'Chemical Physics (Arts & Sciences).',
-        )
-    return SimpleVocabulary.fromValues(vocab)
+degreeprograms_vocab = ([
+        SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
+        SimpleTerm(value=u'Biochemistry', title=_(u'Biochemistry (Arts & Sciences)')),
+        SimpleTerm(value=u'Chemical', title=_(u'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)')),
+        SimpleTerm(value=u'ComputerScience', title=_(u'Computer Science (Engineering & Applied Science)')),
+        SimpleTerm(value=u'Ecology', title=_(u'Ecology and Evolutionary Biology (Arts & Sciences)')),
+        SimpleTerm(value=u'Mechanical', title=_(u'Mechanical Engineering (Engineering & Applies Science)')),
+        SimpleTerm(value=u'Molecular', title=_(u'Molecular, Cellular and Developmental Biology (Arts & Sciences)')),
+        SimpleTerm(value=u'ChemicalPhysics', title=_(u'Chemical Physics (Arts & Sciences).')),
+        ])
 
 
 def biochem_vocab(context):
