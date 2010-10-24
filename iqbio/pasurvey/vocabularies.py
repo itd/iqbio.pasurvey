@@ -1,5 +1,17 @@
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
+
+degreeprograms_vocab = ([
+        SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
+        SimpleTerm(value=u'Biochemistry', title=_(u'Biochemistry (Arts & Sciences)')),
+        SimpleTerm(value=u'ChemBioEngineering', title=_(u'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)')),
+        SimpleTerm(value=u'ComputerScience', title=_(u'Computer Science (Engineering & Applied Science)')),
+        SimpleTerm(value=u'Ecology', title=_(u'Ecology and Evolutionary Biology (Arts & Sciences)')),
+        SimpleTerm(value=u'Mechanical', title=_(u'Mechanical Engineering (Engineering & Applies Science)')),
+        SimpleTerm(value=u'Molecular', title=_(u'Molecular, Cellular and Developmental Biology (Arts & Sciences)')),
+        SimpleTerm(value=u'ChemicalPhysics', title=_(u'Chemical Physics (Arts & Sciences).')),
+        ])
+
 #----------------------------------------------------------------------
 def biochem_research_interests_vocab(context):
     ''' '''
@@ -52,19 +64,6 @@ def facultyofinterest_vocab(context):
         'Hang (Hubert) Yin',
         )
     return SimpleVocabulary.fromValues(vocab)
-
-
-
-degreeprograms_vocab = ([
-        SimpleTerm(value=u'AppliedMath', title=_(u'Applied Mathematics (Arts & Sciences)')),
-        SimpleTerm(value=u'Biochemistry', title=_(u'Biochemistry (Arts & Sciences)')),
-        SimpleTerm(value=u'ChemBioEngineering', title=_(u'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)')),
-        SimpleTerm(value=u'ComputerScience', title=_(u'Computer Science (Engineering & Applied Science)')),
-        SimpleTerm(value=u'Ecology', title=_(u'Ecology and Evolutionary Biology (Arts & Sciences)')),
-        SimpleTerm(value=u'Mechanical', title=_(u'Mechanical Engineering (Engineering & Applies Science)')),
-        SimpleTerm(value=u'Molecular', title=_(u'Molecular, Cellular and Developmental Biology (Arts & Sciences)')),
-        SimpleTerm(value=u'ChemicalPhysics', title=_(u'Chemical Physics (Arts & Sciences).')),
-        ])
 
 
 def biochem_vocab(context):
@@ -138,6 +137,7 @@ def comp_sci_vocab(context):
     )
     return SimpleVocabulary.fromValues(vocab)
 
+
 def comp_sci_financial_aid_vocab(context):
     return ([
     SimpleTerm(value=u'MustHave', title=_(u'I will not accept admission without financial aid.')),
@@ -145,8 +145,17 @@ def comp_sci_financial_aid_vocab(context):
     SimpleTerm(value=u'DoNotWant', title=_(u'I do not wish to be considered for financial aid.')),
     ])
 
+
 def yes_no_vocab (context):
     return ([
+    SimpleTerm(value=u'', title=_(u'-----')),
     SimpleTerm(value=u'Yes', title=_(u'Yes')),
     SimpleTerm(value=u'No', title=_(u'No')),
+    ])
+
+
+def exp_or_theoretical_vocab (context):
+    return ([
+    SimpleTerm(value=u'Experimental', title=_(u'Experimental')),
+    SimpleTerm(value=u'Theoretical', title=_(u'Theoretical')),
     ])
