@@ -9,12 +9,12 @@
       i18n:translate="">A Survey of information submittied by a potential student</property>
  <property name="content_icon">user.gif</property>
  <property name="allow_discussion">False</property>
- <property name="global_allow">False</property>
+ <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>
  <property name="allowed_content_types" />
 
  <!-- schema interface -->
- <property name="schema">iqbio.pasurvey.content.IPasurvey</property>
+ <property name="schema">iqbio.pasurvey.pasurvey.IPasurvey</property>
 
  <!-- class used for content items -->
  <property name="klass">plone.dexterity.content.Item</property>
