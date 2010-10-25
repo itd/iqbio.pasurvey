@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<object name="iqbio.pasurvey.pasurvey" meta_type="Dexterity FTI"
+<object name="Pre-Admission Survey" meta_type="Dexterity FTI"
    i18n:domain="iqbio.pasurvey" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <!-- Basic metadata -->
@@ -24,7 +24,9 @@
 
  <!-- enabled behaviors -->
  <property name="behaviors">
-     <element value="plone.app.content.interfaces.INameFromTitle" />
+ <!--    <element value="plone.app.content.interfaces.INameFromTitle" />
+     <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
+-->
  </property>
 
  <!-- View information -->
