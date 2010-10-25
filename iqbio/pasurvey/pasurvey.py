@@ -361,6 +361,19 @@ class View(dexterity.DisplayForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
 
+
+class AddForm(dexterity.AddForm):
+    grok.name('iqbio.pasurvey.pasurvey')
+    
+    def updateActions(self):
+        super(AddForm, self).updateActions()
+        # change the title of save button
+        self.actions["save"].title = u'Save as draft'
+        import pdb; pdb.set_trace()
+
+
 class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
+
+
