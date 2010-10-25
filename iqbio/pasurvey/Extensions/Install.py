@@ -20,6 +20,15 @@ def install(portal):
     print >>out, "Installing iqbio.pasurvey"
     _runProfile('profile-iqbio.pasurvey:default', portal)
 
+    # Set up groups
+    uf = getToolByName(site, 'acl_users')
+    gtool = getToolByName(site, 'portal_groups')
+    if not uf.searchGroups(id='FacultyReviewers'):
+        gtool.addGroup('FacultyReviewers', title='FacultyReviewers', roles=['Editor'])
+    if not uf.searchGroups(id='SurveryManagers'):
+        gtool.addGroup('SurveryManagers', title='SurveryManagers', roles=['Manager'])
+    if not uf.searchGroups(id='ProgramReviewers'):
+        gtool.addGroup('ProgramReviewers', title='ProgramReviewers', roles=['Editor'])
 
 
 def uninstall(portal):
