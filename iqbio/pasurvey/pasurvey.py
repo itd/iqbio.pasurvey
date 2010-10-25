@@ -1,7 +1,8 @@
 from five import grok
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date
-from plone.directives import form, dexterity
+from plone.directives import form
+from plone.directives import dexterity
 
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
@@ -26,17 +27,21 @@ class IPasurvey(form.Schema):
     """
     The schema for the survey form
     """
-    fname = TextLine(
+
+    fname = schema.TextLine(
             title=_(u"First Name"),
             description=_(u"Your legal first name"),
+            required = True,
         )
-    mname = TextLine(
+    mname = schema.TextLine(
             title=_(u"Middle Name or Initial"),
             description=_(u""),
+            required = False,
         )
-    lname = TextLine(
+    lname = schema.TextLine(
             title=_(u"Last Name / Sir Name"),
             description=_(u"Your legal last name"),
+            required = True,
         )
     dob = Date(
             title=_(u"Date of birth"),
@@ -326,7 +331,36 @@ class IPasurvey(form.Schema):
     # The following fields are for the overall management of the process  #
 
 
+# Now we need to compute the title.
+# An accompanying adapter is in configure.zcml
+from plone.app.content.interfaces import INameFromTitle
+from zope.interface import implements
 
-class View(grok.View):
+class INameFromPersonNames(INameFromTitle):
+    def title():
+        """Return a processed title"""
+
+class NameFromPersonNames(object):
+    implements(INameFromPersonNames)
+
+    def __init__(self, context):
+        self.context = context
+
+    @property
+    def title(self):
+        mname =""
+        if self.context.mname != '':
+            mname = '_' + self.context.mname
+        return "%s_%s%s" % (self.context.lname, self.context.fname, mname )
+
+
+class View(dexterity.DisplayForm):
+    """The view. Will pull a template from <modulename>_templates/view.pt,
+        and will be called 'view' unless otherwise stated.
+        """
+    grok.context(IPasurvey)
+    grok.require('zope2.View')
+
+class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')

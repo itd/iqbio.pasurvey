@@ -10,6 +10,7 @@
     <permission name="iqbio.pasurvey: Modify survey" acquire="True">
       <role name="Manager"/>
       <role name="Reviewer"/>
+      <role name="Editor"/>
     </permission>
   </permissions>
 </rolemap>

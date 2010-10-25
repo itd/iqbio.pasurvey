@@ -25,5 +25,10 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
     <!-- -*- extra stuff goes here -*- -->
+    <!-- adapter to compute the title -->
+    <adapter for="iqbio.pasurvey.pasurvey.IPasurvey"
+        provides="iqbio.pasurvey.pasurvey.INameFromPersonNames"
+        factory="iqbio.pasurvey.pasurvey.NameFromPersonNames"
+        />
 
 </configure>
