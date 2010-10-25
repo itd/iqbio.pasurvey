@@ -349,7 +349,7 @@ class NameFromPersonNames(object):
     @property
     def title(self):
         mname =""
-        if self.context.mname != '':
+        if self.context.mname:
             mname = '_' + self.context.mname
         return "%s_%s%s" % (self.context.lname, self.context.fname, mname )
 
