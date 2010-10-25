@@ -369,7 +369,6 @@ class AddForm(dexterity.AddForm):
         super(AddForm, self).updateActions()
         # change the title of save button
         self.actions["save"].title = u'Save as draft'
-        import pdb; pdb.set_trace()
 
 
 class EditForm(dexterity.EditForm):
