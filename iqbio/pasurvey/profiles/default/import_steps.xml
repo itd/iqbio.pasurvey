@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="pasurvey-various"
+    version="001"
+    handler="iqbio.pasurvey.setuphandlers.importVarious"
+    title="Additional iqbio.pasurvey setup">
+    <dependency step="rolemap"/>
+  </import-step>
+</import-steps>
