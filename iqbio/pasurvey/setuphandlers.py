@@ -29,6 +29,7 @@ def addInitialAdmins(site):
             already_taken = '\nlogin id %s already exists...\n\n'
             logger.debug(already_taken % (member['id'],))
 
+#----------------------------------------------------------------------
 def createSurveyFolder(portal):
     """ create hSurveyFolder
     it has to be the last step from importVarious !
@@ -55,6 +56,62 @@ def createGroups(portal):
     if not uf.searchGroups(id='ProgramReviewers'):
         gtool.addGroup('ProgramReviewers', title='ProgramReviewers', roles=['Editor'])
 
+def setSurveyFolderContentRestrictions(context):
+    """"""
+    site = context.getParentNode()
+    if not 'survey' in site.objectIds():
+        self.portal.invokeFactory("Folder", "surveys")
+    else:
+        sfolder = site._getOb('surveys')
+        # Add type restrictions
+        logger.info('Restricting addable types in survey Folder \
+            to iqbio.pasurvey.pasurvey (Pre-Admission Survey)')
+        sfolder.setConstrainTypesMode(1)
+        sfolder.setLocallyAllowedTypes(['iqbio.pasurvey.pasurvey', 'Page', 'Topic',])
+        sfolder.setImmediatelyAddableTypes(['iqbio.pasurvey.pasurvey'])
+
+
+def updateCatalog(context):
+    """update the catalog"""
+    logger.info('****** updateCatalog BEGIN ******')
+    pc = getToolByName(context, 'portal_catalog')
+    pc.refreshCatalog()
+    logger.info('****** updateCatalog END ******')
+
+
+def setIntranetWorkflow(context):
+    """ Setting the initial workflow to intranet_workflow for now.
+    """
+    portal = context.getSite()
+    wft = getToolByName(portal, "portal_workflow")
+    wft.setDefaultChain('intranet_workflow')
+    logger.info('\n\n  default workflow set to intranet_workflow \n\n')
+
+def updateRoleMappings(context):
+    """after workflow change, update the roles mapping. This is like pressing
+    the button 'Update Security Setting' in the portal_workflow ZMI"""
+    portal = context.getSite()
+    wft = getToolByName(context.getSite(), 'portal_workflow')
+    wft.updateRoleMappings()
+    wft.doActionFor(portal.surveys, 'publish_internally')
+
+#----------------------------------------------------------------------
+def hideMembersFolder(context):
+    """set the setExcludeFromNav bit to true on the Members folder
+    """
+    portal = context.getSite()
+    members = portal.Members
+    members.setExcludeFromNav(True)
+    members.update()
+
+def rmStuff(context):
+    """rm stuff in the portal root"""
+    portal = context.getSite()
+    stuff = ['events', 'news']
+    for obj in stuff:
+        if obj in portal.listFolderContents():
+            portal.manage_delObjects(obj)
+
 
 def importVarious(context):
     """Run the handlers for the default profile
@@ -63,5 +120,10 @@ def importVarious(context):
         return
     portal = context.getSite()
     createSurveyFolder(portal)
+    setSurveyFolderContentRestrictions
     createGroups(portal)
+    rmStuff(context)
+    hideMembersFolder(context)
+    setIntranetWorkflow(context)
+    updateRoleMappings(context)
 
