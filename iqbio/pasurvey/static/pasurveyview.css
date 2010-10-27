@@ -1,1 +1,5 @@
 /*  Any special css overrides for the form view would go here */
+
+span.option {
+    display: block;
+}
