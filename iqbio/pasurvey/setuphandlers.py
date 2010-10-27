@@ -50,8 +50,8 @@ def createGroups(portal):
     gtool = getToolByName(portal, 'portal_groups')
     if not uf.searchGroups(id='FacultyReviewers'):
         gtool.addGroup('FacultyReviewers', title='FacultyReviewers', roles=['Editor'])
-    if not uf.searchGroups(id='SurveryManagers'):
-        gtool.addGroup('SurveryManagers', title='SurveryManagers', roles=['Manager'])
+    if not uf.searchGroups(id='SurveyManagers'):
+        gtool.addGroup('SurveyManagers', title='SurveyManagers', roles=['Manager'])
     if not uf.searchGroups(id='ProgramReviewers'):
         gtool.addGroup('ProgramReviewers', title='ProgramReviewers', roles=['Editor'])
 
