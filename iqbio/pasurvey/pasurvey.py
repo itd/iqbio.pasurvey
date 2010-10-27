@@ -107,11 +107,13 @@ class IPasurvey(form.Schema):
     biochemteachingexperience = Text(
         title = _(u"Teaching Experience"),
         description = _(u"Please list all previous teaching experience including the subject, start date, end date, and institution."),
+        required=False,
         )
 
     biochemresearchexperience = Text(
             title=_(u"Research Experience"),
             description=_(u"Please list all previous research experience including the project name/short description, start date, end date, and institution/company."),
+            required=False,
         )
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
