@@ -2,14 +2,14 @@ from zope.schema.vocabulary import SimpleVocabulary
 from iqbio.pasurvey import _
 
 degreeprograms_vocab = SimpleVocabulary.fromItems((
-    ('AppliedMath', 'Applied Mathematics (Arts & Sciences)'),
-    ('Biochemistry', 'Biochemistry (Arts & Sciences)'),
-    ('ChemBioEngineering', 'Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)'),
-    ('ComputerScience', 'Computer Science (Engineering & Applied Science)'),
-    ('Ecology', 'Ecology and Evolutionary Biology (Arts & Sciences)'),
-    ('Mechanical', 'Mechanical Engineering (Engineering & Applies Science)'),
-    ('Molecular', 'Molecular, Cellular and Developmental Biology (Arts & Sciences)'),
-    ('ChemicalPhysics', 'Chemical Physics (Arts & Sciences).'),
+    ('Applied Mathematics (Arts & Sciences)', 'AppliedMath'),
+    ('Biochemistry (Arts & Sciences)', 'Biochemistry'),
+    ('Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)', 'ChemBioEngineering'),
+    ('Computer Science (Engineering & Applied Science)', 'ComputerScience'),
+    ('Ecology and Evolutionary Biology (Arts & Sciences)', 'Ecology'),
+    ('Mechanical Engineering (Engineering & Applies Science)', 'Mechanical'),
+    ('Molecular, Cellular and Developmental Biology (Arts & Sciences)', 'Molecular'),
+    ('Chemical Physics (Arts & Sciences).', 'ChemicalPhysics'),
     ))
 
 #----------------------------------------------------------------------
@@ -38,25 +38,25 @@ biochem_research_interests_vocab = SimpleVocabulary.fromValues((
 
 
 facultyofinterest_vocab = SimpleVocabulary.fromItems((
-    ('Cech', 'Thomas R. Cech'),
-    ('Anseth', 'Kristi S. Anseth'),
-    ('Betterton', 'Meredith D. Betterton'),
-    ('Bortz', 'David M. Bortz'),
-    ('Bryant', 'Stephanie J. Bryant'),
-    ('Clauset', 'Aaron Clauset'),
-    ('Dowell', 'Robin Dowell'),
-    ('Ferguson', 'Virginia L. Ferguson'),
-    ('Glaser', 'Matthew A. Glaser'),
-    ('Goldberg', 'Debra S. Goldberg'),
-    ('Knight', 'Rob Knight'),
-    ('Leinwand', 'Leslie A. Leinwand'),
-    ('Lladser', 'Manuel E. Lladser'),
-    ('Melbourne', 'Brett A. Melbourne'),
-    ('Nesbitt', 'David. J. Nesbitt'),
-    ('Pardi', 'Arthur Pardi'),
-    ('Palmer', 'Amy. E. Palmer'),
-    ('Perkins', 'Thomas T. Perkins'),
-    ('Yin', 'Hang (Hubert) Yin'),
+    ('Thomas R. Cech', 'Cech'),
+    ('Kristi S. Anseth','Anseth'),
+    ('Meredith D. Betterton','Betterton'),
+    ('David M. Bortz','Bortz'),
+    ('Stephanie J. Bryant','Bryant'),
+    ('Aaron Clauset','Clauset'),
+    ('Robin Dowell','Dowell'),
+    ('Virginia L. Ferguson','Ferguson'),
+    ('Matthew A. Glaser','Glaser'),
+    ('Debra S. Goldberg','Goldberg'),
+    ('Rob Knight','Knight'),
+    ('Leslie A. Leinwand','Leinwand'),
+    ('Manuel E. Lladser','Lladser'),
+    ('Brett A. Melbourne','Melbourne'),
+    ('David. J. Nesbitt','Nesbitt'),
+    ('Arthur Pardi','Pardi'),
+    ('Amy. E. Palmer','Palmer'),
+    ('Thomas T. Perkins','Perkins'),
+    ('Hang (Hubert) Yin', 'Yin'),
     ))
 
 
@@ -128,15 +128,15 @@ comp_sci_vocab = SimpleVocabulary.fromValues((
     ))
 
 comp_sci_financial_aid_vocab = SimpleVocabulary.fromItems((
-    ('MustHave', u'I will not accept admission without financial aid.'),
-    ('WillConsider', u'I have my own financial support, but would like to be considered for financial aid.'),
-    ('DoNotWant', u'I do not wish to be considered for financial aid.'),
+    (u'I will not accept admission without financial aid.', 'MustHave'),
+    ( u'I have my own financial support, but would like to be considered for financial aid.', 'WillConsider'),
+    (u'I do not wish to be considered for financial aid.', 'DoNotWant'),
     ))
 
 yes_no_vocab = SimpleVocabulary.fromItems((
-    ('', u'-----'),
-    ('Yes', u'Yes'),
-    ('No', u'No'),
+    (u'', ''),
+    (u'Yes', 'Yes'),
+    (u'No', 'No'),
     ))
 
 
