@@ -1,16 +1,24 @@
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from iqbio.pasurvey import _
 
-degreeprograms_vocab = SimpleVocabulary.fromItems((
-    ('Applied Mathematics (Arts & Sciences)', 'AppliedMath'),
-    ('Biochemistry (Arts & Sciences)', 'Biochemistry'),
-    ('Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)', 'ChemBioEngineering'),
-    ('Computer Science (Engineering & Applied Science)', 'ComputerScience'),
-    ('Ecology and Evolutionary Biology (Arts & Sciences)', 'Ecology'),
-    ('Mechanical Engineering (Engineering & Applies Science)', 'Mechanical'),
-    ('Molecular, Cellular and Developmental Biology (Arts & Sciences)', 'Molecular'),
-    ('Chemical Physics (Arts & Sciences).', 'ChemicalPhysics'),
-    ))
+degreeprograms_vocab = SimpleVocabulary(
+    [SimpleTerm(title='Applied Mathematics (Arts & Sciences)',
+                value='AppliedMath'),
+     SimpleTerm(title='Biochemistry (Arts & Sciences)',
+                value='Biochemistry'),
+     SimpleTerm(title='Chemical and Biological Engineering (listed as Chemical Engineering in College of Engineering & Applied Science)',
+                value='ChemBioEngineering'),
+     SimpleTerm(title='Computer Science (Engineering & Applied Science)',
+                value='ComputerScience'),
+     SimpleTerm(title='Ecology and Evolutionary Biology (Arts & Sciences)',
+                value='Ecology'),
+     SimpleTerm(title='Mechanical Engineering (Engineering & Applies Science)',
+                value='Mechanical'),
+     SimpleTerm(title='Molecular, Cellular and Developmental Biology (Arts & Sciences)',
+                value='Molecular'),
+     SimpleTerm(title='Chemical Physics (Arts & Sciences).',
+                value='ChemicalPhysics')]
+    )
 
 #----------------------------------------------------------------------
 biochem_research_interests_vocab = SimpleVocabulary.fromValues((

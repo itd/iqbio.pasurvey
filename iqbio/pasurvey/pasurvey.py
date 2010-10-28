@@ -15,7 +15,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
-from z3c.form import button
+from z3c.form import button, form as z3cform
 
 from iqbio.pasurvey import _
 
@@ -378,9 +378,10 @@ class View(dexterity.DisplayForm):
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
+    # extends fields, buttons and handlers from base class
+    z3cform.extends(dexterity.AddForm)
     
-    ### override button handlers from plone.dexterity.browser.add.DefaultAddForm
-    
+    ### override handlers from plone.dexterity.browser.add.DefaultAddForm
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleAdd(self, action):
         data, errors = self.extractData()
@@ -397,16 +398,38 @@ class AddForm(dexterity.AddForm):
         if obj is not None:
             # mark only as finished if we get the new object
             self._finishedAdd = True
-            IStatusMessage(self.request).addStatusMessage(_(u"Item created"), "info")
+            IStatusMessage(self.request).addStatusMessage(_(u"Item created"),
+                                                          "info")
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
-    def handleCancel(self, action):
-        IStatusMessage(self.request).addStatusMessage(_(u"Add New Item operation cancelled"), "info")
-        self.request.response.redirect(self.nextURL()) 
-            
+    # custom button
+    @button.buttonAndHandler(_('Submit For Review'), name='submit')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # redirect to workflow submit url
+            submit_url = '%s/%s/content_status_modify?workflow_action=submit' % (self.context.absolute_url(), obj.getId())
+            self.request.response.redirect(submit_url)
 
 class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
+    # extends fields, buttons and handlers from base class
+    z3cform.extends(dexterity.AddForm)
+
+    # custom button
+    @button.buttonAndHandler(_(u'Submit For Review'), name='submit')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+        # redirect to workflow submit url
+        submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
+        self.request.response.redirect(submit_url)
 
 
