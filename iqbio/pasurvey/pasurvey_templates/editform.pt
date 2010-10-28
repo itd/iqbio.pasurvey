@@ -18,7 +18,13 @@
     <tal:main-macro metal:define-macro="main">
 
         <h1 class="documentFirstHeading">Edit Pre-Admission Survey</h1>
-
+                <h2>Steps to be completed...</h2>
+        <p>If you have not already done so, please
+<a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+to the Graduate Admissions Website</a> and fill out the application for your
+First Degree Program of Interest.
+Remember to return to this IQ Biology survey to provide any supplementary
+information needed and formally submit your saved draft. </p>
         <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
 
     </tal:main-macro>

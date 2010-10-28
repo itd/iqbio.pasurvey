@@ -7,3 +7,16 @@
     tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/showhidefields.js"></script>
 
 <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
+
+<p><strong>Before you submit your survey....</strong>
+Your survey will be available for edit until you use the (Submit for review) button.
+At that point, your survey will be presented to several reviewers and is no
+longer available to edit.</p>
+
+        <h2>Thank you - Steps to be completed...</h2>
+        <p>Thank you for saving a draft of your IQ Biology Survey, please
+<a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+to the Graduate Admissions Website</a> and fill out the application for your
+First Degree Program of Interest.
+Remember to return to this IQ Biology survey to provide any supplementary
+information needed and formally submit your saved draft. </p>
