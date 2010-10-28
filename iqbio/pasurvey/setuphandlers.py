@@ -60,7 +60,7 @@ def setSurveyFolderContentRestrictions(context):
     """"""
     site = context.getParentNode()
     if not 'survey' in site.objectIds():
-        self.portal.invokeFactory("Folder", "surveys")
+        createSurveyFolder(context)
     else:
         sfolder = site._getOb('surveys')
         # Add type restrictions
