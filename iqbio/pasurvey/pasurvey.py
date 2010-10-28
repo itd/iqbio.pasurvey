@@ -1,6 +1,7 @@
 from five import grok
 from zope import schema
-from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date
+from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float
+from zope.schema.interfaces import RequiredMissing
 from plone.directives import form
 from plone.directives import dexterity
 
@@ -10,18 +11,20 @@ from zope.event import notify
 
 from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 
 from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
+from z3c.form import button, form as z3cform
 
 from iqbio.pasurvey import _
-
 
 #import iqbio.pasurvey.vocabularies
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
 
+from iqbio.pasurvey.validators import validate_email, validate_decimal
 
 class IPasurvey(form.Schema):
     """
@@ -51,14 +54,16 @@ class IPasurvey(form.Schema):
     email = TextLine(
             title=_(u"Email"),
             description=_(u"A valid email address where you can be reached."),
+            constraint=validate_email,
         )
 
 
     form.widget(facultyofinterest=CheckBoxFieldWidget)
-    facultyofinterest  = Choice(
+    facultyofinterest  = List(
         title=_(u"Faculty of interest"),
         description=_(u"Optional: Please indicate up to five faculty whose research interests you."),
-        vocabulary = facultyofinterest_vocab,
+        value_type=Choice(vocabulary = facultyofinterest_vocab),
+        max_length=5,
         )
 
     facultyofinterestother = TextLine(
@@ -89,18 +94,21 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
 
-    degreeprograms = Choice(
+    form.widget(degreeprograms=CheckBoxFieldWidget)
+    degreeprograms = List(
         title = _(u"Which Degree Programs?"),
         description = _(u"If so, please indicate which degree programs you would like your application considered by (up to three)."),
-        vocabulary = degreeprograms_vocab,
+        value_type = Choice(vocabulary = degreeprograms_vocab),
         required=False,
+        max_length=3,
         )
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
-    biochem_research_interests = Choice(
+    form.widget(biochem_research_interests=CheckBoxFieldWidget)
+    biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
         description = _(u"Please check off as many of the research areas as interests you."),
-        vocabulary = biochem_research_interests_vocab,
+        value_type = Choice(vocabulary = biochem_research_interests_vocab),
         required=False,
         )
 
@@ -124,11 +132,13 @@ class IPasurvey(form.Schema):
         required = False,
         )
 
-    bioengresearchinterests = Choice(
+    form.widget(bioengresearchinterests=CheckBoxFieldWidget)
+    bioengresearchinterests = List(
         title = _(u"Research Interests"),
         description = _(u"Check multiple boxes (up to three):"),
         required=False,
-        vocabulary = chem_bio_vocab,
+        value_type = Choice(vocabulary = chem_bio_vocab),
+        max_length = 3,
         )
 
     bioengducationalgoals = Text(
@@ -142,19 +152,20 @@ class IPasurvey(form.Schema):
     # ---------- conditional questions if "ComputerScience" is selected ---------
 
     form.widget(csinterests=CheckBoxFieldWidget)
-    csinterests = Choice(
+    csinterests = List(
         title = _(u"Your Interests"),
         description = _(u"Which areas represented at the University of Colorado are you interested in? Please pick up to three areas."),
         required=False,
-        vocabulary = comp_sci_vocab,
+        value_type=Choice(vocabulary = comp_sci_vocab),
+        max_length=3,
         )
+        
     csfinancialaid = Choice(
         title = _(u"Financial Aid (select one)"),
         description = _(u"Indicate your need for financial aid (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
         required = False,
         vocabulary = comp_sci_financial_aid_vocab,
         )
-
 
     # ---------- conditional questions if "Ecology" is selected ---------
 
@@ -165,27 +176,31 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
 
-    ecoundergradgpa = TextLine(
+    ecoundergradgpa = Float(
         title = _(u"Undergraduate GPA (overall)"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)"),
         required = False,
+        constraint = validate_decimal,
         )
-    ecoundergradgpabio = TextLine(
+        
+    ecoundergradgpabio = Float(
         title = _(u"Undergraduate GPA: biological science courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)"),
         required = False,
+        constraint = validate_decimal,
         )
 
-
-    ecogradgpa = TextLine(
+    ecogradgpa = Float(
         title = _(u"Overall Graduate GPA (optional)"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank."),
         required = False,
+        constraint = validate_decimal,
         )
-    ecogradgpabio = TextLine(
+    ecogradgpabio = Float(
         title = _(u"Graduate GPA: biological science courses only (optional)"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank."),
         required = False,
+        constraint = validate_decimal,
         )
 
     ecogre = TextLine(
@@ -194,20 +209,17 @@ class IPasurvey(form.Schema):
         required = False,
         )
 
-
     ecocoursebio = Text(
         title = _(u"Biology Courses"),
         description = _(u"Please list the names of biology courses you have taken (and your grade in each course). "),
         required = False,
         )
 
-
     ecocoursechem = Text(
         title = _(u"Chemistry Courses"),
         description = _(u"Please list the names of chemistry courses you have taken (and your grade in each course). "),
         required = False,
         )
-
 
     ecocoursemath = Text(
         title = _(u"Math and Statistics Courses"),
@@ -221,13 +233,11 @@ class IPasurvey(form.Schema):
         required = False,
         )
 
-
     ecocourseother = Text(
         title = _(u"Other Sciences and Relevant Courses"),
         description = _(u"Please list the names of other science and relevant courses you have taken and your grade in each course. "),
         required = False,
         )
-
 
     ecoresearchinterests = Text(
         title = _(u"Research Interests"),
@@ -235,13 +245,11 @@ class IPasurvey(form.Schema):
         required = False,
         )
 
-
     ecofaculty = Text(
         title = _(u"Faculty"),
         description = _(u"Have you made contact with any Ecology or Evolutionary Biology Faculty? Whose research interests you? Please list names of a few faculty."),
         required = False,
         )
-
 
     ecopublications = Text(
         title = _(u"Publications"),
@@ -258,35 +266,39 @@ class IPasurvey(form.Schema):
         )
 
     form.widget(chemphexperimental=CheckBoxFieldWidget)
-    chemphexperimental = Choice(
+    chemphexperimental = List(
         title = _(u"Research Interests: Experimental or Theoretical"),
         description = _(u"Check one or both boxes depending on your interests."),
         required=False,
-        vocabulary = exp_or_theoretical_vocab,
+        value_type=Choice(vocabulary = exp_or_theoretical_vocab),
         )
 
-    chemphgpaphysics = TextLine(
+    chemphgpaphysics = Float(
         title = _(u"Undergraduate GPA: Physics courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
+        constraint = validate_decimal,
         )
 
-    chemphgpamath = TextLine(
+    chemphgpamath = Float(
         title = _(u"Undergraduate GPA: Math courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
+        constraint = validate_decimal,
         )
 
-    chemphgpacombined = TextLine(
+    chemphgpacombined = Float(
         title = _(u"Undergraduate GPA: Combined math and physics courses "),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
+        constraint = validate_decimal,
         )
 
-    chemphgpaoverall = TextLine(
+    chemphgpaoverall = Float(
         title = _(u"Undergraduate GPA: overall (all courses)"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
+        constraint = validate_decimal,
         )
 
     chemphgre = Text(
@@ -366,15 +378,58 @@ class View(dexterity.DisplayForm):
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
+    # extends fields, buttons and handlers from base class
+    z3cform.extends(dexterity.AddForm)
     
-    def updateActions(self):
-        super(AddForm, self).updateActions()
-        # change the title of save button
-        self.actions["save"].title = u'Save as draft'
+    ### override handlers from plone.dexterity.browser.add.DefaultAddForm
+    @button.buttonAndHandler(_('Save As Draft'), name='save')
+    def handleAdd(self, action):
+        data, errors = self.extractData()
+        # skip RequiredMissing errors
+        errors = [e for e in errors if not isinstance(e.error, RequiredMissing)]
+        if errors:
+            self.status = self.formErrorsMessage
+            # advoid required errors to be displayed then
+            for name, widget in self.widgets.items():
+                if widget.error and isinstance(widget.error.error, RequiredMissing):
+                    self.widgets[name].error = None
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # mark only as finished if we get the new object
+            self._finishedAdd = True
+            IStatusMessage(self.request).addStatusMessage(_(u"Item created"),
+                                                          "info")
 
+    # custom button
+    @button.buttonAndHandler(_('Submit For Review'), name='submit')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        obj = self.createAndAdd(data)
+        if obj is not None:
+            # redirect to workflow submit url
+            submit_url = '%s/%s/content_status_modify?workflow_action=submit' % (self.context.absolute_url(), obj.getId())
+            self.request.response.redirect(submit_url)
 
 class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
+    # extends fields, buttons and handlers from base class
+    z3cform.extends(dexterity.AddForm)
+
+    # custom button
+    @button.buttonAndHandler(_(u'Submit For Review'), name='submit')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+        # redirect to workflow submit url
+        submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
+        self.request.response.redirect(submit_url)
 
 

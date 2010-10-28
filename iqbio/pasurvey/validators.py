@@ -1,12 +1,24 @@
-import inspect
-from zope.interface import implements
-from Products.validation import validation
-from Products.validation.interfaces import ivalidator
-from Products.validation.interfaces.IValidator import IValidator
-from zope.app.component.hooks import getSite
+import re
+from zope import schema
 
+from iqbio.pasurvey import _
 
+class InvalidEmailAddress(schema.ValidationError):
+    __doc__ = _(u"Your e-mail address is invalid")
+    regex = r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
 
-# Now that we've defined a custom field validator, register it.
-# Does it matter if I've registered it in the __init__.py?
-#validation.register(isUniqueUnixUid('isUniqueUnixUid'))
+def validate_email(value):
+    if not re.match(InvalidEmailAddress.regex, value) or value.endswith('.'):
+        raise InvalidEmailAddress
+    return True
+
+class InvalidDecimal(schema.ValidationError):
+    __doc__ = _(u"Only accept numbers up to 1 decimal place")
+
+def validate_decimal(value):
+    """ only up to 1 decimal place """
+    n = str(value)
+    if '.' in n:
+        if len(n.split('.')[-1]) > 1:
+            raise InvalidDecimal
+    return True
