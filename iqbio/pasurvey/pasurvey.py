@@ -104,6 +104,12 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
+    form.fieldset('Biochemistry',
+                  label = _(u"Biochemistry Department"),
+                  fields = ['biochem_research_interests',
+                            'biochemteachingexperience',
+                            'biochemresearchexperience'])
+        
     form.widget(biochem_research_interests=CheckBoxFieldWidget)
     biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
@@ -125,6 +131,12 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
+    form.fieldset('ChemBioEngineering',
+                  label = _(u"Chemical and Biological Engineering"),
+                  fields = ['bioengfellowshipsupport',
+                            'bioengresearchinterests',
+                            'bioengducationalgoals'])
+    
     form.widget(bioengfellowshipsupport=CheckBoxFieldWidget)
     bioengfellowshipsupport = Bool(
         title = _(u"Fellowship Support"),
@@ -150,7 +162,11 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "ComputerScience" is selected ---------
-
+    form.fieldset('ComputerScience',
+                  label  = _(u"Computer Science"),
+                  fields = ['csinterests',
+                            'csfinancialaid',])
+    
     form.widget(csinterests=CheckBoxFieldWidget)
     csinterests = List(
         title = _(u"Your Interests"),
@@ -168,7 +184,23 @@ class IPasurvey(form.Schema):
         )
 
     # ---------- conditional questions if "Ecology" is selected ---------
-
+    form.fieldset('Ecology',
+                  label = _(u"Ecology and Evolutionary Biology"),
+                  fields = ['ecofinancialaid',
+                            'ecoundergradgpa',
+                            'ecoundergradgpabio',
+                            'ecogradgpa',
+                            'ecogradgpabio',
+                            'ecogre',
+                            'ecocoursebio',
+                            'ecocoursechem',
+                            'ecocoursemath',
+                            'ecocoursephysics',
+                            'ecocourseother',
+                            'ecoresearchinterests',
+                            'ecofaculty',
+                            'ecopublications',])
+    
     ecofinancialaid = Choice(
         title = _(u"Financial Aid"),
         description = _(u"Will you be requesting a financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
@@ -258,7 +290,15 @@ class IPasurvey(form.Schema):
         )
 
     #----- if ChemicalPhysics is chosen ----------------------------
-
+    form.fieldset('ChemicalPhysics',
+                  label  = u"Chemical Physics",
+                  fields = ['chemphexperimental',
+                            'chemphgpaphysics',
+                            'chemphgpamath',
+                            'chemphgpacombined',
+                            'chemphgpaoverall',
+                            'chemphgre'])
+    
     chemphresearchinterests  = Text(
         title = _(u"Research Interests"),
         description = _(u"Please write in a few phrases that describe your area(s) of interest or specialization."),
@@ -376,22 +416,32 @@ class View(dexterity.DisplayForm):
     grok.require('zope2.View')
 
 
+# fields that cannot be skipped when "Save As Draft"
+ALWAYS_REQUIRED_FIELDS = ('fname', 'lname', 'degreeprogram1', 'degreeprogram2', 'degreeprogram3')
+
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.AddForm)
+    
+    def isRequiredError(self, error):
+        if isinstance(error, RequiredMissing):
+            # some fields are always required
+            if error.__str__() not in ALWAYS_REQUIRED_FIELDS:
+                return True
+        return False
     
     ### override handlers from plone.dexterity.browser.add.DefaultAddForm
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleAdd(self, action):
         data, errors = self.extractData()
         # skip RequiredMissing errors
-        errors = [e for e in errors if not isinstance(e.error, RequiredMissing)]
+        errors = [e for e in errors if not self.isRequiredError(e.error)]
         if errors:
             self.status = self.formErrorsMessage
             # advoid required errors to be displayed then
             for name, widget in self.widgets.items():
-                if widget.error and isinstance(widget.error.error, RequiredMissing):
+                if widget.error and self.isRequiredError(widget.error.error):
                     self.widgets[name].error = None
             return
         obj = self.createAndAdd(data)
@@ -418,7 +468,7 @@ class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
     # extends fields, buttons and handlers from base class
-    z3cform.extends(dexterity.AddForm)
+    z3cform.extends(dexterity.EditForm)
 
     # custom button
     @button.buttonAndHandler(_(u'Submit For Review'), name='submit')
