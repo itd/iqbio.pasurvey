@@ -451,18 +451,18 @@ class AddForm(dexterity.AddForm):
             IStatusMessage(self.request).addStatusMessage(_(u"Item created"),
                                                           "info")
 
-    # custom button
-    @button.buttonAndHandler(_('Submit For Review'), name='submit')
-    def handleSubmit(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        obj = self.createAndAdd(data)
-        if obj is not None:
-            # redirect to workflow submit url
-            submit_url = '%s/%s/content_status_modify?workflow_action=submit' % (self.context.absolute_url(), obj.getId())
-            self.request.response.redirect(submit_url)
+#    # custom button
+#    @button.buttonAndHandler(_('Submit For Review'), name='submit')
+#    def handleSubmit(self, action):
+#        data, errors = self.extractData()
+#        if errors:
+#            self.status = self.formErrorsMessage
+#            return
+#        obj = self.createAndAdd(data)
+#        if obj is not None:
+#            # redirect to workflow submit url
+#            submit_url = '%s/%s/content_status_modify?workflow_action=submit' % (self.context.absolute_url(), obj.getId())
+#            self.request.response.redirect(submit_url)
 
 class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
