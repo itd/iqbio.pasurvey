@@ -4,7 +4,7 @@
     />
 <script type="text/javascript"
     tal:define="navroot context/@@plone_portal_state/navigation_root_url"
-    tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/showhidefields.js"></script>
+    tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/hideformtabs.js"></script>
 
 <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
 
