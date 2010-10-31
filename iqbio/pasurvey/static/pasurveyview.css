@@ -4,3 +4,15 @@ span.option {
     display: block;
 }
 
+#fieldset-0.kssattr-fieldset-0.formPanel,
+#fieldset-1.kssattr-fieldset-1.formPanel,
+#fieldset-2.kssattr-fieldset-2.formPanel,
+#fieldset-3.kssattr-fieldset-3.formPanel,
+#fieldset-4.kssattr-fieldset-4.formPanel
+{
+    border: 1px solid red;
+}
+
+fieldset legend {
+    border: 1px solid red;
+}
