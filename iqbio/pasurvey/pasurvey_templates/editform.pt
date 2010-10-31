@@ -15,6 +15,14 @@
         tal:define="navroot context/@@plone_portal_state/navigation_root_url"
         tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/showhidefields.js"></script>
     </metal:block>
+
+    <metal:block fill-slot="style_slot">
+        <link
+            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+            tal:attributes="href string:${navroot}/++resource++iqbio.pasurvey/pasurveyview.css"
+            media="screen" type="text/css" rel="stylesheet" />
+    </metal:block>
+
 </head>
 <body>
 
