@@ -1,6 +1,6 @@
 from five import grok
 from zope import schema
-from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float
+from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
 from plone.directives import form
 from plone.directives import dexterity
@@ -13,7 +13,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 
-from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget
+from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget, SingleCheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from z3c.form import button, form as z3cform
 
@@ -384,6 +384,13 @@ class IPasurvey(form.Schema):
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the overall management of the process  #
 
+    form.mode(completed='hidden')
+    completed = Int(
+        title = _(u"Is completed?"),
+        description = _(u"Identity that your form was completed."),
+        required = False,
+        default = 0,
+        )
 
 # Now we need to compute the title.
 # An accompanying adapter is in configure.zcml
@@ -477,6 +484,8 @@ class EditForm(dexterity.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
+        #
+        data['completed'] = 1
         self.applyChanges(data)
         # redirect to workflow submit url
         submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
