@@ -45,26 +45,26 @@ biochem_research_interests_vocab = SimpleVocabulary.fromValues((
     ))
 
 
-facultyofinterest_vocab = SimpleVocabulary.fromItems((
-    ('Thomas R. Cech', 'Cech'),
-    ('Kristi S. Anseth','Anseth'),
-    ('Meredith D. Betterton','Betterton'),
-    ('David M. Bortz','Bortz'),
-    ('Stephanie J. Bryant','Bryant'),
-    ('Aaron Clauset','Clauset'),
-    ('Robin Dowell','Dowell'),
-    ('Virginia L. Ferguson','Ferguson'),
-    ('Matthew A. Glaser','Glaser'),
-    ('Debra S. Goldberg','Goldberg'),
-    ('Rob Knight','Knight'),
-    ('Leslie A. Leinwand','Leinwand'),
-    ('Manuel E. Lladser','Lladser'),
-    ('Brett A. Melbourne','Melbourne'),
-    ('David. J. Nesbitt','Nesbitt'),
-    ('Arthur Pardi','Pardi'),
-    ('Amy. E. Palmer','Palmer'),
-    ('Thomas T. Perkins','Perkins'),
-    ('Hang (Hubert) Yin', 'Yin'),
+facultyofinterest_vocab = SimpleVocabulary((
+    SimpleTerm(title='Thomas R. Cech', value='Cech'),
+    SimpleTerm(title='Kristi S. Anseth',value='Anseth'),
+    SimpleTerm(title='Meredith D. Betterton',value='Betterton'),
+    SimpleTerm(title='David M. Bortz',value='Bortz'),
+    SimpleTerm(title='Stephanie J. Bryant',value='Bryant'),
+    SimpleTerm(title='Aaron Clauset',value='Clauset'),
+    SimpleTerm(title='Robin Dowell',value='Dowell'),
+    SimpleTerm(title='Virginia L. Ferguson',value='Ferguson'),
+    SimpleTerm(title='Matthew A. Glaser',value='Glaser'),
+    SimpleTerm(title='Debra S. Goldberg',value='Goldberg'),
+    SimpleTerm(title='Rob Knight',value='Knight'),
+    SimpleTerm(title='Leslie A. Leinwand',value='Leinwand'),
+    SimpleTerm(title='Manuel E. Lladser',value='Lladser'),
+    SimpleTerm(title='Brett A. Melbourne',value='Melbourne'),
+    SimpleTerm(title='David. J. Nesbitt',value='Nesbitt'),
+    SimpleTerm(title='Arthur Pardi',value='Pardi'),
+    SimpleTerm(title='Amy. E. Palmer',value='Palmer'),
+    SimpleTerm(title='Thomas T. Perkins',value='Perkins'),
+    SimpleTerm(title='Hang (Hubert) Yin', value='Yin'),
     ))
 
 
@@ -135,20 +135,20 @@ comp_sci_vocab = SimpleVocabulary.fromValues((
     ('Theory'),
     ))
 
-comp_sci_financial_aid_vocab = SimpleVocabulary.fromItems((
-    (u'I will not accept admission without financial aid.', 'MustHave'),
-    ( u'I have my own financial support, but would like to be considered for financial aid.', 'WillConsider'),
-    (u'I do not wish to be considered for financial aid.', 'DoNotWant'),
+comp_sci_financial_aid_vocab = SimpleVocabulary((
+    SimpleTerm(title=u'I will not accept admission without financial aid.', value='MustHave'),
+    SimpleTerm(title=u'I have my own financial support, but would like to be considered for financial aid.', value='WillConsider'),
+    SimpleTerm(title=u'I do not wish to be considered for financial aid.', value='DoNotWant'),
     ))
 
-yes_no_vocab = SimpleVocabulary.fromItems((
-    (u'', ''),
-    (u'Yes', 'Yes'),
-    (u'No', 'No'),
+yes_no_vocab = SimpleVocabulary((
+    SimpleTerm(title=u'', value=''),
+    SimpleTerm(title=u'Yes', value='Yes'),
+    SimpleTerm(title=u'No', value='No'),
     ))
 
 
-exp_or_theoretical_vocab = SimpleVocabulary.fromItems((
-    ('Experimental', u'Experimental'),
-    ('Theoretical', u'Theoretical'),
+exp_or_theoretical_vocab = SimpleVocabulary((
+    SimpleTerm(value='Experimental', title=u'Experimental'),
+    SimpleTerm(value='Theoretical', title=u'Theoretical'),
     ))
