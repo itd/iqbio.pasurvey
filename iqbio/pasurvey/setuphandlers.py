@@ -125,5 +125,5 @@ def importVarious(context):
     rmStuff(context)
     hideMembersFolder(context)
     setIntranetWorkflow(context)
-    updateRoleMappings(context)
+    #updateRoleMappings(context)
 
