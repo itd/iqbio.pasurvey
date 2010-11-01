@@ -1,0 +1,52 @@
+/*  Any special css overrides for the form view would go here */
+
+span.option {
+    display: block;
+}
+
+#fieldset-0.kssattr-fieldset-0.formPanel,
+#fieldset-1.kssattr-fieldset-1.formPanel,
+#fieldset-2.kssattr-fieldset-2.formPanel,
+#fieldset-3.kssattr-fieldset-3.formPanel,
+#fieldset-4.kssattr-fieldset-4.formPanel
+{
+    border: 1px solid red;
+}
+
+fieldset legend {
+    border: 1px solid red;
+}
+
+
+#view-edit-button-container {
+  float: right;
+  margin-right: 8px;
+}
+#view-edit-button-container a:link,
+#view-edit-button-container a:visited {
+  margin: 3px 5px 3px 5px;
+  padding: 2px;
+  width: 290px;
+  border-top: 2px solid #cccccc;
+  border-bottom: 2px solid black;
+  border-left: 2px solid #cccccc;
+  border-right: 2px solid black;
+  background: #ddd;
+  text-align: center;
+  text-decoration: none;
+  font-size: 120%;
+  color: black;
+}
+
+#view-edit-button-container a:hover {
+  background: #fff;
+  color: white;
+}
+
+#view-edit-button-container a:active{
+  border-bottom: 2px solid #eeeeee;
+  border-top: 2px solid black;
+  border-right: 2px solid #eeeeee;
+  border-left: 2px solid black;
+}
+
