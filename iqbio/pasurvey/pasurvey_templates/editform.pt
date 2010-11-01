@@ -15,13 +15,21 @@
         tal:define="navroot context/@@plone_portal_state/navigation_root_url"
         tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/showhidefields.js"></script>
     </metal:block>
+
+    <metal:block fill-slot="style_slot">
+        <link
+            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+            tal:attributes="href string:${navroot}/++resource++iqbio.pasurvey/pasurveyview.css"
+            media="screen" type="text/css" rel="stylesheet" />
+    </metal:block>
+
 </head>
 <body>
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-        <h1 class="documentFirstHeading">Edit Pre-Admission Survey</h1>
+        <h1 class="documentFirstHeading">Biology Survey and Supplementary Information</h1>
                 <h2>Steps to be completed...</h2>
         <p>If you have not already done so, please
 <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
