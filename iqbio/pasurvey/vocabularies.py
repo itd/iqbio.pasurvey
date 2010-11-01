@@ -20,6 +20,24 @@ degreeprograms_vocab = SimpleVocabulary(
                 value='ChemicalPhysics')]
     )
 
+degreeprograms_lite_vocab = SimpleVocabulary(
+    [SimpleTerm(title='Applied Mathematics',
+                value='AppliedMath'),
+     SimpleTerm(title='Biochemistry',
+                value='Biochemistry'),
+     SimpleTerm(title='Chemical and Biological Engineering',
+                value='ChemBioEngineering'),
+     SimpleTerm(title='Computer Science',
+                value='ComputerScience'),
+     SimpleTerm(title='Ecology and Evolutionary Biology',
+                value='Ecology'),
+     SimpleTerm(title='Mechanical Engineering',
+                value='Mechanical'),
+     SimpleTerm(title='Molecular, Cellular and Developmental Biology',
+                value='Molecular'),
+     SimpleTerm(title='Chemical Physics',
+                value='ChemicalPhysics')]
+    )
 #----------------------------------------------------------------------
 biochem_research_interests_vocab = SimpleVocabulary.fromValues((
     ('Bio-Organic and Bio-Inorganic'),
@@ -62,7 +80,7 @@ facultyofinterest_vocab = SimpleVocabulary((
     SimpleTerm(title='Brett A. Melbourne',value='Melbourne'),
     SimpleTerm(title='David. J. Nesbitt',value='Nesbitt'),
     SimpleTerm(title='Arthur Pardi',value='Pardi'),
-    SimpleTerm(title='Amy. E. Palmer',value='Palmer'),
+    SimpleTerm(title='Amy E. Palmer',value='Palmer'),
     SimpleTerm(title='Thomas T. Perkins',value='Perkins'),
     SimpleTerm(title='Hang (Hubert) Yin', value='Yin'),
     ))
