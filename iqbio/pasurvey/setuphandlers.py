@@ -93,7 +93,7 @@ def updateRoleMappings(context):
     portal = context.getSite()
     wft = getToolByName(context.getSite(), 'portal_workflow')
     wft.updateRoleMappings()
-    wft.doActionFor(portal.surveys, 'publish_internally')
+    #wft.doActionFor(portal.surveys, 'publish_internally')
 
 #----------------------------------------------------------------------
 def hideMembersFolder(context):
