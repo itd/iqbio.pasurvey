@@ -2,10 +2,16 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     >
-
+<!--
   <browser:resourceDirectory
       name="iqbio.xdvtheme.stylesheets"
       directory="stylesheets"
       />
+
+    <browser:resource
+        name="pasurveyviews.css"
+        file="stylesheets/pasurveyviews.css"
+        />
+-->
 
 </configure>
