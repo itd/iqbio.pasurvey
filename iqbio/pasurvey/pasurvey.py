@@ -23,7 +23,7 @@ from iqbio.pasurvey import _
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
-
+from iqbio.pasurvey.vocabularies import degreeprograms_lite_vocab
 from iqbio.pasurvey.validators import validate_email, validate_decimal
 
 class IPasurvey(form.Schema):
@@ -72,18 +72,24 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
+    howdidyouhear= TextLine(
+        title=_(u"How did you hear about IQ Biology?"),
+        description = _(u""),
+        required=False,
+        )
+
     degreeprogram1 = Choice(
-        title=_(u"First degree program of interest"),
+        title=_(u"First Degree Program of Interest"),
         description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
         vocabulary = degreeprograms_vocab,
       )
     degreeprogram2 = Choice(
-        title=_(u"Second degree program of interest"),
+        title=_(u"Second Degree Program of Interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
        )
     degreeprogram3 = Choice(
-        title=_(u"Third degree program of interest"),
+        title=_(u"Third Degree Program of Interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
        )
@@ -98,7 +104,7 @@ class IPasurvey(form.Schema):
     degreeprograms = List(
         title = _(u"Which Degree Programs?"),
         description = _(u"If so, please indicate which degree programs you would like your application considered by (up to three)."),
-        value_type = Choice(vocabulary = degreeprograms_vocab),
+        value_type = Choice(vocabulary = degreeprograms_lite_vocab),
         required=False,
         max_length=3,
         )
@@ -109,7 +115,7 @@ class IPasurvey(form.Schema):
                   fields = ['biochem_research_interests',
                             'biochemteachingexperience',
                             'biochemresearchexperience'])
-        
+
     form.widget(biochem_research_interests=CheckBoxFieldWidget)
     biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
@@ -136,7 +142,7 @@ class IPasurvey(form.Schema):
                   fields = ['bioengfellowshipsupport',
                             'bioengresearchinterests',
                             'bioengducationalgoals'])
-    
+
     form.widget(bioengfellowshipsupport=CheckBoxFieldWidget)
     bioengfellowshipsupport = Bool(
         title = _(u"Fellowship Support"),
@@ -166,7 +172,7 @@ class IPasurvey(form.Schema):
                   label  = _(u"Computer Science"),
                   fields = ['csinterests',
                             'csfinancialaid',])
-    
+
     form.widget(csinterests=CheckBoxFieldWidget)
     csinterests = List(
         title = _(u"Your Interests"),
@@ -175,7 +181,7 @@ class IPasurvey(form.Schema):
         value_type=Choice(vocabulary = comp_sci_vocab),
         max_length=3,
         )
-        
+
     csfinancialaid = Choice(
         title = _(u"Financial Aid (select one)"),
         description = _(u"Indicate your need for financial aid (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
@@ -200,7 +206,7 @@ class IPasurvey(form.Schema):
                             'ecoresearchinterests',
                             'ecofaculty',
                             'ecopublications',])
-    
+
     ecofinancialaid = Choice(
         title = _(u"Financial Aid"),
         description = _(u"Will you be requesting a financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
@@ -214,7 +220,7 @@ class IPasurvey(form.Schema):
         required = False,
         constraint = validate_decimal,
         )
-        
+
     ecoundergradgpabio = Float(
         title = _(u"Undergraduate GPA: biological science courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)"),
@@ -298,7 +304,7 @@ class IPasurvey(form.Schema):
                             'chemphgpacombined',
                             'chemphgpaoverall',
                             'chemphgre'])
-    
+
     chemphresearchinterests  = Text(
         title = _(u"Research Interests"),
         description = _(u"Please write in a few phrases that describe your area(s) of interest or specialization."),
@@ -307,28 +313,28 @@ class IPasurvey(form.Schema):
 
     form.widget(chemphexperimental=CheckBoxFieldWidget)
     chemphexperimental = List(
-        title = _(u"Research Interests: Experimental or Theoretical"),
+        title = _(u"Research Interests: experimental or theoretical"),
         description = _(u"Check one or both boxes depending on your interests."),
         required=False,
         value_type=Choice(vocabulary = exp_or_theoretical_vocab),
         )
 
     chemphgpaphysics = Float(
-        title = _(u"Undergraduate GPA: Physics courses only"),
+        title = _(u"Undergraduate GPA: physics courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
         constraint = validate_decimal,
         )
 
     chemphgpamath = Float(
-        title = _(u"Undergraduate GPA: Math courses only"),
+        title = _(u"Undergraduate GPA: math courses only"),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
         constraint = validate_decimal,
         )
 
     chemphgpacombined = Float(
-        title = _(u"Undergraduate GPA: Combined math and physics courses "),
+        title = _(u"Undergraduate GPA: combined math and physics courses "),
         description = _(u"Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0."),
         required = False,
         constraint = validate_decimal,
@@ -430,14 +436,14 @@ class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.AddForm)
-    
+
     def isRequiredError(self, error):
         if isinstance(error, RequiredMissing):
             # some fields are always required
             if error.__str__() not in ALWAYS_REQUIRED_FIELDS:
                 return True
         return False
-    
+
     ### override handlers from plone.dexterity.browser.add.DefaultAddForm
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleAdd(self, action):
@@ -478,7 +484,7 @@ class EditForm(dexterity.EditForm):
     z3cform.extends(dexterity.EditForm)
 
     # custom button
-    @button.buttonAndHandler(_(u'Submit For Review'), name='submit')
+    @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:

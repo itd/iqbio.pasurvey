@@ -26,23 +26,38 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <h2>Thank you - Steps to be completed...</h2>
-        <p>Thank you for saving a draft of your IQ Biology Survey, please
-<a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
-to the Graduate Admissions Website</a> and fill out the application for your
-First Degree Program of Interest.
-Remember to return to this IQ Biology survey to provide any supplementary
-information needed and formally submit your saved draft. </p>
+<div id="view-edit-button-container">
+<a tal:attributes="href string:${context/getId}/edit" style="color: black;"> Edit your survey submission >> </a>
 
-<h3>Click here to continue to edit your form.</h3>
-<p>It will be available for edit until you use the (Submit for review) button.
-At that point, your survey will be presented to several reviewers and is no
-longer available to edit.</p>
+</div>
 
-<p>
-<strong><a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">Continue
-to the Graduate Admissions Website...</a></strong>
-</p>
+
+        <h2>Thank you for saving your IQ Biology Survey and Supplementary Information.</h2>
+        <p>Please <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+        to the Graduate Admissions Website</a> to fill out your
+        application for your "First Department of Interest".
+        Remember to return to the IQ Biology Survey and
+        Supplementary Information site to edit information on your
+        survey and provide the necessary supplementary information
+        for your Degree Programs of Interest before the deadline.</p>
+
+        <h3><a
+            tal:attributes="href string:${context/getId}/edit">Click
+                here to continue to edit your form.</a></h3>
+
+        <p>You may return to
+        <a tal:attributes="href string:${context/getId}/edit">edit your draft at any time.</a>
+        After you have completed your IQ Biology Survey and Supplementary Information,
+        press the (Submit Survey) button.
+        After that, your information will be delivered to IQ Biology
+        and will no longer be available for edit.<P>
+
+        <p>Please review the Application Instructions
+        [link to Application Instructions on IQ Biology site]
+        to be sure that your entire application is complete by the
+        deadline on January 5th, 2011.
+        </p>
+
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
 

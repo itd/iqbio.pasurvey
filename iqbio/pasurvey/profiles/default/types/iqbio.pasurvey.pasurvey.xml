@@ -6,7 +6,7 @@
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Pre-Admission Survey</property>
  <property name="description"
-      i18n:translate="">A Survey of information submittied by a potential student</property>
+      i18n:translate=""></property>
  <property name="content_icon">user.gif</property>
  <property name="allow_discussion">False</property>
  <property name="global_allow">True</property>
