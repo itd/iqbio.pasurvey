@@ -464,6 +464,30 @@ class AddForm(dexterity.AddForm):
             IStatusMessage(self.request).addStatusMessage(_(u"Item created"),
                                                           "info")
 
+
+    ##@grok.subscribe(IPasurvey, IObjectAddedEvent)
+    ##def notifyUser(pasurvey.title, event):
+    ##    """Send a message to the submitter"""
+    ##    acl_users = getToolByName(pasurvey, 'acl_users')
+    ##    mail_host = getToolByName(pasurvey, 'MailHost')
+    ##    portal_url = getToolByName(pasurvey, 'portal_url')
+    ##
+    ##    portal = portal_url.getPortalObject()
+    ##    sender = portal.getProperty('email_from_address')
+    ##
+    ##    if not sender:
+    ##        return
+    ##
+    ##    subject = "Survey form"
+    ##    message = "A survey for %s was created here %s" % (pasurvey.title, pasurvey.absolute_url(),)
+    ##
+    ##    matching_users = acl_users.searchUsers(email=pasurvey.email)
+    ##    for user_info in matching_users:
+    ##        email = user_info.get('email', None)
+    ##        if email is not None:
+    ##            mail_host.secureSend(message, email, sender, subject)
+
+
 #    # custom button
 #    @button.buttonAndHandler(_('Submit For Review'), name='submit')
 #    def handleSubmit(self, action):
