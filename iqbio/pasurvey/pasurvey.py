@@ -72,7 +72,7 @@ class IPasurvey(form.Schema):
         required=False,
         )
 
-    howdidyouhear= TextLine(
+    howdidyouhear = TextLine(
         title=_(u"How did you hear about IQ Biology?"),
         description = _(u""),
         required=False,
