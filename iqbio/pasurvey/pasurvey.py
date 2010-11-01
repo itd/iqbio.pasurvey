@@ -23,7 +23,7 @@ from iqbio.pasurvey import _
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
 from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
-
+from iqbio.pasurvey.vocabularies import degreeprograms_lite_vocab
 from iqbio.pasurvey.validators import validate_email, validate_decimal
 
 class IPasurvey(form.Schema):
