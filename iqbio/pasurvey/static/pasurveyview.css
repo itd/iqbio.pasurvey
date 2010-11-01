@@ -1,5 +1,10 @@
 /*  Any special css overrides for the form view would go here */
 
+#form-widgets-howdidyouhear {width: 90%;}
+#content textarea {
+  min-height: 10em;
+}
+
 span.option {
     display: block;
 }
