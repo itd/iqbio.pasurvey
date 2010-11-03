@@ -78,7 +78,7 @@ facultyofinterest_vocab = SimpleVocabulary((
     SimpleTerm(title='Leslie A. Leinwand',value='Leinwand'),
     SimpleTerm(title='Manuel E. Lladser',value='Lladser'),
     SimpleTerm(title='Brett A. Melbourne',value='Melbourne'),
-    SimpleTerm(title='David. J. Nesbitt',value='Nesbitt'),
+    SimpleTerm(title='David J. Nesbitt',value='Nesbitt'),
     SimpleTerm(title='Arthur Pardi',value='Pardi'),
     SimpleTerm(title='Amy E. Palmer',value='Palmer'),
     SimpleTerm(title='Thomas T. Perkins',value='Perkins'),
@@ -160,9 +160,8 @@ comp_sci_financial_aid_vocab = SimpleVocabulary((
     ))
 
 yes_no_vocab = SimpleVocabulary((
-    SimpleTerm(title=u'', value=''),
-    SimpleTerm(title=u'Yes', value='Yes'),
     SimpleTerm(title=u'No', value='No'),
+    SimpleTerm(title=u'Yes', value='Yes'),
     ))
 
 
