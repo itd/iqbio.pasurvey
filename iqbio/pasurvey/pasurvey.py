@@ -68,7 +68,7 @@ class IPasurvey(form.Schema):
 
     facultyofinterestother = TextLine(
         title = _(u"Faculty of Interest (other)"),
-        description = _(u"If you did not see the faculty you were interested in on the list, please write their name in here."),
+        description = _(u"If you did not see the faculty you were interested in on the list, please write their names in here."),
         required=False,
         )
 
@@ -95,15 +95,16 @@ class IPasurvey(form.Schema):
        )
 
     alsoapply = Choice(
-        title = _(u"Apply to Department Also"),
+        title = _(u"Consideration by individual degree program(s)?"),
         description = _(u"If you are not accepted by the IQ Biology program, would you like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?"),
         vocabulary = yes_no_vocab,
+        required=True,
         )
 
     form.widget(degreeprograms=CheckBoxFieldWidget)
     degreeprograms = List(
         title = _(u"Which Degree Programs?"),
-        description = _(u"If so, please indicate which degree programs you would like your application considered by (up to three)."),
+        description = _(u"If so, please indicate which degree programs you would like to consider your application (up to three)."),
         value_type = Choice(vocabulary = degreeprograms_lite_vocab),
         required=False,
         max_length=3,
@@ -111,7 +112,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
     form.fieldset('Biochemistry',
-                  label = _(u"Biochemistry Department"),
+                  label = _(u"Biochemistry Degree Program"),
                   fields = ['biochem_research_interests',
                             'biochemteachingexperience',
                             'biochemresearchexperience'])
@@ -138,7 +139,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
     form.fieldset('ChemBioEngineering',
-                  label = _(u"Chemical and Biological Engineering"),
+                  label = _(u"Chemical and Biological Engineering Degree Program"),
                   fields = ['bioengfellowshipsupport',
                             'bioengresearchinterests',
                             'bioengducationalgoals'])
@@ -169,7 +170,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ComputerScience" is selected ---------
     form.fieldset('ComputerScience',
-                  label  = _(u"Computer Science"),
+                  label  = _(u"Computer Science Degree Program"),
                   fields = ['csinterests',
                             'csfinancialaid',])
 
@@ -191,7 +192,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Ecology" is selected ---------
     form.fieldset('Ecology',
-                  label = _(u"Ecology and Evolutionary Biology"),
+                  label = _(u"Ecology and Evolutionary Biology Degree Program"),
                   fields = ['ecofinancialaid',
                             'ecoundergradgpa',
                             'ecoundergradgpabio',
@@ -297,7 +298,7 @@ class IPasurvey(form.Schema):
 
     #----- if ChemicalPhysics is chosen ----------------------------
     form.fieldset('ChemicalPhysics',
-                  label  = u"Chemical Physics",
+                  label  = u"Chemical Physics Degree Program",
                   fields = ['chemphexperimental',
                             'chemphgpaphysics',
                             'chemphgpamath',
@@ -430,7 +431,9 @@ class View(dexterity.DisplayForm):
 
 
 # fields that cannot be skipped when "Save As Draft"
-ALWAYS_REQUIRED_FIELDS = ('fname', 'lname', 'email', 'dob', 'degreeprogram1', 'degreeprogram2', 'degreeprogram3')
+ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email', 
+                        'dob', 'degreeprogram1', 'degreeprogram2', 
+                        )
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
