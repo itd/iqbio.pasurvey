@@ -274,7 +274,7 @@ class IPasurvey(form.Schema):
 
     ecocourseother = Text(
         title = _(u"Other Sciences and Relevant Courses"),
-        description = _(u"Please list the names of other science and relevant courses you have taken and your grade in each course. "),
+        description = _(u"Please list the names of other science and relevant courses you have taken (and your grade in each course). "),
         required = False,
         )
 
@@ -299,7 +299,8 @@ class IPasurvey(form.Schema):
     #----- if ChemicalPhysics is chosen ----------------------------
     form.fieldset('ChemicalPhysics',
                   label  = u"Chemical Physics Degree Program",
-                  fields = ['chemphexperimental',
+                  fields = ['chemphresearchinterests',
+                  					'chemphexperimental',
                             'chemphgpaphysics',
                             'chemphgpamath',
                             'chemphgpacombined',
@@ -431,8 +432,8 @@ class View(dexterity.DisplayForm):
 
 
 # fields that cannot be skipped when "Save As Draft"
-ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email', 
-                        'dob', 'degreeprogram1', 'degreeprogram2', 
+ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email',
+                        'dob', 'degreeprogram1', 'degreeprogram2',
                         )
 
 class AddForm(dexterity.AddForm):
