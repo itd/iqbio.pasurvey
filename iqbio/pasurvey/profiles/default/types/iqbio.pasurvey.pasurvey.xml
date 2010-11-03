@@ -4,7 +4,7 @@
    i18n:domain="iqbio.pasurvey" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
  <!-- Basic metadata -->
- <property name="title" i18n:translate="">Pre-Admission Survey</property>
+ <property name="title" i18n:translate="">IQ Biology Survey</property>
  <property name="description"
       i18n:translate=""></property>
  <property name="content_icon">user.gif</property>
