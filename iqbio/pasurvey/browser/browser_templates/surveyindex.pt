@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="iqbio.pasurvey">
+
+<body>
+
+<metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main"
+                    define="isAnon view/isAnon;
+                            object_url context_state/object_url">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading">IQ Biology Survey and Supplementary Information Form</h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription">Welcome to the IQ Biology Survey and Supplementary Information Site</p>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <p>
+            We recommend you bookmark this page so that you may access your application easily in the future. From this site, you are able to:
+        </p>
+
+        <ol>
+           <li tal:condition="isAnon">
+               <a tal:attributes="href string:$object_url/@@register">REGISTER FOR AN ACCOUNT</a>
+               using your email as a login.
+           </li>
+           <li tal:condition="isAnon">
+               <a tal:attributes="href string:$object_url/login_form">LOG IN</a>
+               to the IQ Biology Survey and Supplementary Information site.
+           </li>
+           <li tal:define="survey view/getSurvey;
+                           url python: view.getSurveyUrl(survey)">
+               <a tal:attributes="href url"><span tal:replace="python: survey and 'Edit' or 'Create'" /> your IQBiology Survey</a>.
+               Please create only one survey.
+           </li>
+           <li>
+               Link to <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">CU's Graduate School Application Website</a>
+               to fill out your application to CU.
+           </li>
+           <li>Access your survey to make edits and complete the necessary supplementary information. You will need to formally submit this survey plus supplementary information before the deadline of January, 5th 2011.</li>
+        </ol>
+
+        <p>
+            If you have not already, we strongly encourage you to print out the
+            <a tal:attributes="href string:$portal_url/application/instructions">Application Instructions</a>
+            before you begin this process.
+        </p>
+        <p>
+            Questions about the application process can be sent to <a href="mailto:iqbiology@colorado.edu">IQBiology@colorado.edu</a>
+        </p>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+
+</metal:main>
+
+</body>
+
+</html>
+
