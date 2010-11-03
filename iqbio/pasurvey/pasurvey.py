@@ -430,7 +430,7 @@ class View(dexterity.DisplayForm):
 
 
 # fields that cannot be skipped when "Save As Draft"
-ALWAYS_REQUIRED_FIELDS = ('fname', 'lname', 'degreeprogram1', 'degreeprogram2', 'degreeprogram3')
+ALWAYS_REQUIRED_FIELDS = ('fname', 'lname', 'email', 'dob', 'degreeprogram1', 'degreeprogram2', 'degreeprogram3')
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
