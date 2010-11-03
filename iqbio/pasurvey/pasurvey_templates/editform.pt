@@ -39,6 +39,11 @@ Remember to return to this IQ Biology survey to provide any supplementary
 information needed and formally submit your saved draft. </p>
         <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
 
+<p>Only questions for Supplementary Information for the Degree Programs of Interest you indicated that require Supplementary Information will be visible. If you change your Degree Programs of Interest, the survey will reflect that change by asking for the appropriate Supplementary Information.
+The following Degree Programs require Supplementary Information: Biochemistry, Chemical &amp; Biological Engineering, Computer Science, Ecology & Evolutionary Biology, and Chemical Physics. The other degree programs do not require any Supplementary Information (Applied Mathematics, Mechanical Engineering, and Molecular, Cellular &amp; Developmental Biology). 
+</p>
+<p>You must submit the IQ Biology Survey with Supplementary Information and the Graduate School Application by January 5th, 2011.</p> 
+
     </tal:main-macro>
 </metal:main>
 
