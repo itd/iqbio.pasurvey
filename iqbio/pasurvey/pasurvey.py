@@ -185,7 +185,7 @@ class IPasurvey(form.Schema):
 
     csfinancialaid = Choice(
         title = _(u"Financial Aid (select one)"),
-        description = _(u"Indicate your need for financial aid (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
+        description = _(u"Indicate your need for financial aid (e.g., Research or Teaching Assistantships) after your second year. Students accepted to the IQ Biology program will have the first two years of funding guaranteed through the IQ Biology program. "),
         required = False,
         vocabulary = comp_sci_financial_aid_vocab,
         )
@@ -512,6 +512,7 @@ class EditForm(dexterity.EditForm):
     z3cform.extends(dexterity.EditForm)
 
     # custom button
+    @button.buttonAndHandler(_('Save As Draft'), name='save')
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
