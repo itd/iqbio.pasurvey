@@ -33,13 +33,13 @@ class SurveyIndex(grok.View):
     def getUserName(self):
         member = self.portal_state.member()
         if member:
-            return member.getUserName()
+            return member.getId()
         
     def getSurvey(self):
         """ Get the created survey """
         if self.isAnon(): return None
         
-        surveys = self.catalog(object_provides=IPasurvey.__identifier__, creator=self.getUserName())
+        surveys = self.catalog(object_provides=IPasurvey.__identifier__, Creator=self.getUserName())
         if surveys:
             return surveys[0]
         

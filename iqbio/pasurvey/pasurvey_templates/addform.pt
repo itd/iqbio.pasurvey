@@ -6,7 +6,11 @@
     tal:define="navroot context/@@plone_portal_state/navigation_root_url"
     tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/hideformtabs.js"></script>
 
-<metal:block use-macro="context/@@ploneform-macros/titlelessform" />
+<metal:form use-macro="context/@@ploneform-macros/titlelessform">
+  <metal:fields fill-slot="field">
+    <metal:block use-macro="context/@@pasurveyform-macros/field" />
+  </metal:fields>
+</metal:form>
 
 <p><strong>Before you submit your survey....</strong>
 Your survey will be available for edit until you use the (Submit for review) button.

@@ -11,6 +11,9 @@ $(document).ready(function() {
 
     function doShow() {
         try {
+            $.viewMap[$('#form-widgets-degreeprogram1').val()].show();
+        } catch(err) {}
+        try {
             $.viewMap[$('#form-widgets-degreeprogram2').val()].show();
         } catch(err) {}
         try {
@@ -22,7 +25,7 @@ $(document).ready(function() {
     doShow()
 
     // onchange event
-    $('#form-widgets-degreeprogram2, #form-widgets-degreeprogram3').change(function() {
+    $('#form-widgets-degreeprogram1, #form-widgets-degreeprogram2, #form-widgets-degreeprogram3').change(function() {
         // hide all first
         $.each($.viewMap, function() { this.hide(); });
         // show fields that matched values selected in degreeprogram2 and degreeprogram3

@@ -1,4 +1,6 @@
 from five import grok
+from Acquisition import aq_inner
+from zope.component import getMultiAdapter
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
@@ -56,7 +58,6 @@ class IPasurvey(form.Schema):
             description=_(u"A valid email address where you can be reached."),
             constraint=validate_email,
         )
-
 
     form.widget(facultyofinterest=CheckBoxFieldWidget)
     facultyofinterest  = List(
@@ -468,29 +469,39 @@ class AddForm(dexterity.AddForm):
             IStatusMessage(self.request).addStatusMessage(_(u"Item created"),
                                                           "info")
 
-
-    ##@grok.subscribe(IPasurvey, IObjectAddedEvent)
-    ##def notifyUser(pasurvey.title, event):
-    ##    """Send a message to the submitter"""
-    ##    acl_users = getToolByName(pasurvey, 'acl_users')
-    ##    mail_host = getToolByName(pasurvey, 'MailHost')
-    ##    portal_url = getToolByName(pasurvey, 'portal_url')
-    ##
-    ##    portal = portal_url.getPortalObject()
-    ##    sender = portal.getProperty('email_from_address')
-    ##
-    ##    if not sender:
-    ##        return
-    ##
-    ##    subject = "Survey form"
-    ##    message = "A survey for %s was created here %s" % (pasurvey.title, pasurvey.absolute_url(),)
-    ##
-    ##    matching_users = acl_users.searchUsers(email=pasurvey.email)
-    ##    for user_info in matching_users:
-    ##        email = user_info.get('email', None)
-    ##        if email is not None:
-    ##            mail_host.secureSend(message, email, sender, subject)
-
+    def update(self):
+        super(AddForm, self).update()
+        
+        survey = self.getSurvey()
+        if survey:
+            # redirect to EditForm if survey was created
+            self.request.response.redirect(survey.getURL() + '/edit')
+            return None
+                    
+    @property
+    def catalog(self):
+        context = aq_inner(self.context)
+        tools = getMultiAdapter((context, self.request), name=u'plone_tools')
+        return tools.catalog()
+    
+    @property
+    def portal_state(self):
+        context = aq_inner(self.context)
+        portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
+        return portal_state
+    
+    def getUserName(self):
+        member = self.portal_state.member()
+        if member:
+            return member.getId()
+    
+    def getSurvey(self):
+        """ Get the created survey """
+        surveys = self.catalog(object_provides=IPasurvey.__identifier__, Creator=self.getUserName())
+        if surveys:
+            return surveys[0]
+        
+        return None
 
 #    # custom button
 #    @button.buttonAndHandler(_('Submit For Review'), name='submit')
@@ -511,19 +522,49 @@ class EditForm(dexterity.EditForm):
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.EditForm)
 
-    # custom button
+    # custom buttons
     @button.buttonAndHandler(_('Save As Draft'), name='save')
+    def handleApply(self, action):
+        super(dexterity.EditForm, self).handleApply(self, action)
+    
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
-        #
+        # set the survey completed manually
         data['completed'] = 1
         self.applyChanges(data)
+        # send email to user
+        self.notifyUser(data['email'])
         # redirect to workflow submit url
         submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
         self.request.response.redirect(submit_url)
+
+    @property
+    def portal_state(self):
+        context = aq_inner(self.context)
+        portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
+        return portal_state
+    
+    def notifyUser(self, email):
+        """Send a message to the submitter"""
+        mail_host = getToolByName(self.context, 'MailHost')
+    
+        portal = self.portal_state.portal()
+        sender_email = portal.getProperty('email_from_address')
+        sender_name = portal.getProperty('email_from_name')
+
+        if sender_email:
+            sender = '%s <%s>' % (sender_name, sender_email)
+        else:
+            return
+    
+        subject = "Survey form"
+        message = "A survey for %s was created here %s" % (self.context.title, self.context.absolute_url())
+        
+        if email:
+            mail_host.send(message, email, sender, subject)
 
 
