@@ -40,6 +40,8 @@ def createSurveyFolder(portal):
         _createObjectByType('Folder', portal,
                 id='surveys', title='Surveys',
                 description='Pe-Admission survey submission folder')
+        #set the default view of the folder
+        portal.surveys.setLayout('@@survey-index')
     logger.info('****** end create Survey folder ******')
 
 
