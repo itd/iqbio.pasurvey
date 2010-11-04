@@ -2,7 +2,9 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from iqbio.pasurvey import _
 
 degreeprograms_vocab = SimpleVocabulary(
-    [SimpleTerm(title='Applied Mathematics (Arts & Sciences)',
+    [SimpleTerm(title='',
+                value=''),
+     SimpleTerm(title='Applied Mathematics (Arts & Sciences)',
                 value='AppliedMath'),
      SimpleTerm(title='Biochemistry (Arts & Sciences)',
                 value='Biochemistry'),
