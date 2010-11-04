@@ -92,6 +92,7 @@ class IPasurvey(form.Schema):
         title=_(u"Third Degree Program of Interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
+        required=False,
        )
 
     alsoapply = Choice(
