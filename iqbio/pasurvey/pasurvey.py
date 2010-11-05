@@ -114,7 +114,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
     form.fieldset('Biochemistry',
-                  label = _(u"Biochemistry Degree Program"),
+                  label = _(u"Supplementary Information for the Biochemistry Degree Program"),
                   fields = ['biochem_research_interests',
                             'biochemteachingexperience',
                             'biochemresearchexperience'])
@@ -141,7 +141,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
     form.fieldset('ChemBioEngineering',
-                  label = _(u"Chemical and Biological Engineering Degree Program"),
+                  label = _(u"Supplementary Information for the Chemical and Biological Engineering Degree Program"),
                   fields = ['bioengfellowshipsupport',
                             'bioengresearchinterests',
                             'bioengducationalgoals'])
@@ -172,7 +172,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ComputerScience" is selected ---------
     form.fieldset('ComputerScience',
-                  label  = _(u"Computer Science Degree Program"),
+                  label  = _(u"Supplementary Information for the Computer Science Degree Program"),
                   fields = ['csinterests',
                             'csfinancialaid',])
 
@@ -194,7 +194,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Ecology" is selected ---------
     form.fieldset('Ecology',
-                  label = _(u"Ecology and Evolutionary Biology Degree Program"),
+                  label = _(u"Supplementary Information for the Ecology and Evolutionary Biology Degree Program"),
                   fields = ['ecofinancialaid',
                             'ecoundergradgpa',
                             'ecoundergradgpabio',
@@ -212,7 +212,7 @@ class IPasurvey(form.Schema):
 
     ecofinancialaid = Choice(
         title = _(u"Financial Aid"),
-        description = _(u"Will you be requesting a financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
+        description = _(u"Will you be requesting financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
         required = False,
         vocabulary = yes_no_vocab,
         )
@@ -300,7 +300,7 @@ class IPasurvey(form.Schema):
 
     #----- if ChemicalPhysics is chosen ----------------------------
     form.fieldset('ChemicalPhysics',
-                  label  = u"Chemical Physics Degree Program",
+                  label  = u"Supplementary Information for the Chemical Physics Degree Program",
                   fields = ['chemphresearchinterests',
                   					'chemphexperimental',
                             'chemphgpaphysics',
@@ -352,7 +352,7 @@ class IPasurvey(form.Schema):
         )
 
     chemphgre = Text(
-        title = _(u"GRE SCore: Physics Subject Exam (optional)"),
+        title = _(u"GRE Score: Physics Subject Exam (optional)"),
         description = _(u"If you have taken a Physics Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test."),
         required = False,
         min_length = None,
@@ -434,9 +434,7 @@ class View(dexterity.DisplayForm):
 
 
 # fields that cannot be skipped when "Save As Draft"
-ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email',
-                        'dob', 'degreeprogram1', 'degreeprogram2',
-                        )
+ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email','dob', 'degreeprogram1', 'degreeprogram2',)
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
@@ -472,36 +470,36 @@ class AddForm(dexterity.AddForm):
 
     def update(self):
         super(AddForm, self).update()
-        
+
         survey = self.getSurvey()
         if survey:
             # redirect to EditForm if survey was created
             self.request.response.redirect(survey.getURL() + '/edit')
             return None
-                    
+
     @property
     def catalog(self):
         context = aq_inner(self.context)
         tools = getMultiAdapter((context, self.request), name=u'plone_tools')
         return tools.catalog()
-    
+
     @property
     def portal_state(self):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
+
     def getUserName(self):
         member = self.portal_state.member()
         if member:
             return member.getId()
-    
+
     def getSurvey(self):
         """ Get the created survey """
         surveys = self.catalog(object_provides=IPasurvey.__identifier__, Creator=self.getUserName())
         if surveys:
             return surveys[0]
-        
+
         return None
 
 #    # custom button
@@ -527,7 +525,7 @@ class EditForm(dexterity.EditForm):
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleApply(self, action):
         super(dexterity.EditForm, self).handleApply(self, action)
-    
+
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -548,11 +546,11 @@ class EditForm(dexterity.EditForm):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
+
     def notifyUser(self, email):
         """Send a message to the submitter"""
         mail_host = getToolByName(self.context, 'MailHost')
-    
+
         portal = self.portal_state.portal()
         sender_email = portal.getProperty('email_from_address')
         sender_name = portal.getProperty('email_from_name')
@@ -561,10 +559,54 @@ class EditForm(dexterity.EditForm):
             sender = '%s <%s>' % (sender_name, sender_email)
         else:
             return
-    
-        subject = "Survey form"
-        message = "A survey for %s was created here %s" % (self.context.title, self.context.absolute_url())
-        
+
+        subject = "IQ Biology Survey Form Submission"
+        #message = "A survey for %s was created here %s" % (self.context.title, self.context.absolute_url())
+        message= """Thank you for saving your IQ Biology Survey and Supplementary Information.
+
+If you have not done so already, please continue to the
+Graduate School Application Website at:
+
+https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action
+
+...to fill out your application for your
+"First Department of Interest".
+
+Remember to return to the IQ Biology Survey and
+Supplementary Information site to edit information
+on your survey and provide the necessary supplementary
+information for your Degree Programs of Interest
+before the deadline.
+
+You may use this link to return back to the IQ Biology Survey
+site to enter in your Supplementary Information and edit any
+of your information as needed:
+
+http://iqbiology.colorado.edu/survey/
+
+After you have completed your IQ Biology Survey and
+Supplementary Information, press the "Submit Survey" button.
+After you do that, your information will be delivered to
+IQ Biology and will no longer be available for edit.
+
+Please review the Application Instructions:
+
+http://iqbiology.colorado.edu/application/instructions
+
+...to be sure that your entire application is complete by the
+deadline on January 5th, 2011.
+
+Please contact us http://iqbiology.colorado.edu/contact-us if you
+have any questions.
+
+
+Thank you,
+
+The IQ Biology Program
+IQBiology.colorado.edu
+
+
+        """
         if email:
             mail_host.send(message, email, sender, subject)
 

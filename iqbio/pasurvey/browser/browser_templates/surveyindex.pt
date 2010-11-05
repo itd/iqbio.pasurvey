@@ -25,7 +25,8 @@
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
         <p>
-            We recommend you bookmark this page so that you may access your application easily in the future. From this site, you are able to:
+            We recommend you bookmark this page so that you may access your application easily in the future.
+            From this site, you are able to:
         </p>
 
         <ol>
@@ -39,14 +40,18 @@
            </li>
            <li tal:define="survey view/getSurvey;
                            url python: view.getSurveyUrl(survey)">
-               <a tal:attributes="href url"><span tal:replace="python: survey and 'Edit' or 'Create'" /> your IQBiology Survey</a>.
+               <a tal:attributes="href url"><span tal:replace="python: survey and 'Edit' or 'Create'" /> your
+               IQBiology Survey</a>.
                Please create only one survey.
            </li>
            <li>
-               Link to <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">CU's Graduate School Application Website</a>
+               Link to <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">CU's
+               Graduate School Application Website</a>
                to fill out your application to CU.
            </li>
-           <li>Access your survey to make edits and complete the necessary supplementary information. You will need to formally submit this survey plus supplementary information before the deadline of January, 5th 2011.</li>
+           <li>Access your survey to make edits and complete the necessary supplementary information.
+           You will need to formally submit this survey plus supplementary information before the
+           deadline of January, 5th 2011.</li>
         </ol>
 
         <p>
@@ -55,7 +60,8 @@
             before you begin this process.
         </p>
         <p>
-            Questions about the application process can be sent to <a href="mailto:iqbiology@colorado.edu">IQBiology@colorado.edu</a>
+            Questions about the application process can be sent to
+            <a href="mailto:iqbiology@colorado.edu">IQBiology@colorado.edu</a>
         </p>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
