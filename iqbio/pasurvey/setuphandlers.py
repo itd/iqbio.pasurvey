@@ -49,15 +49,25 @@ def createSurveyFolder(portal):
 #----------------------------------------------------------------------
 def createGroups(portal):
     """Create the new groups for the survey management"""
-        # Set up groups
     uf = getToolByName(portal, 'acl_users')
     gtool = getToolByName(portal, 'portal_groups')
-    if not uf.searchGroups(id='FacultyReviewers'):
-        gtool.addGroup('FacultyReviewers', title='FacultyReviewers', roles=['Editor'])
-    if not uf.searchGroups(id='SurveyManagers'):
-        gtool.addGroup('SurveyManagers', title='SurveyManagers', roles=['Manager'])
-    if not uf.searchGroups(id='ProgramReviewers'):
-        gtool.addGroup('ProgramReviewers', title='ProgramReviewers', roles=['Editor'])
+    glist = (
+        {'id':'SurveyManagers', 'title':'Survey Managers', 'roles':'Manager'},
+        {'id':'FacultyReviewers', 'title':'Faculty Reviewers', 'roles':'Editor'},
+        {'id':'AppliedMath', 'title':'Applied Mathematics', 'roles':'Editor'},
+        {'id':'Biochemistry', 'title':'Biochemistry', 'roles':'Editor'},
+        {'id':'ChemBioEngineering', 'title':'ChemBioEngineering', 'roles':'Editor'},
+        {'id':'ComputerScience', 'title':'Computer Science', 'roles':'Editor'},
+        {'id':'Ecology', 'title':'Ecology', 'roles':'Editor'},
+        {'id':'Mechanical', 'title':'Mechanical Engineering', 'roles':'Editor'},
+        {'id':'Molecular', 'title':'Molecular', 'roles':'Editor'},
+        {'id':'ChemicalPhysics', 'title':'Chemical Physics', 'roles':'Editor'},
+        )
+
+    for i in glist:
+        if not uf.searchGroups(id=i['id']):
+            gtool.addGroup(i['id'], title=i['title'], roles=[i['roles']])
+
 
 def setSurveyFolderContentRestrictions(context):
     """"""
