@@ -3,7 +3,7 @@ from iqbio.pasurvey import _
 
 degreeprograms_vocab = SimpleVocabulary(
     [SimpleTerm(title='',
-                value=''),
+                value=None),
      SimpleTerm(title='Applied Mathematics (Arts & Sciences)',
                 value='AppliedMath'),
      SimpleTerm(title='Biochemistry (Arts & Sciences)',
@@ -162,6 +162,7 @@ comp_sci_financial_aid_vocab = SimpleVocabulary((
     ))
 
 yes_no_vocab = SimpleVocabulary((
+    SimpleTerm(title=u'', value=None),
     SimpleTerm(title=u'No', value='No'),
     SimpleTerm(title=u'Yes', value='Yes'),
     ))

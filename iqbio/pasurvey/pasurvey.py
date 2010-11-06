@@ -28,6 +28,15 @@ from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio
 from iqbio.pasurvey.vocabularies import degreeprograms_lite_vocab
 from iqbio.pasurvey.validators import validate_email, validate_decimal
 
+
+def choiceVocabConstraint(value):
+    """Check that the value selected is not blank
+    """
+    if value is None:
+        raise Invalid(_(u"Selecting a First and Second Degree Program is required."))
+    return True
+
+
 class IPasurvey(form.Schema):
     """
     The schema for the survey form
@@ -83,11 +92,13 @@ class IPasurvey(form.Schema):
         title=_(u"First Degree Program of Interest"),
         description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
         vocabulary = degreeprograms_vocab,
+        constraint = choiceVocabConstraint,
       )
     degreeprogram2 = Choice(
         title=_(u"Second Degree Program of Interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
+        constraint = choiceVocabConstraint,
        )
     degreeprogram3 = Choice(
         title=_(u"Third Degree Program of Interest"),
@@ -100,7 +111,7 @@ class IPasurvey(form.Schema):
         title = _(u"Consideration by individual degree program(s)?"),
         description = _(u"If you are not accepted by the IQ Biology program, would you like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?"),
         vocabulary = yes_no_vocab,
-        required=True,
+        constraint = choiceVocabConstraint,
         )
 
     form.widget(degreeprograms=CheckBoxFieldWidget)
@@ -359,6 +370,7 @@ class IPasurvey(form.Schema):
         max_length = None,
         )
 
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the various departments to     #
     # comment and accept/notaccept an applicant                   #
@@ -401,6 +413,7 @@ class IPasurvey(form.Schema):
         required = False,
         default = 0,
         )
+
 
 # Now we need to compute the title.
 # An accompanying adapter is in configure.zcml
@@ -528,13 +541,13 @@ class EditForm(dexterity.EditForm):
 
         data, errors = self.extractData()
         # skip RequiredMissing errors
-        errors = [e for e in errors if not self.isRequiredError(e.error)]
+        errors = [e for e in errors]
         if errors:
             self.status = self.formErrorsMessage
-            # advoid required errors to be displayed then
-            for name, widget in self.widgets.items():
-                if widget.error and self.isRequiredError(widget.error.error):
-                    self.widgets[name].error = None
+            # avoid required errors to be displayed then
+            #for name, widget in self.widgets.items():
+            #    if widget.error and self.isRequiredError(widget.error.error):
+            #        self.widgets[name].error = None
             return
 
         # send email to user when saved as draft
@@ -600,6 +613,10 @@ Thank you,
 The IQ Biology Program
 IQBiology.colorado.edu
 
+
+
+Note: You will recieve one of these reminder messages
+      every time you edit your survey form.
 
         """
         if email:
