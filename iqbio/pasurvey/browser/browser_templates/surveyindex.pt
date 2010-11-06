@@ -29,30 +29,13 @@
             From this site, you are able to:
         </p>
 
-        <ol>
-           <li tal:condition="isAnon">
-               <a tal:attributes="href string:$object_url/@@register">REGISTER FOR AN ACCOUNT</a>
-               using your email as a login.
-           </li>
-           <li tal:condition="isAnon">
-               <a tal:attributes="href string:$object_url/login_form">LOG IN</a>
-               to the IQ Biology Survey and Supplementary Information site.
-           </li>
-           <li tal:define="survey view/getSurvey;
-                           url python: view.getSurveyUrl(survey)">
-               <a tal:attributes="href url"><span tal:replace="python: survey and 'Edit' or 'Create'" /> your
-               IQBiology Survey</a>.
-               Please create only one survey.
-           </li>
-           <li>
-               Link to <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">CU's
-               Graduate School Application Website</a>
-               to fill out your application to CU.
-           </li>
-           <li>Access your survey to make edits and complete the necessary supplementary information.
-           You will need to formally submit this survey plus supplementary information before the
-           deadline of January, 5th 2011.</li>
-        </ol>
+
+        <p tal:define="survey view/getSurvey;
+                        url python: view.getSurveyUrl(survey)">
+            <strong><a tal:attributes="href url"><span tal:replace="python: survey and 'Edit' or 'Create'" /> your
+            IQBiology Survey</a>.</strong>
+            <em>Please create only one survey.</em>
+        </p>
 
         <p>
             If you have not already, we strongly encourage you to print out the
