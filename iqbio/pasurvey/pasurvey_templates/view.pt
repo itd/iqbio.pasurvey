@@ -33,11 +33,10 @@
 
 
         <h2>Thank you for saving your IQ Biology Survey and Supplementary Information.</h2>
-        <p>We recommend you <strong><em>bookmark this page</em></strong> so that you may access your application easily
-in the future.ou will want to return here.</p>
-        <p>After you bookmark this page, please <strong><a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+
+        <p>Please <strong><a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
         to the Graduate Admissions Website</a></strong> to fill out your
-        application for your "First Department of Interest".
+        application for your "First Degree Program".
         Remember to return to the IQ Biology Survey and
         Supplementary Information site to edit information on your
         survey and provide the necessary supplementary information
@@ -50,13 +49,14 @@ in the future.ou will want to return here.</p>
         <p>You may return to
         <a tal:attributes="href string:${context/getId}/edit">edit your draft at any time.</a>
         After you have completed your IQ Biology Survey and Supplementary Information,
-        press the (Submit Survey) button.
-        After that, your information will be delivered to IQ Biology
+        press the "Submit Survey" button.
+        After you do that, your information will be delivered to IQ Biology
         and will no longer be available for edit.<P>
 
-        <p>Please review the Application Instructions
-        [link to Application Instructions on IQ Biology site]
-        to be sure that your entire application is complete by the
+        <p>Please review the
+        <a href="http://iqbiology.colorado.edu/application/instructions ">Application
+        Instructions</a>
+        to be sure your entire application is complete by the
         deadline on January 5th, 2011.
         </p>
 
