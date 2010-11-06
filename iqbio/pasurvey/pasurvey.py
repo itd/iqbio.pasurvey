@@ -526,26 +526,19 @@ class EditForm(dexterity.EditForm):
     def handleApply(self, action):
         super(dexterity.EditForm, self).handleApply(self, action)
 
-    @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
-    def handleSubmit(self, action):
         data, errors = self.extractData()
+        # skip RequiredMissing errors
+        errors = [e for e in errors if not self.isRequiredError(e.error)]
         if errors:
             self.status = self.formErrorsMessage
+            # advoid required errors to be displayed then
+            for name, widget in self.widgets.items():
+                if widget.error and self.isRequiredError(widget.error.error):
+                    self.widgets[name].error = None
             return
-        # set the survey completed manually
-        data['completed'] = 1
-        self.applyChanges(data)
-        # send email to user
-        self.notifyUser(data['email'])
-        # redirect to workflow submit url
-        submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
-        self.request.response.redirect(submit_url)
 
-    @property
-    def portal_state(self):
-        context = aq_inner(self.context)
-        portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
-        return portal_state
+        # send email to user when saved as draft
+        self.notifyUser(data['email'])
 
     def notifyUser(self, email):
         """Send a message to the submitter"""
@@ -585,19 +578,21 @@ of your information as needed:
 http://iqbiology.colorado.edu/survey/
 
 After you have completed your IQ Biology Survey and
-Supplementary Information, press the "Submit Survey" button.
-After you do that, your information will be delivered to
-IQ Biology and will no longer be available for edit.
+Supplementary Information, press the "Submit Survey"
+button.
+
+After you do that, your information will be delivered
+to IQ Biology and will no longer be available for edit.
 
 Please review the Application Instructions:
 
 http://iqbiology.colorado.edu/application/instructions
 
-...to be sure that your entire application is complete by the
-deadline on January 5th, 2011.
+...to be sure that your entire application is complete
+by the deadline on January 5th, 2011.
 
-Please contact us http://iqbiology.colorado.edu/contact-us if you
-have any questions.
+Please contact us http://iqbiology.colorado.edu/contact-us
+if you have any questions.
 
 
 Thank you,
@@ -610,4 +605,25 @@ IQBiology.colorado.edu
         if email:
             mail_host.send(message, email, sender, subject)
 
+
+
+    @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        # set the survey completed manually
+        data['completed'] = 1
+        self.applyChanges(data)
+
+        # redirect to workflow submit url
+        submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
+        self.request.response.redirect(submit_url)
+
+    @property
+    def portal_state(self):
+        context = aq_inner(self.context)
+        portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
+        return portal_state
 
