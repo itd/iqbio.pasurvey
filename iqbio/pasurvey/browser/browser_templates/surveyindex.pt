@@ -24,11 +24,6 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <p>
-            We recommend you bookmark this page so that you may access your application easily in the future.
-            From this site, you are able to:
-        </p>
-
 
         <p tal:define="survey view/getSurvey;
                         url python: view.getSurveyUrl(survey)">
