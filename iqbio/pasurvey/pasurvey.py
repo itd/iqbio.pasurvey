@@ -558,6 +558,24 @@ class EditForm(dexterity.EditForm):
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.EditForm)
 
+    def getRolesOfUser(self):
+        """A hack to determine if the current user is a Manager or Editor.
+        We'll use this to allow Editor's only if the form has been submitted
+        since the workflow is not yet in place.
+        Sorry. I know it's a horrible hack.
+        """
+        context = aq_inner(self)
+        mt = getToolByName(context, 'portal_membership')
+        memb = mt.getAuthenticatedMember()
+        roles = memb.getRolesInContext(self)
+        allowed = ['Editor','Manager']
+        is_allowed = set(allowed).intersection( set(roles) )
+        is_allowed = list(is_allowed)
+        retval = False
+        if len(is_allowed) == True:
+            retval = True
+        return retval
+
     # custom buttons
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleApply(self, action):
