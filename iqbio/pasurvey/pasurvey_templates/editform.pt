@@ -18,7 +18,9 @@
         <script type="text/javascript"
         tal:define="navroot context/@@plone_portal_state/navigation_root_url"
         tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/jquery.validity.pack.js"></script>
-
+        <script type="text/javascript"
+        tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+        tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/validity_parts.js"></script>
     </metal:block>
 
     <metal:block fill-slot="style_slot">
@@ -31,19 +33,6 @@
             tal:attributes="href string:${navroot}/++resource++iqbio.pasurvey/jquery.validity.css"
             media="screen" type="text/css" rel="stylesheet" />
     </metal:block>
-
-
-
-
-    <script type="text/javascript">
-    // Select all of the forms on the page (in this case the only one)
-    // and call 'validity' on the result.
-    $(function() {
-        $("form").validity(function() {
-
-        });
-    });
-    </script>
 
 </head>
 <body>
