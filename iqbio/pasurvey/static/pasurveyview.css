@@ -1,7 +1,11 @@
 /*  Any special css overrides for the form view would go here */
 
-.formTabs {
+.template-edit .formTabs {
 visibility:collapse;
+height:1px;
+}
+#fieldset-default {
+  margin-top: -14px;
 }
 .documentByLine{
 visibility:collapse;
