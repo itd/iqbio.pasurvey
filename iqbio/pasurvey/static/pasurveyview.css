@@ -3,7 +3,9 @@
 .formTabs {
 visibility:collapse;
 }
-
+.documentByLine{
+visibility:collapse;
+}
 #form-widgets-howdidyouhear {width: 90%;}
 #content textarea {
   min-height: 10em;
