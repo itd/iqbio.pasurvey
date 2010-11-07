@@ -17,48 +17,104 @@
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
-
         <div tal:replace="structure provider:plone.abovecontenttitle" />
-
         <h1 class="documentFirstHeading" tal:content="context/title" />
-
+        <tal:comment tal:replace="nothing">
+        <!-- we don't need a by-line here -->
         <div tal:replace="structure provider:plone.belowcontenttitle" />
-
+        </tal:comment>
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-<div id="view-edit-button-container">
-<a tal:attributes="href string:${context/getId}/edit" style="color: black;"> Edit your survey submission >> </a>
 
-</div>
+        <div tal:condition="view/getRolesOfUser">
+         <tal:comment tal:replace="nothing">
+                If the current user is a Manager or Editor, display this div
+        </tal:comment>
+        <h1>Editor Privileges</h1>
+        <a tal:attributes="href string:${context/getId}/edit"
+                      style="color: black;"> Edit this survey submission </a>
+        </div>
 
+        <div tal:condition="python:not context.completed"
+            id="pasurvey-view-still-editable">
+                <tal:comment tal:replace="nothing">
+                This div gets shown if the value of the 'completed' field is 0
+                </tal:comment>
 
-        <h2>Thank you for saving your IQ Biology Survey and Supplementary Information.</h2>
+                <div id="view-edit-button-container">
+                  <a tal:attributes="href string:${context/getId}/edit"
+                      style="color: black;"> Edit your survey submission >> </a>
+                </div>
 
-        <p>Please <strong><a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
-        to the Graduate Admissions Website</a></strong> to fill out your
-        application for your "First Degree Program".
-        Remember to return to the IQ Biology Survey and
-        Supplementary Information site to edit information on your
-        survey and provide the necessary supplementary information
-        for your Degree Programs of Interest before the deadline.</p>
+                <h2>Thank you for saving your IQ Biology Survey and Supplementary Information.</h2>
 
-        <h3><a
-            tal:attributes="href string:${context/getId}/edit">Click
-                here to continue to edit your form.</a></h3>
+                <p>Please
+                <strong><a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+                to the Graduate Admissions Website</a></strong> to fill out your
+                application for your "First Degree Program".
+                Remember to return to the IQ Biology Survey and
+                Supplementary Information site to edit information on your
+                survey and provide the necessary supplementary information
+                for your Degree Programs of Interest before the deadline.</p>
 
-        <p>You may return to
-        <a tal:attributes="href string:${context/getId}/edit">edit your draft at any time.</a>
-        After you have completed your IQ Biology Survey and Supplementary Information,
-        press the "Submit Survey" button.
-        After you do that, your information will be delivered to IQ Biology
-        and will no longer be available for edit.<P>
+                <h3><a
+                    tal:attributes="href string:${context/getId}/edit">Click
+                        here to continue to edit your form.</a></h3>
 
-        <p>Please review the
-        <a href="http://iqbiology.colorado.edu/application/instructions ">Application
-        Instructions</a>
-        to be sure your entire application is complete by the
-        deadline on January 5th, 2011.
-        </p>
+                <p>You may return to
+                <a tal:attributes="href string:${context/getId}/edit">edit your draft at any time.</a>
+                After you have completed your IQ Biology Survey and Supplementary Information,
+                press the "Submit Survey" button.
+                After you do that, your information will be delivered to IQ Biology
+                and will no longer be available for edit.<P>
+
+                <p>Please review the
+                <a href="http://iqbiology.colorado.edu/application/instructions ">Application
+                Instructions</a>
+                to be sure your entire application is complete by the
+                deadline on January 5th, 2011.
+                </p>
+
+        </div><tal:comment
+            tal:replace="nothing">ends conditional
+            pasurvey-view-still-editable div</tal:comment>
+
+        <div tal:define="roles view/getRolesOfUser"
+            tal:condition="python:context.completed"
+            id="pasurvey-view-completed">
+                <tal:comment tal:replace="nothing">
+                This div gets shown if the value of the 'completed' field is 1
+                </tal:comment>
+            <h2>Thank you for submitting your IQ Biology Survey
+            and Supplementary Information.</h2>
+
+            <p>&nbsp;
+            </p>
+
+            <p>Your IQ Biology Survey and Supplementary Information has been
+            passed on to IQ Biology and is no longer available to edit.
+            </p>
+            <p>
+            If you have not already, please continue to the
+            <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">Graduate
+            School Application Website</a> to fill out your application for your
+            "First Degree Program of Interest" and formally submit your application.
+            </p>
+            <p>
+            Please review the
+            <a href="http://iqbiology.colorado.edu/application/instructions">Application
+            Instructions</a> to be sure that your entire application is complete
+            by the deadline on January 5th, 2011.
+            </p>
+            <p>
+            Please direct questions to
+            <a href="mailto:IQBiology@colorado.edu?Subject=IQBiology%20Survey%20Question">
+            IQBiology@colorado.edu </a>
+
+        </div><tal:comment
+            tal:replace="nothing">ends conditional
+            pasurvey-view-completed div</tal:comment>
+
 
 
         <div tal:replace="structure provider:plone.belowcontentbody" />

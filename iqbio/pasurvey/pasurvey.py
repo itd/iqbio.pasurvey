@@ -1,6 +1,7 @@
 from five import grok
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
+
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
@@ -409,7 +410,7 @@ class IPasurvey(form.Schema):
     form.mode(completed='hidden')
     completed = Int(
         title = _(u"Is completed?"),
-        description = _(u"Identity that your form was completed."),
+        description = _(u"Identify that your form was completed."),
         required = False,
         default = 0,
         )
@@ -444,6 +445,29 @@ class View(dexterity.DisplayForm):
         """
     grok.context(IPasurvey)
     grok.require('zope2.View')
+
+    def getRolesOfUser(self):
+        """A hack to determine if the current user is an admin or editor,
+        or a normal user so we can display info in the view"""
+        context = aq_inner(self)
+        mt = getToolByName(context, 'portal_membership')
+        memb = mt.getAuthenticatedMember()
+        roles = memb.getRolesInContext(self)
+        allowed = ['Editor','Manager']
+        is_allowed = set(allowed).intersection( set(roles) )
+        is_allowed = list(is_allowed)
+        retval = False
+        if len(is_allowed) == True:
+            retval = True
+        return retval
+
+    def isComplete(self):
+        data, errors = self.extractData()
+        if data['completed'] == 1:
+            retval = True
+        else:
+            retval = False
+        return retval
 
 
 # fields that cannot be skipped when "Save As Draft"
