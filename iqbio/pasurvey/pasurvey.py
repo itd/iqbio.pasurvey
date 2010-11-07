@@ -134,7 +134,7 @@ class IPasurvey(form.Schema):
     form.widget(biochem_research_interests=CheckBoxFieldWidget)
     biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
-        description = _(u"Please check off as many of the research areas as interests you."),
+        description = _(u"Please check off as many of the research areas as interest you. (required)"),
         value_type = Choice(vocabulary = biochem_research_interests_vocab),
         required=False,
         )
@@ -306,7 +306,7 @@ class IPasurvey(form.Schema):
 
     ecopublications = Text(
         title = _(u"Publications"),
-        description = _(u"Please list the complete citations of any scientific publication that you have authored."),
+        description = _(u"Please list the complete citations of any scientific publications that you have authored."),
         required = False,
         )
 
