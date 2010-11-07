@@ -34,7 +34,7 @@
 
         <p>
             If you have not already, we strongly encourage you to print out the
-            <a tal:attributes="href string:$portal_url/application/instructions">Application Instructions</a>
+            <a href="http://iqbiology.colorado.edu/application/instructions">Application InstructionsApplication Instructions</a>
             before you begin this process.
         </p>
         <p>
