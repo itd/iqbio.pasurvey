@@ -21,6 +21,9 @@
         <script type="text/javascript"
         tal:define="navroot context/@@plone_portal_state/navigation_root_url"
         tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/validity_parts.js"></script>
+       <script type="text/javascript"
+        tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+        tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/pasurvey_misc.js"></script>
     </metal:block>
 
     <metal:block fill-slot="style_slot">
