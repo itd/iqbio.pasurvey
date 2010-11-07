@@ -134,7 +134,7 @@ class IPasurvey(form.Schema):
     form.widget(biochem_research_interests=CheckBoxFieldWidget)
     biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
-        description = _(u"Please check off as many of the research areas as interest you. (required)"),
+        description = _(u"Please check off as many of the research areas as interest you."),
         value_type = Choice(vocabulary = biochem_research_interests_vocab),
         required=False,
         )
