@@ -29,22 +29,6 @@ def addInitialAdmins(site):
             already_taken = '\nlogin id %s already exists...\n\n'
             logger.debug(already_taken % (member['id'],))
 
-#----------------------------------------------------------------------
-def createSurveyFolder(portal):
-    """ create hSurveyFolder
-    it has to be the last step from importVarious !
-    """
-    logger.info('****** start create Survey Folder ******')
-    portal_ids = portal.contentIds()
-    if 'surveys' not in portal_ids:
-        _createObjectByType('Folder', portal,
-                id='surveys', title='Surveys',
-                description='Pe-Admission survey submission folder')
-    #set the default view of the folder
-    if 'surveys' in portal_ids:
-        portal.surveys.setLayout('@@survey-index')
-    logger.info('****** end create Survey folder ******')
-
 
 #----------------------------------------------------------------------
 def createGroups(portal):
@@ -106,7 +90,8 @@ def updateRoleMappings(context):
     portal = context.getSite()
     wft = getToolByName(context.getSite(), 'portal_workflow')
     wft.updateRoleMappings()
-    #wft.doActionFor(portal.surveys, 'publish_internally')
+    wft.doActionFor(portal.surveys, 'publish_internally')
+
 
 #----------------------------------------------------------------------
 def hideMembersFolder(context):
@@ -117,26 +102,69 @@ def hideMembersFolder(context):
     members.setExcludeFromNav(True)
     members.update()
 
-def rmStuff(context):
+
+#----------------------------------------------------------------------
+def hideStuff(context):
     """rm stuff in the portal root"""
     portal = context.getSite()
     stuff = ['events', 'news']
     for obj in stuff:
         if obj in portal.listFolderContents():
-            portal.manage_delObjects(obj)
+            obj = portal.obj
+            obj.setExcludeFromNav(True)
+            obj.update()
 
 
+#----------------------------------------------------------------------
+def createSurveyFolder(portal):
+    """ create SurveyFolder
+    """
+    logger.info('*start create Survey Folder')
+    portal_ids = portal.contentIds()
+    if 'surveys' not in portal_ids:
+        _createObjectByType('Folder', portal,
+                id='surveys', title='Surveys',
+                description='Pe-Admission survey submission folder')
+    logger.info('...Survey folder done')
+
+
+#----------------------------------------------------------------------
+def setSurveysFolderView(portal):
+    """set the default view of the surveys folder"""
+    portal_ids = portal.contentIds()
+    if 'surveys' in portal_ids:
+        portal.surveys.setLayout('@@survey-index')
+        logger.info('> surveys folder default view set to @@survey-index')
+
+
+#----------------------------------------------------------------------
+def transitionSurveysFolderWorkflow(portal):
+    """move the surveys folder to the published internally state"""
+    portal_ids = portal.contentIds()
+    if 'surveys' in portal_ids:
+        surveys = portal.surveys
+        wft = getToolByName(portal, 'portal_workflow')
+        # check if folder can be transitioned to 'publish_internally'
+        trans = wft.getTransitionsFor(surveys)
+        trans = [i['id'] for i in trans]
+        if 'publish_internally' in trans:
+            wft.doActionFor(surveys, 'publish_internally')
+            logger.info('* surveys folder transitioned to internally_published state')
+
+#----------------------------------------------------------------------
 def importVarious(context):
     """Run the handlers for the default profile
     """
     if context.readDataFile('iqbio.pasurvey_various.txt') is None:
         return
     portal = context.getSite()
-    createSurveyFolder(portal)
     setSurveyFolderContentRestrictions
     createGroups(portal)
-    rmStuff(context)
+    hideStuff(context)
     hideMembersFolder(context)
     setIntranetWorkflow(context)
     #updateRoleMappings(context)
+    createSurveyFolder(portal)
+    setSurveysFolderView(portal)
+    transitionSurveysFolderWorkflow(portal)
 
