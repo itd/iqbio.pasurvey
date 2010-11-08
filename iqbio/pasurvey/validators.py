@@ -22,3 +22,4 @@ def validate_decimal(value):
         if len(n.split('.')[-1]) > 1:
             raise InvalidDecimal
     return True
+

@@ -14,12 +14,26 @@
         <script type="text/javascript"
         tal:define="navroot context/@@plone_portal_state/navigation_root_url"
         tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/showhidefields.js"></script>
+
+        <script type="text/javascript"
+        tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+        tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/jquery.validity.pack.js"></script>
+        <script type="text/javascript"
+        tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+        tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/validity_parts.js"></script>
+       <script type="text/javascript"
+        tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+        tal:attributes="src string:${navroot}/++resource++iqbio.pasurvey/pasurvey_misc.js"></script>
     </metal:block>
 
     <metal:block fill-slot="style_slot">
         <link
             tal:define="navroot context/@@plone_portal_state/navigation_root_url"
             tal:attributes="href string:${navroot}/++resource++iqbio.pasurvey/pasurveyview.css"
+            media="screen" type="text/css" rel="stylesheet" />
+        <link
+            tal:define="navroot context/@@plone_portal_state/navigation_root_url"
+            tal:attributes="href string:${navroot}/++resource++iqbio.pasurvey/jquery.validity.css"
             media="screen" type="text/css" rel="stylesheet" />
     </metal:block>
 
@@ -29,25 +43,60 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-        <h1 class="documentFirstHeading">IQ Biology Survey and Supplementary Information</h1>
-                <h2>Steps to be completed...</h2>
-        <p>If you have not already done so, please
-<a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
-to the Graduate Admissions Website</a> and fill out the application for your
-First Degree Program of Interest.
-Remember to return to this IQ Biology survey to provide any supplementary
-information needed and formally submit your saved draft. </p>
+        <div tal:condition="python:context.completed"
+            id="pasurvey-view-completed">
+            <tal:comment tal:replace="nothing">
+            ############################################
+            This div gets shown if the survey has been submitted for review
+            </tal:comment>
+            <h2>This survey has been submitted for consideration.</h2>
+        </div>
 
-        <metal:form use-macro="context/@@ploneform-macros/titlelessform">
-          <metal:fields fill-slot="field">
-            <metal:block use-macro="context/@@pasurveyform-macros/field" />
-          </metal:fields>
-        </metal:form>
+        <div tal:define="getRolesOfUser view/getRolesOfUser"
+            tal:condition="python:not context.completed or getRolesOfUser"
+            id="pasurvey-view-completed">
+            <tal:comment tal:replace="nothing">
+            ############################################
+            This div gets shown if the value of the 'completed' field is 0
+            </tal:comment>
 
-<p>Only questions for Supplementary Information for the Degree Programs of Interest you indicated that require Supplementary Information will be visible. If you change your Degree Programs of Interest, the survey will reflect that change by asking for the appropriate Supplementary Information.
-The following Degree Programs require Supplementary Information: Biochemistry, Chemical &amp; Biological Engineering, Computer Science, Ecology & Evolutionary Biology, and Chemical Physics. The other degree programs do not require any Supplementary Information (Applied Mathematics, Mechanical Engineering, and Molecular, Cellular &amp; Developmental Biology).
-</p>
-<p>You must submit the IQ Biology Survey with Supplementary Information and the Graduate School Application by January 5th, 2011.</p>
+            <h1 class="documentFirstHeading">IQ Biology Survey and Supplementary Information</h1>
+                    <h2>Steps to be completed...</h2>
+            <p>If you have not already done so, please
+                <a href="https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action">continue
+                to the Graduate Admissions Website</a> and fill out the application for your
+                First Degree Program of Interest.
+                </p><p>
+                Remember to return to this IQ Biology survey to provide any supplementary
+                information needed and formally submit your saved draft.
+            </p>
+
+            <metal:form use-macro="context/@@ploneform-macros/titlelessform">
+              <metal:fields fill-slot="field">
+                <metal:block use-macro="context/@@pasurveyform-macros/field" />
+              </metal:fields>
+            </metal:form>
+
+            <p>Only questions for Supplementary Information for the Degree Programs
+            of Interest you indicated that require Supplementary Information will be
+            visible. If you change your Degree Programs of Interest, the survey will
+            reflect that change by asking for the appropriate Supplementary Information.
+            </p>
+            <p>The following Degree Programs require Supplementary Information: Biochemistry,
+            Chemical &amp; Biological Engineering, Computer Science, Ecology &amp;
+            Evolutionary Biology, and Chemical Physics. The other degree programs
+            do not require any Supplementary Information (Applied Mathematics,
+            Mechanical Engineering, and Molecular, Cellular &amp; Developmental Biology).
+            </p>
+            <p>You must submit the IQ Biology Survey with Supplementary Information
+            and the Graduate School Application by January 5th, 2011.</p>
+
+            <tal:comment tal:replace="nothing">
+            #################################
+            END div if form is not completed
+            #################################
+            </tal:comment>
+        </div>
 
     </tal:main-macro>
 </metal:main>

@@ -1,6 +1,7 @@
 from five import grok
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
+
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
@@ -27,6 +28,15 @@ from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
 from iqbio.pasurvey.vocabularies import degreeprograms_lite_vocab
 from iqbio.pasurvey.validators import validate_email, validate_decimal
+
+
+def choiceVocabConstraint(value):
+    """Check that the value selected is not blank
+    """
+    if value is None:
+        raise Invalid(_(u"Selecting a First and Second Degree Program is required."))
+    return True
+
 
 class IPasurvey(form.Schema):
     """
@@ -83,11 +93,13 @@ class IPasurvey(form.Schema):
         title=_(u"First Degree Program of Interest"),
         description=_(u"Remember this degree program. You will formally fill out the application on CU's Graduate School Application website for this degree program. The options are presented in the drop down menu (with their associated colleges)."),
         vocabulary = degreeprograms_vocab,
+        constraint = choiceVocabConstraint,
       )
     degreeprogram2 = Choice(
         title=_(u"Second Degree Program of Interest"),
         description=_(u""),
         vocabulary = degreeprograms_vocab,
+        constraint = choiceVocabConstraint,
        )
     degreeprogram3 = Choice(
         title=_(u"Third Degree Program of Interest"),
@@ -100,7 +112,7 @@ class IPasurvey(form.Schema):
         title = _(u"Consideration by individual degree program(s)?"),
         description = _(u"If you are not accepted by the IQ Biology program, would you like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?"),
         vocabulary = yes_no_vocab,
-        required=True,
+        constraint = choiceVocabConstraint,
         )
 
     form.widget(degreeprograms=CheckBoxFieldWidget)
@@ -114,7 +126,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Biochemistry" is selected ---------
     form.fieldset('Biochemistry',
-                  label = _(u"Biochemistry Degree Program"),
+                  label = _(u"Supplementary Information for the Biochemistry Degree Program"),
                   fields = ['biochem_research_interests',
                             'biochemteachingexperience',
                             'biochemresearchexperience'])
@@ -122,7 +134,7 @@ class IPasurvey(form.Schema):
     form.widget(biochem_research_interests=CheckBoxFieldWidget)
     biochem_research_interests = List(
         title = _(u"Biochemistry Research Interests"),
-        description = _(u"Please check off as many of the research areas as interests you."),
+        description = _(u"Please check off as many of the research areas as interest you."),
         value_type = Choice(vocabulary = biochem_research_interests_vocab),
         required=False,
         )
@@ -141,7 +153,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ChemBioEngineering" is selected ---------
     form.fieldset('ChemBioEngineering',
-                  label = _(u"Chemical and Biological Engineering Degree Program"),
+                  label = _(u"Supplementary Information for the Chemical and Biological Engineering Degree Program"),
                   fields = ['bioengfellowshipsupport',
                             'bioengresearchinterests',
                             'bioengducationalgoals'])
@@ -172,7 +184,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "ComputerScience" is selected ---------
     form.fieldset('ComputerScience',
-                  label  = _(u"Computer Science Degree Program"),
+                  label  = _(u"Supplementary Information for the Computer Science Degree Program"),
                   fields = ['csinterests',
                             'csfinancialaid',])
 
@@ -194,7 +206,7 @@ class IPasurvey(form.Schema):
 
     # ---------- conditional questions if "Ecology" is selected ---------
     form.fieldset('Ecology',
-                  label = _(u"Ecology and Evolutionary Biology Degree Program"),
+                  label = _(u"Supplementary Information for the Ecology and Evolutionary Biology Degree Program"),
                   fields = ['ecofinancialaid',
                             'ecoundergradgpa',
                             'ecoundergradgpabio',
@@ -212,7 +224,7 @@ class IPasurvey(form.Schema):
 
     ecofinancialaid = Choice(
         title = _(u"Financial Aid"),
-        description = _(u"Will you be requesting a financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
+        description = _(u"Will you be requesting financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed)."),
         required = False,
         vocabulary = yes_no_vocab,
         )
@@ -294,13 +306,13 @@ class IPasurvey(form.Schema):
 
     ecopublications = Text(
         title = _(u"Publications"),
-        description = _(u"Please list the complete citations of any scientific publication that you have authored."),
+        description = _(u"Please list the complete citations of any scientific publications that you have authored."),
         required = False,
         )
 
     #----- if ChemicalPhysics is chosen ----------------------------
     form.fieldset('ChemicalPhysics',
-                  label  = u"Chemical Physics Degree Program",
+                  label  = u"Supplementary Information for the Chemical Physics Degree Program",
                   fields = ['chemphresearchinterests',
                   					'chemphexperimental',
                             'chemphgpaphysics',
@@ -352,12 +364,13 @@ class IPasurvey(form.Schema):
         )
 
     chemphgre = Text(
-        title = _(u"GRE SCore: Physics Subject Exam (optional)"),
+        title = _(u"GRE Score: Physics Subject Exam (optional)"),
         description = _(u"If you have taken a Physics Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test."),
         required = False,
         min_length = None,
         max_length = None,
         )
+
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the various departments to     #
@@ -397,10 +410,11 @@ class IPasurvey(form.Schema):
     form.mode(completed='hidden')
     completed = Int(
         title = _(u"Is completed?"),
-        description = _(u"Identity that your form was completed."),
+        description = _(u"Identify that your form was completed."),
         required = False,
         default = 0,
         )
+
 
 # Now we need to compute the title.
 # An accompanying adapter is in configure.zcml
@@ -432,11 +446,32 @@ class View(dexterity.DisplayForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
 
+    def getRolesOfUser(self):
+        """A hack to determine if the current user is an admin or editor,
+        or a normal user so we can display info in the view"""
+        context = aq_inner(self)
+        mt = getToolByName(context, 'portal_membership')
+        memb = mt.getAuthenticatedMember()
+        roles = memb.getRolesInContext(self)
+        allowed = ['Editor','Manager']
+        is_allowed = set(allowed).intersection( set(roles) )
+        is_allowed = list(is_allowed)
+        retval = False
+        if len(is_allowed) == True:
+            retval = True
+        return retval
+
+    def isComplete(self):
+        data, errors = self.extractData()
+        if data['completed'] == 1:
+            retval = True
+        else:
+            retval = False
+        return retval
+
 
 # fields that cannot be skipped when "Save As Draft"
-ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email',
-                        'dob', 'degreeprogram1', 'degreeprogram2',
-                        )
+ALWAYS_REQUIRED_FIELDS = ('fname', 'alsoapply', 'lname', 'email','dob', 'degreeprogram1', 'degreeprogram2',)
 
 class AddForm(dexterity.AddForm):
     grok.name('iqbio.pasurvey.pasurvey')
@@ -472,36 +507,36 @@ class AddForm(dexterity.AddForm):
 
     def update(self):
         super(AddForm, self).update()
-        
+
         survey = self.getSurvey()
         if survey:
             # redirect to EditForm if survey was created
             self.request.response.redirect(survey.getURL() + '/edit')
             return None
-                    
+
     @property
     def catalog(self):
         context = aq_inner(self.context)
         tools = getMultiAdapter((context, self.request), name=u'plone_tools')
         return tools.catalog()
-    
+
     @property
     def portal_state(self):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
+
     def getUserName(self):
         member = self.portal_state.member()
         if member:
             return member.getId()
-    
+
     def getSurvey(self):
         """ Get the created survey """
         surveys = self.catalog(object_provides=IPasurvey.__identifier__, Creator=self.getUserName())
         if surveys:
             return surveys[0]
-        
+
         return None
 
 #    # custom button
@@ -523,11 +558,114 @@ class EditForm(dexterity.EditForm):
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.EditForm)
 
+    def getRolesOfUser(self):
+        """A hack to determine if the current user is a Manager or Editor.
+        We'll use this to allow Editor's only if the form has been submitted
+        since the workflow is not yet in place.
+        Sorry. I know it's a horrible hack.
+        """
+        context = aq_inner(self)
+        mt = getToolByName(context, 'portal_membership')
+        memb = mt.getAuthenticatedMember()
+        roles = memb.getRolesInContext(self)
+        allowed = ['Editor','Manager']
+        is_allowed = set(allowed).intersection( set(roles) )
+        is_allowed = list(is_allowed)
+        retval = False
+        if len(is_allowed) == True:
+            retval = True
+        return retval
+
     # custom buttons
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleApply(self, action):
         super(dexterity.EditForm, self).handleApply(self, action)
-    
+
+        data, errors = self.extractData()
+        # skip RequiredMissing errors
+        errors = [e for e in errors]
+        if errors:
+            self.status = self.formErrorsMessage
+            # avoid required errors to be displayed then
+            #for name, widget in self.widgets.items():
+            #    if widget.error and self.isRequiredError(widget.error.error):
+            #        self.widgets[name].error = None
+            return
+
+        # send email to user when saved as draft
+        self.notifyUser(data['email'])
+
+    def notifyUser(self, email):
+        """Send a message to the submitter"""
+        mail_host = getToolByName(self.context, 'MailHost')
+
+        portal = self.portal_state.portal()
+        sender_email = portal.getProperty('email_from_address')
+        sender_name = portal.getProperty('email_from_name')
+
+        if sender_email:
+            sender = '%s <%s>' % (sender_name, sender_email)
+        else:
+            return
+
+        subject = "IQ Biology Survey Form Submission"
+        #message = "A survey for %s was created here %s" % (self.context.title, self.context.absolute_url())
+        message= """Thank you for saving your IQ Biology Survey and Supplementary Information.
+
+If you have not done so already, please continue to the
+Graduate School Application Website at:
+
+https://soaprod.cusys.edu/degreeprog/applyDEGREEPROG_CUBLD/login.action
+
+...to fill out your application for your
+"First Department of Interest".
+
+Remember to return to the IQ Biology Survey and
+Supplementary Information site to edit information
+on your survey and provide the necessary supplementary
+information for your Degree Programs of Interest
+before the deadline.
+
+You may use this link to return back to the IQ Biology Survey
+site to enter in your Supplementary Information and edit any
+of your information as needed:
+
+http://iqbiology.colorado.edu/survey/
+
+After you have completed your IQ Biology Survey and
+Supplementary Information, press the "Submit Survey"
+button.
+
+After you do that, your information will be delivered
+to IQ Biology and will no longer be available for edit.
+
+Please review the Application Instructions:
+
+http://iqbiology.colorado.edu/application/instructions
+
+...to be sure that your entire application is complete
+by the deadline on January 5th, 2011.
+
+Please contact us http://iqbiology.colorado.edu/contact-us
+if you have any questions.
+
+
+Thank you,
+
+The IQ Biology Program
+IQBiology.colorado.edu
+
+
+
+Note: You will recieve one of these reminder messages
+      every time you edit your survey form.
+
+        """
+        if email:
+            mail_host.send(message, email, sender, subject)
+
+
+
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -537,8 +675,7 @@ class EditForm(dexterity.EditForm):
         # set the survey completed manually
         data['completed'] = 1
         self.applyChanges(data)
-        # send email to user
-        self.notifyUser(data['email'])
+
         # redirect to workflow submit url
         submit_url = '%s/content_status_modify?workflow_action=submit' % self.context.absolute_url()
         self.request.response.redirect(submit_url)
@@ -548,24 +685,4 @@ class EditForm(dexterity.EditForm):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
-    def notifyUser(self, email):
-        """Send a message to the submitter"""
-        mail_host = getToolByName(self.context, 'MailHost')
-    
-        portal = self.portal_state.portal()
-        sender_email = portal.getProperty('email_from_address')
-        sender_name = portal.getProperty('email_from_name')
-
-        if sender_email:
-            sender = '%s <%s>' % (sender_name, sender_email)
-        else:
-            return
-    
-        subject = "Survey form"
-        message = "A survey for %s was created here %s" % (self.context.title, self.context.absolute_url())
-        
-        if email:
-            mail_host.send(message, email, sender, subject)
-
 

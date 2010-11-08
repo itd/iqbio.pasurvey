@@ -11,7 +11,24 @@
 
     <metal:field define-macro="field">
       <div class="field">
-        <h3 tal:condition="python: widget.id == 'form-widgets-degreeprogram1'">Three Degree Programs of Interest</h3>
+        <div tal:condition="python: widget.id == 'form-widgets-degreeprogram1'">
+          <h3>Three Degree Programs of Interest</h3>
+          <p>In May of your first year, you will formally choose which degree program
+            you would like to pursue a PhD in. In order to streamline that process,
+            we are asking that you choose three potential
+            degree programs now (from which you will choose one after your first year), so that
+            each degree program may "pre-approve" your application. You must be pre-approved by two
+            different degree programs, or significantly different disciplines within one program,
+            to be accepted into the IQ Biology program.
+          </p>
+          <p>You will formally fill out an application on CU's Graduate School
+            Application website for your "First Degree Program of Interest";
+            IQ Biology will pass along your application to your other
+            degree programs of interest. You will only have to fill out one
+            application and pay one fee and it does not matter in what order
+            of interest you ranked them on this application.
+          </p>
+        </div>
       </div>
 
       <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
