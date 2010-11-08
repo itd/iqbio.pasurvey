@@ -45,26 +45,25 @@ def createSurveyFolder(portal):
         portal.surveys.setLayout('@@survey-index')
     logger.info('****** end create Survey folder ******')
 
-
+GLIST = (
+    {'id':'SurveyManagers', 'title':'Survey Managers', 'roles':'Manager'},
+    {'id':'FacultyReviewers', 'title':'Faculty Reviewers', 'roles':'Member'},
+    {'id':'AppliedMath', 'title':'Applied Mathematics', 'roles':'Member'},
+    {'id':'Biochemistry', 'title':'Biochemistry', 'roles':'Member'},
+    {'id':'ChemBioEngineering', 'title':'ChemBioEngineering', 'roles':'Member'},
+    {'id':'ComputerScience', 'title':'Computer Science', 'roles':'Member'},
+    {'id':'Ecology', 'title':'Ecology', 'roles':'Member'},
+    {'id':'Mechanical', 'title':'Mechanical Engineering', 'roles':'Member'},
+    {'id':'Molecular', 'title':'Molecular', 'roles':'Member'},
+    {'id':'ChemicalPhysics', 'title':'Chemical Physics', 'roles':'Member'},
+    )
 #----------------------------------------------------------------------
 def createGroups(portal):
     """Create the new groups for the survey management"""
     uf = getToolByName(portal, 'acl_users')
     gtool = getToolByName(portal, 'portal_groups')
-    glist = (
-        {'id':'SurveyManagers', 'title':'Survey Managers', 'roles':'Manager'},
-        {'id':'FacultyReviewers', 'title':'Faculty Reviewers', 'roles':'Editor'},
-        {'id':'AppliedMath', 'title':'Applied Mathematics', 'roles':'Editor'},
-        {'id':'Biochemistry', 'title':'Biochemistry', 'roles':'Editor'},
-        {'id':'ChemBioEngineering', 'title':'ChemBioEngineering', 'roles':'Editor'},
-        {'id':'ComputerScience', 'title':'Computer Science', 'roles':'Editor'},
-        {'id':'Ecology', 'title':'Ecology', 'roles':'Editor'},
-        {'id':'Mechanical', 'title':'Mechanical Engineering', 'roles':'Editor'},
-        {'id':'Molecular', 'title':'Molecular', 'roles':'Editor'},
-        {'id':'ChemicalPhysics', 'title':'Chemical Physics', 'roles':'Editor'},
-        )
 
-    for i in glist:
+    for i in GLIST:
         if not uf.searchGroups(id=i['id']):
             gtool.addGroup(i['id'], title=i['title'], roles=[i['roles']])
 
@@ -125,6 +124,30 @@ def rmStuff(context):
         if obj in portal.listFolderContents():
             portal.manage_delObjects(obj)
 
+def setWorkflowGroups(portal):
+    wft = getToolByName(portal, "portal_workflow")
+    wf = wft.get('iqbio.pasurvey.workflow', None)
+    if wf:
+        # add groups to manage
+        for g in GLIST:
+            wf.addGroup(g['id'])
+        # map groups - roles in states
+        facultyreview_state = wf.states['facultyreview']
+        request = {'FacultyReviewers|Reviewer': 1, }
+        facultyreview_state.setGroups(request)
+        
+        programreview_state = wf.states['programreview']
+        request = {'AppliedMath|Editor': 1,
+                   'Biochemistry|Editor': 1,
+                   'ChemBioEngineering|Editor': 1,
+                   'ComputerScience|Editor': 1,
+                   'Ecology|Editor': 1,
+                   'Mechanical|Editor': 1,
+                   'Molecular|Editor': 1,
+                   'ChemicalPhysics|Editor': 1}
+        programreview_state.setGroups(request)
+#    import pdb; pdb.set_trace()
+
 
 def importVarious(context):
     """Run the handlers for the default profile
@@ -137,6 +160,7 @@ def importVarious(context):
     createGroups(portal)
     rmStuff(context)
     hideMembersFolder(context)
-    setIntranetWorkflow(context)
+    #setIntranetWorkflow(context)
+    setWorkflowGroups(portal)
     #updateRoleMappings(context)
 
