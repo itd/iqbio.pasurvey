@@ -52,9 +52,7 @@
             <h2>This survey has been submitted for consideration.</h2>
         </div>
 
-        <div tal:define="getRolesOfUser view/getRolesOfUser"
-            tal:condition="python:not context.completed or getRolesOfUser"
-            id="pasurvey-view-completed">
+        <div id="pasurvey-view-completed">
             <tal:comment tal:replace="nothing">
             ############################################
             This div gets shown if the value of the 'completed' field is 0

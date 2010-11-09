@@ -19,6 +19,11 @@ $(document).ready(function() {
         try {
             $.viewMap[$('#form-widgets-degreeprogram3').val()].show();
         } catch(err) {}
+        try {
+            // assume that the review fieldset's id is always 5
+            // show review fieldset onload if available
+            $('#fieldset-5, #fieldsetlegend-5').show();
+        } catch(err) {}
     }
 
     // show onload based on default/stored values (especially in EditForm)

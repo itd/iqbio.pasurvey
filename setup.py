@@ -30,6 +30,7 @@ setup(name='iqbio.pasurvey',
           'plone.formwidget.namedfile',
           'plone.namedfile[blobs]',
           # -*- Extra requirements: -*-
+          'collective.wtf',
       ],
       entry_points="""
       # -*- Entry points: -*-

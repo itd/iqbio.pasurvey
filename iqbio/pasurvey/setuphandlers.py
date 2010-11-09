@@ -127,7 +127,8 @@ def setWorkflowGroups(portal):
         facultyreview_state.setGroups(request)
         
         programreview_state = wf.states['programreview']
-        request = {'AppliedMath|Editor': 1,
+        request = {'FacultyReviewers|Reader': 1,
+                   'AppliedMath|Editor': 1,
                    'Biochemistry|Editor': 1,
                    'ChemBioEngineering|Editor': 1,
                    'ComputerScience|Editor': 1,
@@ -136,7 +137,6 @@ def setWorkflowGroups(portal):
                    'Molecular|Editor': 1,
                    'ChemicalPhysics|Editor': 1}
         programreview_state.setGroups(request)
-#    import pdb; pdb.set_trace()
 
 
 #----------------------------------------------------------------------

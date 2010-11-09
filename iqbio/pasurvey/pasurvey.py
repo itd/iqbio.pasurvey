@@ -1,3 +1,4 @@
+from datetime import datetime
 from five import grok
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
@@ -16,6 +17,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 
+from z3c.form.interfaces import IAddForm, IEditForm, IDisplayForm, HIDDEN_MODE
 from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget, SingleCheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
 from z3c.form import button, form as z3cform
@@ -314,7 +316,7 @@ class IPasurvey(form.Schema):
     form.fieldset('ChemicalPhysics',
                   label  = u"Supplementary Information for the Chemical Physics Degree Program",
                   fields = ['chemphresearchinterests',
-                  					'chemphexperimental',
+                  		    'chemphexperimental',
                             'chemphgpaphysics',
                             'chemphgpamath',
                             'chemphgpacombined',
@@ -371,38 +373,91 @@ class IPasurvey(form.Schema):
         max_length = None,
         )
 
-
+    form.fieldset('review',
+                  label = 'Review',
+                  fields = ['faculty_comments',
+                            'program1_accepted',
+                            'program1_acceptancedate',
+                            'program1_comments',
+                            'program2_accepted',
+                            'program2_acceptancedate',
+                            'program2_comments',
+                            'program3_accepted',
+                            'program3_acceptancedate',
+                            'program3_comments', ])
+    
+    form.omitted(IAddForm, 'faculty_comments')
+    dexterity.write_permission(faculty_comments='Review portal content')
+    faculty_comments = Text(
+        title = _(u"Faculty Review Comments"),
+        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
+        required = False,
+        )
+        
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the various departments to     #
     # comment and accept/notaccept an applicant                   #
 
-
     #-- prefix the following with each dept's identifier ------------
-#    accepted = Choice(
-#        title = _(u"Accepted?"),
-#        description = _(u"Would you accept this person into your program?"),
-#        required=False,
-#        vocabulary = yes_no_vocab,
-#        )
-#
-#    acceptancedate = Datetime(
-#        title = _(u"Acceptance Date"),
-#        description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
-#        required = False,
-#        )
-#
-#    notaccepteddate = Datetime(
-#        title = _(u"Not Accepted Date"),
-#        description = _(u"If this person WILL NOT be accepted into your program, please enter the date and time of this determination."),
-#        required = False,
-#        )
-#
-#    comments = TextLine(
-#        title = _(u"PROGRAM Comments"),
-#        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
-#        required = False,
-#        )
-
+    form.omitted(IAddForm, 'program1_accepted')
+    program1_accepted = Choice(
+        title = _(u"First Degree Program: Accepted?"),
+        description = _(u"Would you accept this person into your program?"),
+        required=False,
+        vocabulary = yes_no_vocab,
+        )
+    form.mode(program1_acceptancedate='hidden')
+    program1_acceptancedate = Datetime(
+        title = _(u"First Degree Program: Acceptance Date"),
+        description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
+        required = False,
+        )
+    form.omitted(IAddForm, 'program1_comments')
+    program1_comments = Text(
+        title = _(u"First Degree Program: Comments"),
+        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
+        required = False,
+        )
+        
+    form.omitted(IAddForm, 'program2_accepted')
+    program2_accepted = Choice(
+        title = _(u"Second Degree Program: Accepted?"),
+        description = _(u"Would you accept this person into your program?"),
+        required=False,
+        vocabulary = yes_no_vocab,
+        )
+    form.mode(program2_acceptancedate='hidden')
+    program2_acceptancedate = Datetime(
+        title = _(u"Second Degree Program: Acceptance Date"),
+        description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
+        required = False,
+        )
+    form.omitted(IAddForm, 'program2_comments')
+    program2_comments = Text(
+        title = _(u"Second Degree Program: Comments"),
+        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
+        required = False,
+        )
+        
+    form.omitted(IAddForm, 'program3_accepted')
+    program3_accepted = Choice(
+        title = _(u"Third Degree Program: Accepted?"),
+        description = _(u"Would you accept this person into your program?"),
+        required=False,
+        vocabulary = yes_no_vocab,
+        )
+    form.mode(program3_acceptancedate='hidden')
+    program3_acceptancedate = Datetime(
+        title = _(u"Third Degree Program: Acceptance Date"),
+        description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
+        required = False,
+        )
+    form.omitted(IAddForm, 'program3_comments')
+    program3_comments = Text(
+        title = _(u"Third Degree Program: Comments"),
+        description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
+        required = False,
+        )
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the overall management of the process  #
@@ -539,24 +594,75 @@ class AddForm(dexterity.AddForm):
 
         return None
 
-#    # custom button
-#    @button.buttonAndHandler(_('Submit For Review'), name='submit')
-#    def handleSubmit(self, action):
-#        data, errors = self.extractData()
-#        if errors:
-#            self.status = self.formErrorsMessage
-#            return
-#        obj = self.createAndAdd(data)
-#        if obj is not None:
-#            # redirect to workflow submit url
-#            submit_url = '%s/%s/content_status_modify?workflow_action=submit' % (self.context.absolute_url(), obj.getId())
-#            self.request.response.redirect(submit_url)
 
 class EditForm(dexterity.EditForm):
     grok.context(IPasurvey)
     grok.require('zope2.View')
     # extends fields, buttons and handlers from base class
     z3cform.extends(dexterity.EditForm)
+
+    def update(self):
+        super(EditForm, self).update()
+        
+        groups = []
+        for group in self.groups:
+            # condition to show/hide Review fieldset
+            if group.__name__ == 'review':
+                state = self.getReviewState()
+                # always show if user is Manager
+                if self.checkPermission('Manage Portal'):
+                    groups.append(group)
+                elif state == 'programreview' or \
+                    (state == 'facultyreview' and self.checkPermission('Review portal content')):
+                    for name, widget in group.widgets.items():
+                        if not self.isProgramReviewable(name, state):
+                            widget.mode = HIDDEN_MODE
+                    groups.append(group)
+            # temporary disable ownership fieldset
+            elif group.__name__ <> 'ownership':
+                groups.append(group)
+                
+        self.groups = tuple(groups)
+        
+    def isProgramReviewable(self, name, review_state):
+        """ Check whether the current user can review the selected programs
+        """
+        username = self.getUserName()
+        if name.startswith('program1_'):
+            value = self.fields['degreeprogram1'].field.get(self.context)
+            if self.isUserInGroup(username, value):
+                return True
+        elif name.startswith('program2_'):
+            value = self.fields['degreeprogram2'].field.get(self.context)
+            if self.isUserInGroup(username, value):
+                return True
+        elif name.startswith('program3_'):
+            value = self.fields['degreeprogram3'].field.get(self.context)
+            if self.isUserInGroup(username, value):
+                return True
+        elif review_state == 'facultyreview':
+            return True
+            
+        return False
+        
+    def isUserInGroup(self, userid, groupid):
+        if groupid:
+            members = self.gtool.getGroupMembers(groupid)
+            if userid in members:
+                return True
+        return False
+                
+    def getReviewState(self):
+        wftool = self.tools.workflow()
+        # Returns workflow state object
+        status = wftool.getStatusOf("iqbio.pasurvey.workflow", self.context)
+        # Plone workflows use variable called "review_state" to store state id
+        # of the object state
+        return status["review_state"]
+    
+    def checkPermission(self, permission):
+        membership = self.tools.membership()
+        return membership.checkPermission(permission, self.context)
 
     def getRolesOfUser(self):
         """A hack to determine if the current user is a Manager or Editor.
@@ -579,21 +685,25 @@ class EditForm(dexterity.EditForm):
     # custom buttons
     @button.buttonAndHandler(_('Save As Draft'), name='save')
     def handleApply(self, action):
-        super(dexterity.EditForm, self).handleApply(self, action)
-
         data, errors = self.extractData()
-        # skip RequiredMissing errors
-        errors = [e for e in errors]
         if errors:
             self.status = self.formErrorsMessage
-            # avoid required errors to be displayed then
-            #for name, widget in self.widgets.items():
-            #    if widget.error and self.isRequiredError(widget.error.error):
-            #        self.widgets[name].error = None
             return
-
+        
+        # set program acceptancedate automatically
+        if data.get('program1_accepted', None):
+            data['program1_acceptancedate'] = datetime.now()
+        if data.get('program2_accepted', None):
+            data['program2_acceptancedate'] = datetime.now()
+        if data.get('program3_accepted', None):
+            data['program3_acceptancedate'] = datetime.now()
+        self.applyChanges(data)
+        
         # send email to user when saved as draft
         self.notifyUser(data['email'])
+
+        IStatusMessage(self.request).addStatusMessage(_(u"Changes saved"), "info")
+        self.request.response.redirect(self.context.absolute_url())
 
     def notifyUser(self, email):
         """Send a message to the submitter"""
@@ -685,4 +795,18 @@ Note: You will recieve one of these reminder messages
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
+    
+    @property
+    def tools(self):
+        context = aq_inner(self.context)
+        tools = getMultiAdapter((context, self.request), name=u'plone_tools')
+        return tools
+    
+    @property
+    def gtool(self):
+        return getToolByName(self.context, 'portal_groups')
 
+    def getUserName(self):
+        member = self.portal_state.member()
+        if member:
+            return member.getId()
