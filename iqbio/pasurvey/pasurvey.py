@@ -658,7 +658,10 @@ class EditForm(dexterity.EditForm):
         status = wftool.getStatusOf("iqbio.pasurvey.workflow", self.context)
         # Plone workflows use variable called "review_state" to store state id
         # of the object state
-        return status["review_state"]
+        if status and status.has_key("review_state"):
+            return status["review_state"]
+        else:
+            return None
     
     def checkPermission(self, permission):
         membership = self.tools.membership()
