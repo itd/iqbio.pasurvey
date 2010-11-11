@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="iqbio.pasurvey">
+
+<body>
+
+<metal:main fill-slot="main">
+
+    <tal:main-macro metal:define-macro="main"
+                    define="surveys view/getSurveys">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading">IQ Bio Submission Status for reviewers</h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription">
+        </p>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <div id="surveylist">
+        <table  class="listing" id="submissions-list">
+        <thead>
+        <tr>
+        <th>ID</th>
+        <th>workflow status</th>
+        <th>degreeprogram1</th>
+        <th>accepted?</th>
+        <th>degreeprogram2</th>
+        <th>accepted?</th>
+        <th>degreeprogram3</th>
+        <th>accepted?</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr tal:repeat="survey surveys">
+            <td> <span tal:replace="survey/id" /> </td>
+            <td> <span tal:replace="survey/workflow_status" /> </td>
+            <td> <span tal:replace="survey/degreeprogram1" /> </td>
+            <td> <span tal:replace="survey/program1_accepted" /> </td>
+            <td> <span tal:replace="survey/degreeprogram2" /> </td>
+            <td> <span tal:replace="survey/program2_accepted" /> </td>
+            <td> <span tal:replace="survey/degreeprogram3" /> </td>
+            <td> <span tal:replace="survey/program3_accepted" /> </td>
+        </tr>
+        </tbody>
+        </table>
+
+
+         <p>
+            If you have questions about what needs to be done to
+            process the survey submission you have been asked to review,
+            please contact
+            <a href="mailto:iqbiology@colorado.edu">IQBiology@colorado.edu</a>
+        </p>
+        </div><!--END surveylist -->
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+
+</metal:main>
+
+</body>
+
+</html>
+
