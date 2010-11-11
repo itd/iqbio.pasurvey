@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<object name="portal_catalog">
+    <index name="completed" meta_type="FieldIndex">
+        <indexed_attr value="completed"/>
+    </index>
+    <index name="degreeprogram1" meta_type="FieldIndex">
+        <indexed_attr value="degreeprogram1"/>
+    </index>
+    <index name="degreeprogram2" meta_type="FieldIndex">
+        <indexed_attr value="degreeprogram2"/>
+    </index>
+    <index name="degreeprogram3" meta_type="FieldIndex">
+        <indexed_attr value="degreeprogram3"/>
+    </index>
+    <index name="program1_accepted" meta_type="FieldIndex">
+        <indexed_attr value="program1_accepted"/>
+    </index>
+    <index name="program2_accepted" meta_type="FieldIndex">
+        <indexed_attr value="program2_accepted"/>
+    </index>
+    <index name="program3_accepted" meta_type="FieldIndex">
+        <indexed_attr value="program3_accepted"/>
+    </index>
+
+    <column value="completed"/>
+    <column value="degreeprogram1"/>
+    <column value="degreeprogram2"/>
+    <column value="degreeprogram3"/>
+    <column value="program1_accepted"/>
+    <column value="program2_accepted"/>
+    <column value="program3_accepted"/>
+</object>

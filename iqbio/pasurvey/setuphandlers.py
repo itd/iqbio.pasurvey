@@ -90,7 +90,7 @@ def updateRoleMappings(context):
     portal = context.getSite()
     wft = getToolByName(context.getSite(), 'portal_workflow')
     wft.updateRoleMappings()
-    wft.doActionFor(portal.surveys, 'publish_internally')
+    #wft.doActionFor(portal.surveys, 'publish_internally')
 
 
 #----------------------------------------------------------------------
@@ -188,8 +188,9 @@ def importVarious(context):
     hideMembersFolder(context)
     setIntranetWorkflow(context)
     setWorkflowGroups(portal)
-    #updateRoleMappings(context)
+    updateRoleMappings(context)
     createSurveyFolder(portal)
     setSurveysFolderView(portal)
     transitionSurveysFolderWorkflow(portal)
+    updateCatalog(portal)
 

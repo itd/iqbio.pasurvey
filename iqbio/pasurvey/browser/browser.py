@@ -1,8 +1,11 @@
+from StringIO import StringIO
+
 from five import grok
 from Acquisition import aq_inner
 
 from zope.component import getMultiAdapter
 
+from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.folder.interfaces import IFolder
 
 from iqbio.pasurvey.pasurvey import IPasurvey
@@ -51,4 +54,38 @@ class SurveyIndex(grok.View):
         else:
             return self.context.absolute_url() + '/++add++iqbio.pasurvey.pasurvey'
 
+
+class SurveyMigration(grok.View):
+    """ Migration handler for survey folder
+    """
+    
+    grok.context(IFolder)
+    grok.require('cmf.ManagePortal')
+    grok.name('migrate-surveys')
+    
+    @property
+    def workflow(self):
+        context = aq_inner(self.context)
+        tools = getMultiAdapter((context, self.request), name=u'plone_tools')
+        return tools.workflow()
+    
+    def update(self):
+        context = aq_inner(self.context)
+        self.submitCompletedSurveys(context)
+            
+    def submitCompletedSurveys(self, context):
+        contentFilter = dict(review_state='draft', completed=1)
+        self.surveys = context.getFolderContents(contentFilter, full_objects=True)
+        self.migrated = 0
+        self.failed = 0
+        for survey in self.surveys:
+            try:
+                self.workflow.doActionFor(survey, "submit")
+                self.migrated += 1
+            except WorkflowException:
+                # a workflow exception is risen if the state transition is not available
+                # (the sampleProperty content is in a workflow state which
+                # does not have a "submit" transition)
+                self.failed += 1
+                pass
 
