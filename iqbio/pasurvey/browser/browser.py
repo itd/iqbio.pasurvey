@@ -81,7 +81,8 @@ class SubmissionStatus(grok.View):
     
     def getGroupEmail(self, groupid):
         group = self.gtool.getGroupById(groupid)
-        return group.getProperty('email', None)
+        if group:
+            return group.getProperty('email', None)
 
 
 class SurveyMigration(grok.View):
