@@ -40,13 +40,31 @@
         </thead>
         <tbody>
         <tr tal:repeat="survey surveys">
-            <td> <span tal:replace="survey/id" /> </td>
-            <td> <span tal:replace="survey/workflow_status" /> </td>
-            <td> <span tal:replace="survey/degreeprogram1" /> </td>
+            <td> <a tal:attributes="href survey/getURL"><span tal:replace="survey/id" /></a> </td>
+            <td> <span tal:replace="survey/review_state" /> </td>
+            <td>
+                <span tal:replace="survey/degreeprogram1" />
+                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram1)"
+                            condition="email">
+                    <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
+                </tal:gemail>
+            </td>
             <td> <span tal:replace="survey/program1_accepted" /> </td>
-            <td> <span tal:replace="survey/degreeprogram2" /> </td>
+            <td>
+                <span tal:replace="survey/degreeprogram2" />
+                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram2)"
+                            condition="email">
+                    <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
+                </tal:gemail>
+            </td>
             <td> <span tal:replace="survey/program2_accepted" /> </td>
-            <td> <span tal:replace="survey/degreeprogram3" /> </td>
+            <td>
+                <span tal:replace="survey/degreeprogram3" />
+                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram3)"
+                            condition="email">
+                    <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
+                </tal:gemail>
+            </td>
             <td> <span tal:replace="survey/program3_accepted" /> </td>
         </tr>
         </tbody>

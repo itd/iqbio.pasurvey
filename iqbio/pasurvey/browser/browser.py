@@ -5,6 +5,7 @@ from Acquisition import aq_inner
 
 from zope.component import getMultiAdapter
 
+from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.folder.interfaces import IFolder
 
@@ -53,6 +54,34 @@ class SurveyIndex(grok.View):
             return survey.getURL() + '/edit'
         else:
             return self.context.absolute_url() + '/++add++iqbio.pasurvey.pasurvey'
+
+
+class SubmissionStatus(grok.View):
+    """ Survey listing for reviewers
+    """
+
+    grok.context(IFolder)
+    grok.require('zope2.View')
+    grok.name('submission-status')
+
+    @property
+    def gtool(self):
+        return getToolByName(self.context, 'portal_groups')
+    
+    def getSurveys(self):
+        """ Get a list of the surveys """
+        context = aq_inner(self.context)
+        
+        contentFilter = dict(object_provides=IPasurvey.__identifier__)
+        surveys = context.getFolderContents(contentFilter)
+        if surveys:
+            return surveys
+
+        return []
+    
+    def getGroupEmail(self, groupid):
+        group = self.gtool.getGroupById(groupid)
+        return group.getProperty('email', None)
 
 
 class SurveyMigration(grok.View):
