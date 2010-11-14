@@ -41,6 +41,7 @@ GLIST = (
     {'id':'Mechanical', 'title':'Mechanical Engineering', 'roles':'Member'},
     {'id':'Molecular', 'title':'Molecular', 'roles':'Member'},
     {'id':'ChemicalPhysics', 'title':'Chemical Physics', 'roles':'Member'},
+    {'id':'siteeditors', 'title':'Site Editors', 'roles':'Member'},
     )
 
 def createGroups(portal):
@@ -125,7 +126,7 @@ def setWorkflowGroups(portal):
         facultyreview_state = wf.states['facultyreview']
         request = {'FacultyReviewers|Reviewer': 1, }
         facultyreview_state.setGroups(request)
-        
+
         programreview_state = wf.states['programreview']
         request = {'FacultyReviewers|Reader': 1,
                    'AppliedMath|Editor': 1,
