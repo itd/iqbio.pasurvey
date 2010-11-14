@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<portlets>
+
+ <assignment name="administration" category="group" key="siteeditors"
+    manager="plone.rightcolumn" type="plone.portlet.static.Static"
+    visible="True">
+  <property
+     name="text">&lt;p&gt;&lt;a class="internal-link" href="surveys/submission-status"&gt;Survey Status Overview List&lt;/a&gt;&lt;/p&gt;</property>
+  <property name="more_url"/>
+  <property name="omit_border">False</property>
+  <property name="header">Administration</property>
+  <property name="footer"/>
+ </assignment>
+
+</portlets>
