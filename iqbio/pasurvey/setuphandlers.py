@@ -6,20 +6,23 @@ from Products.CMFPlone.utils import _createObjectByType
 import logging
 logger = logging.getLogger(__name__)
 
-def addInitialAdmins(site):
-    rtool = getToolByName(site, 'portal_registration')
+def addInitialAdmins(portal):
+    rtool = getToolByName(portal, 'portal_registration')
     members = [
-        {'id':'test@tool.net',
-         'email': 'test@tool.net',
-         'password': 'iqbio'},
-    ]
+        {'id':'SOMEUSER@tool.net',
+         'email': 'SOMEUSER@tool.net',
+         'password': 'changeme',
+         'roles':'["Manager", "Member"]'
+         },
+        ]
+
     rta = rtool.addMember
     for member in members:
         try:
             rta(
                 id=member['id'],
                 password=member['password'],
-                roles=['Manager', 'Member'],
+                roles=member['roles'],
                 properties={
                     'username': member['id'],
                     'email': member['email']
@@ -53,6 +56,13 @@ def createGroups(portal):
         if not uf.searchGroups(id=i['id']):
             gtool.addGroup(i['id'], title=i['title'], roles=[i['roles']])
 
+#----------------------------------------------------------------------
+def populateSiteeditors(portal):
+    """put all the admin groups in the siteeditor group"""
+    sg = portal.acl_users.source_groups
+    for i in GLIST:
+        if i['id'] is not 'siteeditors':
+            sg.manage_addPrincipalsToGroup('siteeditors', [i['id'],])
 
 def setSurveyFolderContentRestrictions(context):
     """"""
@@ -184,7 +194,9 @@ def importVarious(context):
         return
     portal = context.getSite()
     setSurveyFolderContentRestrictions
+    #addInitialAdmins(portal)
     createGroups(portal)
+    populateSiteeditors(portal)
     hideStuff(context)
     hideMembersFolder(context)
     setIntranetWorkflow(context)
