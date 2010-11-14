@@ -5,3 +5,14 @@ Changelog
 -------------------
 
 - Initial release
+
+
+0.2
+--------------------
+
+- Added management groups
+- Includes custom workflows
+- Administration portlet with link to the Survey Status Overview List
+  tied to the siteeditors group.
+- Adds dependency on collective.wtf
+
