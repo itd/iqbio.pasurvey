@@ -98,9 +98,25 @@ review a submission and either transition it to the not accept it.
 
 Review by Specified Graduate Program Reviewers
 ----------------------------------------------------
+There are several groups defined, one for each of the
+Degree Programs of Choice. Anyone added to a specific
+graduate program reviewer group may comment and approve
+or not approve a survey for their program.
+
+Reviewers and the Survey Manager(s) can reference the
+IQ Bio Submission Status list to determine what surveys
+need attention.
+
+The Survey Managers must provide contact email addresses for
+each of the graduate program reviewer groups. This will assist
+the Survey Managers in reminding each of the groups if there
+are submissions that need reviewed.
 
 
 Final Transitions and States
 ------------------------------
-
+Once a survey has reached the Graduate Program Review state, and
+using the IQ Bio Submission Status report, Survey Managers will
+be able to determine which surveys should be considered for the
+further review.
 
