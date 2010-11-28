@@ -28,14 +28,32 @@ span.option {
 #fieldset-1.kssattr-fieldset-1.formPanel,
 #fieldset-2.kssattr-fieldset-2.formPanel,
 #fieldset-3.kssattr-fieldset-3.formPanel,
-#fieldset-4.kssattr-fieldset-4.formPanel
-{
+#fieldset-4.kssattr-fieldset-4.formPanel {
     border: 1px solid red;
 }
 
+#content fieldset {
+  margin-bottom: 3em;
+}
+
+
+#content legend {
+font-size:120%;
+}
 fieldset legend {
     border: 1px solid red;
     font-size: 120%;
+}
+
+#fieldset-5.kssattr-fieldset-5.formPanel,
+#fieldsetlegend-5 {
+    border: 3px dotted Maroon;
+    background-color: yellow;
+}
+
+#fieldsetlegend-5 {
+    font-size-adjust: 1;
+    font-weight: bold;
 }
 
 #view-edit-button-container {
