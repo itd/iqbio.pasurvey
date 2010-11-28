@@ -39,4 +39,11 @@
         permission="zope.Public"
         />
 
+    <browser:page
+        name="view_macros"
+        for="*"
+        template="pasurvey_templates/view_macros.pt"
+        permission="zope.Public"
+        />
+
 </configure>

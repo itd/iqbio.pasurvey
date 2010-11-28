@@ -1,0 +1,42 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="iqbio.pasurvey">
+
+<head></head>
+<body>
+
+    <div metal:define-macro="dp-fields">
+    <div tal:define="d1 string:${context/degreeprogram1};
+                    d2 string:${context/degreeprogram2};
+                    d3 string:${context/degreeprogram3};
+                    dps python:d1, d2, d3;
+                    "
+        tal:repeat="dp dps">
+        <h3>Degree program  <span tal:replace="repeat/dp/number" /></h3>
+
+
+            <div tal:condition="python: dp == 'ComputerScience'">
+                <h3>Computer Science</h3>
+                <p><b>Computer Science interests:</b>
+                    <span tal:repeat="i context/csinterests">
+                    <span tal:replace="i" />,</span>
+                </p>
+                <p><b>Willing to accept Financial Aid?</b>
+                    <span tal:replace="context/csfinancialaid" />
+                </p>
+            </div>
+
+
+
+
+
+        </div><!-- end repeat dps -->
+
+    </div>
+</body>
+</html>
+
+
+<span tal:repeat="fac context/facultyofinterest">
+                    <span tal:replace="fac" />,
+                </span>

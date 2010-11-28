@@ -3,6 +3,9 @@ from five import grok
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
 
+from plone.app.content.interfaces import INameFromTitle
+from zope.interface import implements
+
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
@@ -20,7 +23,14 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IAddForm, IEditForm, IDisplayForm, HIDDEN_MODE
 from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget, SingleCheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
+
+from z3c.relationfield.schema import RelationList, RelationChoice, List
+from plone.formwidget.contenttree import ObjPathSourceBinder
+
 from z3c.form import button, form as z3cform
+
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
 
 from iqbio.pasurvey import _
 
@@ -376,6 +386,7 @@ class IPasurvey(form.Schema):
     form.fieldset('review',
                   label = 'Review',
                   fields = ['faculty_comments',
+                            'assignedreviewers',
                             'program1_accepted',
                             'program1_acceptancedate',
                             'program1_comments',
@@ -384,8 +395,9 @@ class IPasurvey(form.Schema):
                             'program2_comments',
                             'program3_accepted',
                             'program3_acceptancedate',
-                            'program3_comments', ])
-    
+                            'program3_comments',
+                            ])
+
     form.omitted(IAddForm, 'faculty_comments')
     dexterity.write_permission(faculty_comments='Review portal content')
     faculty_comments = Text(
@@ -393,7 +405,16 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-        
+
+#    form.omitted(IAddForm, 'assignedreviewers')
+#    assignedreviewers = schema.List(
+#        title = _(u"Assigned Reviewers"),
+#        default = [],
+#        #source = GroupMembers('FacultyReviewers'),
+#        value_type=schema.Choice(...)
+#        required = False,
+#        )
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the various departments to     #
     # comment and accept/notaccept an applicant                   #
@@ -418,7 +439,7 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-        
+
     form.omitted(IAddForm, 'program2_accepted')
     program2_accepted = Choice(
         title = _(u"Second Degree Program: Accepted?"),
@@ -438,7 +459,7 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-        
+
     form.omitted(IAddForm, 'program3_accepted')
     program3_accepted = Choice(
         title = _(u"Third Degree Program: Accepted?"),
@@ -473,12 +494,10 @@ class IPasurvey(form.Schema):
 
 # Now we need to compute the title.
 # An accompanying adapter is in configure.zcml
-from plone.app.content.interfaces import INameFromTitle
-from zope.interface import implements
-
 class INameFromPersonNames(INameFromTitle):
     def title():
         """Return a processed title"""
+
 
 class NameFromPersonNames(object):
     implements(INameFromPersonNames)
@@ -603,7 +622,7 @@ class EditForm(dexterity.EditForm):
 
     def update(self):
         super(EditForm, self).update()
-        
+
         groups = []
         for group in self.groups:
             # condition to show/hide Review fieldset
@@ -621,9 +640,9 @@ class EditForm(dexterity.EditForm):
             # temporary disable ownership fieldset
             elif group.__name__ <> 'ownership':
                 groups.append(group)
-                
+
         self.groups = tuple(groups)
-        
+
     def isProgramReviewable(self, name, review_state):
         """ Check whether the current user can review the selected programs
         """
@@ -642,16 +661,16 @@ class EditForm(dexterity.EditForm):
                 return True
         elif review_state == 'facultyreview':
             return True
-            
+
         return False
-        
+
     def isUserInGroup(self, userid, groupid):
         if groupid:
             members = self.gtool.getGroupMembers(groupid)
             if userid in members:
                 return True
         return False
-                
+
     def getReviewState(self):
         wftool = self.tools.workflow()
         # Returns workflow state object
@@ -662,7 +681,7 @@ class EditForm(dexterity.EditForm):
             return status["review_state"]
         else:
             return None
-    
+
     def checkPermission(self, permission):
         membership = self.tools.membership()
         return membership.checkPermission(permission, self.context)
@@ -692,7 +711,7 @@ class EditForm(dexterity.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
-        
+
         # set program acceptancedate automatically
         if data.get('program1_accepted', None):
             data['program1_acceptancedate'] = datetime.now()
@@ -701,7 +720,7 @@ class EditForm(dexterity.EditForm):
         if data.get('program3_accepted', None):
             data['program3_acceptancedate'] = datetime.now()
         self.applyChanges(data)
-        
+
         # send email to user when saved as draft
         self.notifyUser(data['email'])
 
@@ -777,8 +796,6 @@ Note: You will recieve one of these reminder messages
         if email:
             mail_host.send(message, email, sender, subject)
 
-
-
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -798,13 +815,13 @@ Note: You will recieve one of these reminder messages
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
+
     @property
     def tools(self):
         context = aq_inner(self.context)
         tools = getMultiAdapter((context, self.request), name=u'plone_tools')
         return tools
-    
+
     @property
     def gtool(self):
         return getToolByName(self.context, 'portal_groups')
@@ -813,3 +830,14 @@ Note: You will recieve one of these reminder messages
         member = self.portal_state.member()
         if member:
             return member.getId()
+
+
+class Printable(grok.View):
+    """ dexterity.DisplayForm A printable view for a survey
+    """
+
+    grok.context(IPasurvey)
+    grok.require('zope2.View')
+    grok.name('printable')
+
+
