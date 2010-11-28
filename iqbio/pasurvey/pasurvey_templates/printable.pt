@@ -2,39 +2,77 @@
 <metal:doctype define-slot="doctype"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"></metal:doctype>
 
 <html>
-<head></head>
+<head>
+
+<style type="text/css">
+body, p {
+    width: 7.5in;
+    font-family: helvetica, arial, sans-serif;
+    font-size: 90%;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: helvetica, arial, sans-serif;
+}
+h1{font-size: 150%;}
+h2{font-size: 140%;}
+h3{font-size: 120%; font-style:oblique;}
+
+th {
+    text-align: left;
+    font-size: 90%;
+    padding-right: 12px;
+}
+
+th em {
+    font-weight: 100;
+    font-size: 80%;
+}
+#person-info{
+}
+
+#page-title{
+}
+.dp-header {
+    border-bottom: 1px solid #333;
+    margin-top: 1.5em;
+}
+</style>
+
+</head>
 <body>
 
 <metal:main-macro define-macro="main">
 
-    <h1>IQ Biology Survey Information and Supplementary Questions for Departmental Applications</h1>
+    <h1 id="page-title">IQ Biology Survey Information and Supplementary Questions for Departmental Applications</h1>
 
-    <table>
-        <tr><td>Name:</td>
+    <table id="person-info">
+        <tbody>
+        <tr><th>Name:</th>
             <td><span tal:replace="context/lname" />,
                 <span tal:replace="context/fname" />
                 <span tal:replace="context/mname" />
             </td>
         </tr>
         <tr>
-            <td>Date of Birth:</td>
+            <th>Date of Birth:</th>
             <td><span tal:replace="context/dob" /></td>
         </tr>
         <tr>
-            <td>Email:</td>
+            <th>Email:</th>
             <td><span tal:replace="context/email" /></td>
         </tr>
 
-        <tr><td>Faculty of Interest:<br />
-                <em>(Optional, Check list)</em></td>
+        <tr><th>Faculty of Interest:<br />
+                <em>(Optional, Check list)</em></th>
             <td valign="top"><span tal:repeat="fac context/facultyofinterest">
                     <span tal:replace="fac" />,
                 </span>
             </td>
         </tr>
-        <tr><td><em>(other, write in)</em></td>
-            <td><span tal:replace="context/facultyofinterestother" /></td>
+        <tr><th><em>(other, write in)</em></th>
+            <td><em><span tal:replace="context/facultyofinterestother" /></em></td>
         </tr>
+        </tbody>
      </table>
 
     <p><b>How did you hear about IQ Biology?</b>
@@ -61,7 +99,8 @@
         <span tal:replace="context/degreeprograms" />
     </p>
 
-    <h2>Supplementary Information Required by their 1st, 2nd, and 3rd Degree Programs of Interest:</h2>
+    <h2>Supplementary Information<br/>
+    Required by their 1st, 2nd, and 3rd Degree Programs of Interest</h2>
 
 
     <!-- Begin degree program options -->

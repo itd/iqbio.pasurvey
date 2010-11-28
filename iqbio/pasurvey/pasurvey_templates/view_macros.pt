@@ -12,26 +12,96 @@
                     dps python:d1, d2, d3;
                     "
         tal:repeat="dp dps">
-        <h3>Degree program  <span tal:replace="repeat/dp/number" /></h3>
+        <h2 class="dp-header">Degree program  <span tal:replace="repeat/dp/number" /></h2>
+		<div tal:condition="python: dp == d3">
+		<p tal:condition="d3"><em>(A third degree program was not selected.)</em>
+		</p>
+		</div>
+			<tal:block tal:condition="python: dp == 'AppliedMath'">
+                <h3>Applied Mathematics</h3>
+                 <p><em>(no supplimentary questions)</em></p>
+           </tal:block>
 
+			<tal:block tal:condition="python: dp == 'Mechanical'">
+                <h3>Mechanical Engineering</h3>
+                 <p><em>(no supplimentary questions)</em></p>
+           </tal:block>
 
-            <div tal:condition="python: dp == 'ComputerScience'">
+			<tal:block tal:condition="python: dp == 'Molecular'">
+                <h3>Molecular, Cellular and Developmental Biology</h3>
+                 <p><em>(no supplimentary questions)</em></p>
+           </tal:block>
+
+            <tal:block tal:condition="python: dp == 'ComputerScience'">
                 <h3>Computer Science</h3>
-                <p><b>Computer Science interests:</b>
+                <p><b>Interests:</b>
                     <span tal:repeat="i context/csinterests">
                     <span tal:replace="i" />,</span>
                 </p>
                 <p><b>Willing to accept Financial Aid?</b>
                     <span tal:replace="context/csfinancialaid" />
                 </p>
-            </div>
+            </tal:block>
 
 
+            <tal:block tal:condition="python: dp == 'Biochemistry'">
+                <h3>Supplementary Information for the Biochemistry Degree Program</h3>
+                <p><b>Research Interests:</b>
+                    <span tal:repeat="i context/biochemteachingexperience">
+                    <span tal:replace="i" />,</span>
+                </p>
+                <p><b>Teaching Experience</b>:<br /><span tal:replace="context/biochemteachingexperience"/></p>
+                <p><b>Research Experience</b>:<br /><span tal:replace="context/biochemresearchexperience"/></p>
+            </tal:block>
 
+
+            <tal:block tal:condition="python: dp == 'ChemBioEngineering'">
+                <h3>Chemical and Biological Engineering</h3>
+                 <p><b>Fellowship Support</b>: <span tal:replace="context/bioengfellowshipsupport"/></p>
+                <p><b>Research Interests:</b>
+                    <span tal:repeat="i context/bioengresearchinterests">
+                    <span tal:replace="i" />,</span>
+                </p>
+                <p><b>Educational Goals</b>: <span tal:replace="context/bioengducationalgoals"/></p>
+           </tal:block>
+
+
+            <tal:block tal:condition="python: dp == 'Ecology'">
+                <h3>Ecology and Evolutionary Biology</h3>
+                 <p><b>Fellowship Support / Financial Aid</b>: <span tal:replace="context/ecofinancialaid"/></p>
+                <p><b>Undergrad GPA</b>: <span tal:replace="context/ecoundergradgpa"/></p>
+                <p><b>Undergrad GPA - Biology Courses</b>: <span tal:replace="context/ecoundergradgpabio"/></p>
+                <p><b>Graduate GPA</b>: <span tal:replace="context/ecogradgpa"/></p>
+                <p><b>Graduate GPA - Biology Courses</b>: <span tal:replace="context/ecogradgpabio"/></p>
+                <p><b>GRE</b>: <span tal:replace="context/ecogre"/></p>
+                <p><b>Courses Bio</b>:<br /><span tal:replace="context/ecocoursebio"/></p>
+                <p><b>Courses Chemistry</b>:<br /><span tal:replace="context/ecocoursechem"/></p>
+                <p><b>Courses Math</b>:<br /><span tal:replace="context/ecocoursemath"/></p>
+                <p><b>Courses Physics</b>:<br /><span tal:replace="context/ecocoursephysics"/></p>
+                <p><b>Courses Other</b>:<br /><span tal:replace="context/ecocourseother"/></p>
+                <p><b>Research Interests</b>:<br /><span tal:replace="context/ecoresearchinterests"/></p>
+                <p><b>Faculty of interest</b>:<br /><span tal:replace="context/ecofaculty"/></p>
+                <p><b>Publications</b>:<br/><span tal:replace="context/ecopublications"/></p>
+           </tal:block>
+
+
+            <tal:block tal:condition="python: dp == 'ChemicalPhysics'">
+                <h3>Chemical Physics</h3>
+                <p><b>Research Interests</b>:<br /> <span tal:replace="context/chemphresearchinterests"/></p>
+                <p><b>Research Interests: experimental or theoretical</b>:
+					<span tal:repeat="i context/chemphexperimental">
+                    <span tal:replace="i" />, </span>
+				</p>
+                <p><b>GPA Physics</b>: <span tal:replace="context/chemphgpaphysics"/></p>
+                <p><b>GPA Math</b>: <span tal:replace="context/chemphgpamath"/></p>
+                <p><b>GPA Combimed</b>: <span tal:replace="context/chemphgpacombined"/></p>
+                <p><b>GPA Overall</b>: <span tal:replace="context/chemphgpaoverall"/></p>
+                <p><b>GRE</b>:<br /><span tal:replace="context/chemphgre"/></p>
+           </tal:block>
 
 
         </div><!-- end repeat dps -->
-
+		<p> &nbsp; </p>
     </div>
 </body>
 </html>
