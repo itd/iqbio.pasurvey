@@ -3,6 +3,9 @@ from five import grok
 from Acquisition import aq_inner
 from zope.component import getMultiAdapter
 
+from plone.app.content.interfaces import INameFromTitle
+from zope.interface import implements
+
 from zope import schema
 from zope.schema import Text, TextLine, Choice, Bool, Datetime, Date, List, Float, Int
 from zope.schema.interfaces import RequiredMissing
@@ -20,7 +23,14 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IAddForm, IEditForm, IDisplayForm, HIDDEN_MODE
 from z3c.form.browser.checkbox import CheckBoxFieldWidget, CheckBoxWidget, SingleCheckBoxFieldWidget
 from z3c.form.browser.textlines import TextLinesFieldWidget
+
+from z3c.relationfield.schema import RelationList, RelationChoice, List
+from plone.formwidget.contenttree import ObjPathSourceBinder
+
 from z3c.form import button, form as z3cform
+
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
 
 from iqbio.pasurvey import _
 
@@ -376,6 +386,7 @@ class IPasurvey(form.Schema):
     form.fieldset('review',
                   label = 'Review',
                   fields = ['faculty_comments',
+                            'assignedreviewers',
                             'program1_accepted',
                             'program1_acceptancedate',
                             'program1_comments',
@@ -409,13 +420,22 @@ class IPasurvey(form.Schema):
                             'admittedtodeptnotes' ])
     
     form.omitted(IAddForm, 'faculty_comments')
-    dexterity.write_permission(faculty_comments='Review portal content')
+    dexterity.write_permission(faculty_comments='cmf.ReviewPortalContent')
     faculty_comments = Text(
         title = _(u"Faculty Review Comments"),
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-        
+
+#    form.omitted(IAddForm, 'assignedreviewers')
+#    assignedreviewers = schema.List(
+#        title = _(u"Assigned Reviewers"),
+#        default = [],
+#        #source = GroupMembers('FacultyReviewers'),
+#        value_type=schema.Choice(...)
+#        required = False,
+#        )
+
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the various departments to     #
     # comment and accept/notaccept an applicant                   #
@@ -440,7 +460,7 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-    dexterity.write_permission(program1_sent2gradcommittee='Manage Portal')
+    dexterity.write_permission(program1_sent2gradcommittee='cmf.ManagePortal')
     program1_sent2gradcommittee = Choice(
         title = _(u"${program}: Sent to Dept. Grad. Committee?"),
         description = _(u""),
@@ -467,7 +487,7 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-    dexterity.write_permission(program2_sent2gradcommittee='Manage Portal')
+    dexterity.write_permission(program2_sent2gradcommittee='cmf.ManagePortal')
     program2_sent2gradcommittee = Choice(
         title = _(u"${program}: Sent to Dept. Grad. Committee?"),
         description = _(u""),
@@ -494,7 +514,7 @@ class IPasurvey(form.Schema):
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
         )
-    dexterity.write_permission(program3_sent2gradcommittee='Manage Portal')
+    dexterity.write_permission(program3_sent2gradcommittee='cmf.ManagePortal')
     program3_sent2gradcommittee = Choice(
         title = _(u"${program}: Sent to Dept. Grad. Committee?"),
         description = _(u""),
@@ -506,21 +526,21 @@ class IPasurvey(form.Schema):
     # The following fields are for the overall management of the process  #
 
     
-    dexterity.write_permission(gradschoolfile='Manage Portal')
+    dexterity.write_permission(gradschoolfile='cmf.ManagePortal')
     gradschoolfile = NamedFile(
         title = _(u"PDF of Graduate Application"),
         description = _(u""),
         required = False,
         )
         
-    dexterity.write_permission(combinedviewfile='Manage Portal')
+    dexterity.write_permission(combinedviewfile='cmf.ManagePortal')
     combinedviewfile = NamedFile(
         title = _(u"PDF of Combined IQ Bio_Grad Application"),
         description = _(u""),
         required = False,
         )
     
-    dexterity.write_permission(survey_complete='Manage Portal')
+    dexterity.write_permission(survey_complete='cmf.ManagePortal')
     survey_complete = Choice(
         title = _(u"Survey Complete?"),
         description = _(u""),
@@ -528,7 +548,7 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
         
-    dexterity.write_permission(gradapplicationcomplete='Manage Portal')
+    dexterity.write_permission(gradapplicationcomplete='cmf.ManagePortal')
     gradapplicationcomplete = Choice(
         title = _(u"Grad Application Complete?"),
         description = _(u""),
@@ -536,7 +556,7 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
         
-    dexterity.write_permission(iqbioadmissionsround1='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround1='cmf.ManagePortal')
     iqbioadmissionsround1 = Choice(
         title = _(u"IQ Bio Admissions 1st Round"),
         description = _(u""),
@@ -544,21 +564,21 @@ class IPasurvey(form.Schema):
         vocabulary = accepted_notaccepted_vocab,
         )
         
-    dexterity.write_permission(iqbioadmissionsround1notes='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround1notes='cmf.ManagePortal')
     iqbioadmissionsround1notes = Text(
         title = _(u"IQ Bio Admissions 1st Round notes"),
         description = _(u""),
         required = False,
         )
         
-    dexterity.write_permission(iqbioadmissionsround1faculty='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround1faculty='cmf.ManagePortal')
     iqbioadmissionsround1faculty = TextLine(
         title=_(u"Faculty sent to"),
         description=_(u""),
         required = False,
         )
         
-    dexterity.write_permission(facultyreviewcomplete='Manage Portal')
+    dexterity.write_permission(facultyreviewcomplete='cmf.ManagePortal')
     facultyreviewcomplete = Choice(
         title = _(u"Faculty Review Complete?"),
         description = _(u""),
@@ -566,7 +586,7 @@ class IPasurvey(form.Schema):
         vocabulary = accepted_notaccepted_vocab,
         )
         
-    dexterity.write_permission(iqbioadmissionsround2='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround2='cmf.ManagePortal')
     iqbioadmissionsround2 = Choice(
         title = _(u"IQ Bio Admissions 2nd Round"),
         description = _(u""),
@@ -574,14 +594,14 @@ class IPasurvey(form.Schema):
         vocabulary = accepted_notaccepted_vocab,
         )
         
-    dexterity.write_permission(iqbioadmissionsround2notes='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround2notes='cmf.ManagePortal')
     iqbioadmissionsround2notes = Text(
         title = _(u"IQ Bio Admissions 2nd Round notes"),
         description = _(u""),
         required = False,
         )
     
-    dexterity.write_permission(iqbioadmissionsround3='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround3='cmf.ManagePortal')
     iqbioadmissionsround3 = Choice(
         title = _(u"IQ Bio Admissions 3rd Round"),
         description = _(u""),
@@ -589,14 +609,14 @@ class IPasurvey(form.Schema):
         vocabulary = accepted_notaccepted_vocab,
         )
         
-    dexterity.write_permission(iqbioadmissionsround3notes='Manage Portal')
+    dexterity.write_permission(iqbioadmissionsround3notes='cmf.ManagePortal')
     iqbioadmissionsround3notes = Text(
         title = _(u"IQ Bio Admissions 3rd Round notes"),
         description = _(u""),
         required = False,
         )
         
-    dexterity.write_permission(applicantinvited='Manage Portal')
+    dexterity.write_permission(applicantinvited='cmf.ManagePortal')
     applicantinvited = Choice(
         title = _(u"Applicant Invited to IQ Biology?"),
         description = _(u""),
@@ -604,14 +624,14 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
     
-    dexterity.write_permission(applicantinvitednotes='Manage Portal')
+    dexterity.write_permission(applicantinvitednotes='cmf.ManagePortal')
     applicantinvitednotes = Text(
         title = _(u"Applicant invited notes"),
         description = _(u""),
         required = False,
         )
         
-    dexterity.write_permission(applicantaccepted='Manage Portal')
+    dexterity.write_permission(applicantaccepted='cmf.ManagePortal')
     applicantaccepted = Choice(
         title = _(u"Applicant accepted offer?"),
         description = _(u""),
@@ -619,14 +639,14 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
         
-    dexterity.write_permission(applicantacceptednotes='Manage Portal')
+    dexterity.write_permission(applicantacceptednotes='cmf.ManagePortal')
     applicantacceptednotes = Text(
         title = _(u"Applicant accepted notes"),
         description = _(u""),
         required = False,
         )
         
-    dexterity.write_permission(admittedtodept='Manage Portal')
+    dexterity.write_permission(admittedtodept='cmf.ManagePortal')
     admittedtodept = Choice(
         title = _(u"Admitted to department?"),
         description = _(u""),
@@ -634,14 +654,14 @@ class IPasurvey(form.Schema):
         vocabulary = yes_no_vocab,
         )
         
-    dexterity.write_permission(admittedtowhichdept='Manage Portal')
+    dexterity.write_permission(admittedtowhichdept='cmf.ManagePortal')
     admittedtowhichdept = TextLine(
         title=_(u"Which department?"),
         description=_(u""),
         required = False,
         )
         
-    dexterity.write_permission(admittedtodeptnotes='Manage Portal')
+    dexterity.write_permission(admittedtodeptnotes='cmf.ManagePortal')
     admittedtodeptnotes = Text(
         title = _(u"Admitted to department notes"),
         description = _(u""),
@@ -659,12 +679,10 @@ class IPasurvey(form.Schema):
 
 # Now we need to compute the title.
 # An accompanying adapter is in configure.zcml
-from plone.app.content.interfaces import INameFromTitle
-from zope.interface import implements
-
 class INameFromPersonNames(INameFromTitle):
     def title():
         """Return a processed title"""
+
 
 class NameFromPersonNames(object):
     implements(INameFromPersonNames)
@@ -789,75 +807,61 @@ class EditForm(dexterity.EditForm):
 
     def update(self):
         super(EditForm, self).update()
-        
+
         groups = []
         for group in self.groups:
             # condition to show/hide Review fieldset
             if group.__name__ == 'review':
-                self.updateProgramFields(group.fields)
                 state = self.getReviewState()
                 # always show if user is Manager
-                if self.checkPermission('Manage Portal'):
-                    groups.append(group)
-                elif state == 'programreview' or \
+                if self.checkPermission('Manage portal') or state == 'programreview' or \
                     (state == 'facultyreview' and self.checkPermission('Review portal content')):
-                    for name, widget in group.widgets.items():
-                        if not self.isProgramReviewable(name, state):
-                            widget.mode = HIDDEN_MODE
                     groups.append(group)
+                    self.updateReviewWidgets(group.widgets)
             # temporary disable ownership fieldset
             elif group.__name__ <> 'ownership':
                 groups.append(group)
-                
+
         self.groups = tuple(groups)
-        
-    def updateProgramFields(self, fields):
+                
+    def updateReviewWidgets(self, widgets):
+        """ Hide widgets if user does not have privileges
+        and change widgets' labels according to selected degreeprograms
+        """
+        username = self.getUserName()
         program1 = self.fields['degreeprogram1'].field.get(self.context)
         program2 = self.fields['degreeprogram2'].field.get(self.context)
         program3 = self.fields['degreeprogram3'].field.get(self.context)
         
-        for name, field in fields.items():
+        for name, widget in widgets.items():
             if name.startswith('program1_'):
+                self.hideWidget(widget, username, program1)
                 text = program1 and program1 or 'First Degree Program'
-                title = field.field.title
-                field.field.title = title.replace('${program}', text)
-            if name.startswith('program2_'):
+                title = widget.label
+                widget.label = title.replace('${program}', text)
+            elif name.startswith('program2_'):
+                self.hideWidget(widget, username, program2)
                 text = program2 and program2 or 'Second Degree Program'
-                title = field.field.title
-                field.field.title = title.replace('${program}', text)
-            if name.startswith('program3_'):
+                title = widget.label
+                widget.label = title.replace('${program}', text)
+            elif name.startswith('program3_'):
+                self.hideWidget(widget, username, program3)
                 text = program3 and program3 or 'Third Degree Program'
-                title = field.field.title
-                field.field.title = title.replace('${program}', text)
-        
-    def isProgramReviewable(self, name, review_state):
-        """ Check whether the current user can review the selected programs
-        """
-        username = self.getUserName()
-        if name.startswith('program1_'):
-            value = self.fields['degreeprogram1'].field.get(self.context)
-            if self.isUserInGroup(username, value):
-                return True
-        elif name.startswith('program2_'):
-            value = self.fields['degreeprogram2'].field.get(self.context)
-            if self.isUserInGroup(username, value):
-                return True
-        elif name.startswith('program3_'):
-            value = self.fields['degreeprogram3'].field.get(self.context)
-            if self.isUserInGroup(username, value):
-                return True
-        elif review_state == 'facultyreview':
-            return True
-            
-        return False
-        
+                title = widget.label
+                widget.label = title.replace('${program}', text)
+    
+    def hideWidget(self, widget, username, program):
+        if not self.checkPermission('Manage portal'):
+            if program and not self.isUserInGroup(username, program):
+                widget.mode = HIDDEN_MODE
+                
     def isUserInGroup(self, userid, groupid):
         if groupid:
             members = self.gtool.getGroupMembers(groupid)
             if userid in members:
                 return True
         return False
-                
+
     def getReviewState(self):
         wftool = self.tools.workflow()
         # Returns workflow state object
@@ -868,7 +872,7 @@ class EditForm(dexterity.EditForm):
             return status["review_state"]
         else:
             return None
-    
+
     def checkPermission(self, permission):
         membership = self.tools.membership()
         return membership.checkPermission(permission, self.context)
@@ -898,7 +902,7 @@ class EditForm(dexterity.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
-        
+
         # set program acceptancedate automatically
         if data.get('program1_accepted', None):
             data['program1_acceptancedate'] = datetime.now()
@@ -907,7 +911,7 @@ class EditForm(dexterity.EditForm):
         if data.get('program3_accepted', None):
             data['program3_acceptancedate'] = datetime.now()
         self.applyChanges(data)
-        
+
         # send email to user when saved as draft
         self.notifyUser(data['email'])
 
@@ -983,8 +987,6 @@ Note: You will recieve one of these reminder messages
         if email:
             mail_host.send(message, email, sender, subject)
 
-
-
     @button.buttonAndHandler(_(u'Submit Survey'), name='submit')
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -1004,13 +1006,13 @@ Note: You will recieve one of these reminder messages
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request), name=u'plone_portal_state')
         return portal_state
-    
+
     @property
     def tools(self):
         context = aq_inner(self.context)
         tools = getMultiAdapter((context, self.request), name=u'plone_tools')
         return tools
-    
+
     @property
     def gtool(self):
         return getToolByName(self.context, 'portal_groups')
@@ -1019,3 +1021,14 @@ Note: You will recieve one of these reminder messages
         member = self.portal_state.member()
         if member:
             return member.getId()
+
+
+class Printable(grok.View):
+    """ dexterity.DisplayForm A printable view for a survey
+    """
+
+    grok.context(IPasurvey)
+    grok.require('zope2.View')
+    grok.name('printable')
+
+

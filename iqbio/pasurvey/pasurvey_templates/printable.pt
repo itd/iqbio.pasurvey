@@ -1,0 +1,118 @@
+<metal:page define-macro="master">
+<metal:doctype define-slot="doctype"><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"></metal:doctype>
+
+<html>
+<head>
+
+<style type="text/css">
+body, p {
+    width: 7.5in;
+    font-family: helvetica, arial, sans-serif;
+    font-size: 90%;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: helvetica, arial, sans-serif;
+}
+h1{font-size: 150%;}
+h2{font-size: 140%;}
+h3{font-size: 120%; font-style:oblique;}
+
+th {
+    text-align: left;
+    font-size: 90%;
+    padding-right: 12px;
+}
+
+th em {
+    font-weight: 100;
+    font-size: 80%;
+}
+#person-info{
+}
+
+#page-title{
+}
+.dp-header {
+    border-bottom: 1px solid #333;
+    margin-top: 1.5em;
+}
+</style>
+
+</head>
+<body>
+
+<metal:main-macro define-macro="main">
+
+    <h1 id="page-title">IQ Biology Survey Information and Supplementary Questions for Departmental Applications</h1>
+
+    <table id="person-info">
+        <tbody>
+        <tr><th>Name:</th>
+            <td><span tal:replace="context/lname" />,
+                <span tal:replace="context/fname" />
+                <span tal:replace="context/mname" />
+            </td>
+        </tr>
+        <tr>
+            <th>Date of Birth:</th>
+            <td><span tal:replace="context/dob" /></td>
+        </tr>
+        <tr>
+            <th>Email:</th>
+            <td><span tal:replace="context/email" /></td>
+        </tr>
+
+        <tr><th>Faculty of Interest:<br />
+                <em>(Optional, Check list)</em></th>
+            <td valign="top"><span tal:repeat="fac context/facultyofinterest">
+                    <span tal:replace="fac" />,
+                </span>
+            </td>
+        </tr>
+        <tr><th><em>(other, write in)</em></th>
+            <td><em><span tal:replace="context/facultyofinterestother" /></em></td>
+        </tr>
+        </tbody>
+     </table>
+
+    <p><b>How did you hear about IQ Biology?</b>
+        <span tal:replace="context/howdidyouhear" />
+    </p>
+
+    <p><b>First Degree Program of Interest:	</b> <span tal:replace="context/degreeprogram1" />
+    </p>
+    <p><b>Second Degree Program of Interest: </b> <span tal:replace="context/degreeprogram2" />
+    </p>
+    <p><b>Third Degree Program of Interest: </b>
+        <tal:dp3 tal:condition="context/degreeprogram3"
+            tal:replace="context/degreeprogram3">
+        </tal:dp3><span tal:condition="not: context/degreeprogram3">None selected</span>
+    </p>
+    <p><em>(The student has formally filled out the CU Graduate School Application for the first degree program of interest. The first, second and third rankings do not necessarily indicate the applicant’s preference.)</em></p>
+
+
+    <p><b>Consideration by Individual Degree Programs:</b>
+        <span tal:replace="context/alsoapply" />
+    </p>
+    <p><em>(If the applicant is not accepted by the IQ Biology program, would s/he like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?)</em></p>
+    <p tal:condition="context/degreeprograms"><b>Which ones?</b>
+        <span tal:replace="context/degreeprograms" />
+    </p>
+
+    <h2>Supplementary Information<br/>
+    Required by their 1st, 2nd, and 3rd Degree Programs of Interest</h2>
+
+
+    <!-- Begin degree program options -->
+
+    <div metal:use-macro="here/view_macros/macros/dp-fields">
+        CS fields go here
+    </div>
+
+
+</metal:main-macro>
+
+
+</body>
+</html>
+</metal:page>
