@@ -172,3 +172,9 @@ exp_or_theoretical_vocab = SimpleVocabulary((
     SimpleTerm(value='Experimental', title=u'Experimental'),
     SimpleTerm(value='Theoretical', title=u'Theoretical'),
     ))
+    
+accepted_notaccepted_vocab = SimpleVocabulary((
+    SimpleTerm(title=u'Accepted', value='accepted'),
+    SimpleTerm(title=u'Not Accepted', value='notaccepted'),
+    ))
+

@@ -10,7 +10,7 @@ from plone.directives import form
 from plone.directives import dexterity
 
 from plone.app.textfield import RichText
-from plone.namedfile.field import NamedImage
+from plone.namedfile.field import NamedFile
 from zope.event import notify
 
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -26,7 +26,7 @@ from iqbio.pasurvey import _
 
 #import iqbio.pasurvey.vocabularies
 from iqbio.pasurvey.vocabularies import biochem_research_interests_vocab, comp_sci_financial_aid_vocab
-from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab
+from iqbio.pasurvey.vocabularies import facultyofinterest_vocab, degreeprograms_vocab, yes_no_vocab, accepted_notaccepted_vocab
 from iqbio.pasurvey.vocabularies import bio_chem_vocab, comp_sci_vocab, chem_bio_vocab, exp_or_theoretical_vocab
 from iqbio.pasurvey.vocabularies import degreeprograms_lite_vocab
 from iqbio.pasurvey.validators import validate_email, validate_decimal
@@ -379,12 +379,34 @@ class IPasurvey(form.Schema):
                             'program1_accepted',
                             'program1_acceptancedate',
                             'program1_comments',
+                            'program1_sent2gradcommittee',
                             'program2_accepted',
                             'program2_acceptancedate',
                             'program2_comments',
+                            'program2_sent2gradcommittee',
                             'program3_accepted',
                             'program3_acceptancedate',
-                            'program3_comments', ])
+                            'program3_comments',
+                            'program3_sent2gradcommittee',
+                            'gradschoolfile',
+                            'combinedviewfile',
+                            'survey_complete',
+                            'gradapplicationcomplete',
+                            'iqbioadmissionsround1',
+                            'iqbioadmissionsround1notes',
+                            'iqbioadmissionsround1faculty',
+                            'facultyreviewcomplete',
+                            'iqbioadmissionsround2',
+                            'iqbioadmissionsround2notes',
+                            'iqbioadmissionsround3',
+                            'iqbioadmissionsround3notes',
+                            'applicantinvited',
+                            'applicantinvitednotes',
+                            'applicantaccepted',
+                            'applicantacceptednotes',
+                            'admittedtodept',
+                            'admittedtowhichdept',
+                            'admittedtodeptnotes' ])
     
     form.omitted(IAddForm, 'faculty_comments')
     dexterity.write_permission(faculty_comments='Review portal content')
@@ -401,67 +423,231 @@ class IPasurvey(form.Schema):
     #-- prefix the following with each dept's identifier ------------
     form.omitted(IAddForm, 'program1_accepted')
     program1_accepted = Choice(
-        title = _(u"First Degree Program: Accepted?"),
+        title = _(u"${program}: Accepted?"),
         description = _(u"Would you accept this person into your program?"),
         required=False,
         vocabulary = yes_no_vocab,
         )
     form.mode(program1_acceptancedate='hidden')
     program1_acceptancedate = Datetime(
-        title = _(u"First Degree Program: Acceptance Date"),
+        title = _(u"${program}: Acceptance Date"),
         description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
         required = False,
         )
     form.omitted(IAddForm, 'program1_comments')
     program1_comments = Text(
-        title = _(u"First Degree Program: Comments"),
+        title = _(u"${program}: Comments"),
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
+        )
+    dexterity.write_permission(program1_sent2gradcommittee='Manage Portal')
+    program1_sent2gradcommittee = Choice(
+        title = _(u"${program}: Sent to Dept. Grad. Committee?"),
+        description = _(u""),
+        required=False,
+        vocabulary = yes_no_vocab,
         )
         
     form.omitted(IAddForm, 'program2_accepted')
     program2_accepted = Choice(
-        title = _(u"Second Degree Program: Accepted?"),
+        title = _(u"${program}: Accepted?"),
         description = _(u"Would you accept this person into your program?"),
         required=False,
         vocabulary = yes_no_vocab,
         )
     form.mode(program2_acceptancedate='hidden')
     program2_acceptancedate = Datetime(
-        title = _(u"Second Degree Program: Acceptance Date"),
+        title = _(u"${program}: Acceptance Date"),
         description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
         required = False,
         )
     form.omitted(IAddForm, 'program2_comments')
     program2_comments = Text(
-        title = _(u"Second Degree Program: Comments"),
+        title = _(u"${program}: Comments"),
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
+        )
+    dexterity.write_permission(program2_sent2gradcommittee='Manage Portal')
+    program2_sent2gradcommittee = Choice(
+        title = _(u"${program}: Sent to Dept. Grad. Committee?"),
+        description = _(u""),
+        required=False,
+        vocabulary = yes_no_vocab,
         )
         
     form.omitted(IAddForm, 'program3_accepted')
     program3_accepted = Choice(
-        title = _(u"Third Degree Program: Accepted?"),
+        title = _(u"${program}: Accepted?"),
         description = _(u"Would you accept this person into your program?"),
         required=False,
         vocabulary = yes_no_vocab,
         )
     form.mode(program3_acceptancedate='hidden')
     program3_acceptancedate = Datetime(
-        title = _(u"Third Degree Program: Acceptance Date"),
+        title = _(u"${program}: Acceptance Date"),
         description = _(u"If this person might be accepted into your program, please enter the date and time of this conditional determination."),
         required = False,
         )
     form.omitted(IAddForm, 'program3_comments')
     program3_comments = Text(
-        title = _(u"Third Degree Program: Comments"),
+        title = _(u"${program}: Comments"),
         description = _(u"Please optionally enter any comments supporting your Acceptance or Not Acceptance decision."),
         required = False,
+        )
+    dexterity.write_permission(program3_sent2gradcommittee='Manage Portal')
+    program3_sent2gradcommittee = Choice(
+        title = _(u"${program}: Sent to Dept. Grad. Committee?"),
+        description = _(u""),
+        required=False,
+        vocabulary = yes_no_vocab,
         )
 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # The following fields are for the overall management of the process  #
 
+    
+    dexterity.write_permission(gradschoolfile='Manage Portal')
+    gradschoolfile = NamedFile(
+        title = _(u"PDF of Graduate Application"),
+        description = _(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(combinedviewfile='Manage Portal')
+    combinedviewfile = NamedFile(
+        title = _(u"PDF of Combined IQ Bio_Grad Application"),
+        description = _(u""),
+        required = False,
+        )
+    
+    dexterity.write_permission(survey_complete='Manage Portal')
+    survey_complete = Choice(
+        title = _(u"Survey Complete?"),
+        description = _(u""),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+        
+    dexterity.write_permission(gradapplicationcomplete='Manage Portal')
+    gradapplicationcomplete = Choice(
+        title = _(u"Grad Application Complete?"),
+        description = _(u""),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround1='Manage Portal')
+    iqbioadmissionsround1 = Choice(
+        title = _(u"IQ Bio Admissions 1st Round"),
+        description = _(u""),
+        required = False,
+        vocabulary = accepted_notaccepted_vocab,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround1notes='Manage Portal')
+    iqbioadmissionsround1notes = Text(
+        title = _(u"IQ Bio Admissions 1st Round notes"),
+        description = _(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround1faculty='Manage Portal')
+    iqbioadmissionsround1faculty = TextLine(
+        title=_(u"Faculty sent to"),
+        description=_(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(facultyreviewcomplete='Manage Portal')
+    facultyreviewcomplete = Choice(
+        title = _(u"Faculty Review Complete?"),
+        description = _(u""),
+        required = False,
+        vocabulary = accepted_notaccepted_vocab,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround2='Manage Portal')
+    iqbioadmissionsround2 = Choice(
+        title = _(u"IQ Bio Admissions 2nd Round"),
+        description = _(u""),
+        required = False,
+        vocabulary = accepted_notaccepted_vocab,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround2notes='Manage Portal')
+    iqbioadmissionsround2notes = Text(
+        title = _(u"IQ Bio Admissions 2nd Round notes"),
+        description = _(u""),
+        required = False,
+        )
+    
+    dexterity.write_permission(iqbioadmissionsround3='Manage Portal')
+    iqbioadmissionsround3 = Choice(
+        title = _(u"IQ Bio Admissions 3rd Round"),
+        description = _(u""),
+        required = False,
+        vocabulary = accepted_notaccepted_vocab,
+        )
+        
+    dexterity.write_permission(iqbioadmissionsround3notes='Manage Portal')
+    iqbioadmissionsround3notes = Text(
+        title = _(u"IQ Bio Admissions 3rd Round notes"),
+        description = _(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(applicantinvited='Manage Portal')
+    applicantinvited = Choice(
+        title = _(u"Applicant Invited to IQ Biology?"),
+        description = _(u""),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+    
+    dexterity.write_permission(applicantinvitednotes='Manage Portal')
+    applicantinvitednotes = Text(
+        title = _(u"Applicant invited notes"),
+        description = _(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(applicantaccepted='Manage Portal')
+    applicantaccepted = Choice(
+        title = _(u"Applicant accepted offer?"),
+        description = _(u""),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+        
+    dexterity.write_permission(applicantacceptednotes='Manage Portal')
+    applicantacceptednotes = Text(
+        title = _(u"Applicant accepted notes"),
+        description = _(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(admittedtodept='Manage Portal')
+    admittedtodept = Choice(
+        title = _(u"Admitted to department?"),
+        description = _(u""),
+        required = False,
+        vocabulary = yes_no_vocab,
+        )
+        
+    dexterity.write_permission(admittedtowhichdept='Manage Portal')
+    admittedtowhichdept = TextLine(
+        title=_(u"Which department?"),
+        description=_(u""),
+        required = False,
+        )
+        
+    dexterity.write_permission(admittedtodeptnotes='Manage Portal')
+    admittedtodeptnotes = Text(
+        title = _(u"Admitted to department notes"),
+        description = _(u""),
+        required = False,
+        )
+        
     form.mode(completed='hidden')
     completed = Int(
         title = _(u"Is completed?"),
@@ -608,6 +794,7 @@ class EditForm(dexterity.EditForm):
         for group in self.groups:
             # condition to show/hide Review fieldset
             if group.__name__ == 'review':
+                self.updateProgramFields(group.fields)
                 state = self.getReviewState()
                 # always show if user is Manager
                 if self.checkPermission('Manage Portal'):
@@ -623,6 +810,25 @@ class EditForm(dexterity.EditForm):
                 groups.append(group)
                 
         self.groups = tuple(groups)
+        
+    def updateProgramFields(self, fields):
+        program1 = self.fields['degreeprogram1'].field.get(self.context)
+        program2 = self.fields['degreeprogram2'].field.get(self.context)
+        program3 = self.fields['degreeprogram3'].field.get(self.context)
+        
+        for name, field in fields.items():
+            if name.startswith('program1_'):
+                text = program1 and program1 or 'First Degree Program'
+                title = field.field.title
+                field.field.title = title.replace('${program}', text)
+            if name.startswith('program2_'):
+                text = program2 and program2 or 'Second Degree Program'
+                title = field.field.title
+                field.field.title = title.replace('${program}', text)
+            if name.startswith('program3_'):
+                text = program3 and program3 or 'Third Degree Program'
+                title = field.field.title
+                field.field.title = title.replace('${program}', text)
         
     def isProgramReviewable(self, name, review_state):
         """ Check whether the current user can review the selected programs

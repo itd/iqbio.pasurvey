@@ -28,44 +28,95 @@
         <table  class="listing" id="submissions-list">
         <thead>
         <tr>
-        <th>ID</th>
-        <th>workflow status</th>
-        <th>degreeprogram1</th>
-        <th>accepted?</th>
-        <th>degreeprogram2</th>
-        <th>accepted?</th>
-        <th>degreeprogram3</th>
-        <th>accepted?</th>
+        <th>&nbsp;</th>
+        <th>Applicant ID</th>
+        <th>Status of Application</th>
+        <th>Survey Complete?</th>
+        <th>Grad Application Complete?</th>
+        <th>PDF of Graduate Application</th>
+        <th>PDF of Combined IQ Bio_Grad Application</th>
+        <th>IQ Bio Admissions 1st Round</th>
+        <th>Faculty sent to</th>
+        <th>Faculty Reviews Complete</th>
+        <th>IQ Bio Admissions 2nd Round</th>
+        <th>Degree Program #1</th>
+        <th>Sent to Dept. Grad. Committee?</th>
+        <th>Accepted by Degree Program?</th>
+        <th>Degree Program #2</th>
+        <th>Sent to Dept. Grad. Committee?</th>
+        <th>Accepted by Degree Program?</th>
+        <th>Degree Program #3</th>
+        <th>Sent to Dept. Grad. Committee?</th>
+        <th>Accepted by Degree Program?</th>
+        <th>IQ Bio Admissions 3rd Round</th>
+        <th>Applicant Invited to IQ Biology?</th>
+        <th>Applicant accepted offer</th>
+        <th>Admitted to department</th>
+        <th>Which department?</th>
         </tr>
         </thead>
         <tbody>
         <tr tal:repeat="survey surveys">
-            <td> <a tal:attributes="href survey/getURL"><span tal:replace="survey/id" /></a> </td>
-            <td> <span tal:replace="survey/review_state" /> </td>
+          <tal:def define="surveybrain python: survey[0];
+                           surveyobj python: survey[1]">
+            <td> <span tal:replace="repeat/survey/number" /> </td>
+            <td tal:define="mname python: surveyobj.mname and ' ' + surveyobj.mname or ''">
+              <a tal:attributes="href surveybrain/getURL"><span tal:replace="string:${surveyobj/lname} ${surveyobj/fname}$mname" /></a>
+            </td>
+            <td> <span tal:replace="python: view.getStateTitle(surveybrain.review_state)" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'survey_complete')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'gradapplicationcomplete')" /> </td>
+            <td tal:define="file surveyobj/gradschoolfile">
+              <a tal:condition="file"
+                 tal:attributes="href string:${surveybrain/getURL}/@@download/gradschoolfile">
+                <span tal:replace="file/filename" />
+              </a>
+              <span tal:condition="not:file" tal:replace="string:(blank)" />
+            </td>
+            <td tal:define="file surveyobj/combinedviewfile">
+              <a tal:condition="file"
+                 tal:attributes="href string:${surveybrain/getURL}/@@download/combinedviewfile">
+                <span tal:replace="file/filename" />
+              </a>
+              <span tal:condition="not:file" tal:replace="string:(blank)" />
+            </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'iqbioadmissionsround1')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'iqbioadmissionsround1faculty')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'facultyreviewcomplete')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'iqbioadmissionsround2')" /> </td>
             <td>
-                <span tal:replace="survey/degreeprogram1" />
-                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram1)"
+                <span tal:replace="python:view.getProgramTitle(surveybrain.degreeprogram1)" />
+                <tal:gemail define="email python: view.getGroupEmail(surveybrain.degreeprogram1)"
                             condition="email">
                     <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
                 </tal:gemail>
             </td>
-            <td> <span tal:replace="survey/program1_accepted" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program1_sent2gradcommittee')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program1_accepted')" /> </td>
             <td>
-                <span tal:replace="survey/degreeprogram2" />
-                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram2)"
+                <span tal:replace="python:view.getProgramTitle(surveybrain.degreeprogram2)" />
+                <tal:gemail define="email python: view.getGroupEmail(surveybrain.degreeprogram2)"
                             condition="email">
                     <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
                 </tal:gemail>
             </td>
-            <td> <span tal:replace="survey/program2_accepted" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program2_sent2gradcommittee')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program2_accepted')" /> </td>
             <td>
-                <span tal:replace="survey/degreeprogram3" />
-                <tal:gemail define="email python: view.getGroupEmail(survey.degreeprogram3)"
+                <span tal:replace="python:view.getProgramTitle(surveybrain.degreeprogram3)" />
+                <tal:gemail define="email python: view.getGroupEmail(surveybrain.degreeprogram3)"
                             condition="email">
                     <a tal:attributes="href string:mailto:$email">&lt;<span tal:replace="email" />&gt;</a>
                 </tal:gemail>
             </td>
-            <td> <span tal:replace="survey/program3_accepted" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program3_sent2gradcommittee')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'program3_accepted')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'iqbioadmissionsround3')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'applicantinvited')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'applicantaccepted')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'admittedtodept')" /> </td>
+            <td> <span tal:replace="python: view.getAttribute(surveyobj, 'admittedtowhichdept')" /> </td>
+          </tal:def>
         </tr>
         </tbody>
         </table>

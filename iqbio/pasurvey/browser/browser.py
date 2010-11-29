@@ -4,12 +4,15 @@ from five import grok
 from Acquisition import aq_inner
 
 from zope.component import getMultiAdapter
+from zope.app.content import queryContentType
+from zope.schema import getFields
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
 from plone.folder.interfaces import IFolder
 
 from iqbio.pasurvey.pasurvey import IPasurvey
+from iqbio.pasurvey.vocabularies import degreeprograms_vocab
 
 class SurveyIndex(grok.View):
     """ Index page for survey folder
@@ -65,6 +68,16 @@ class SubmissionStatus(grok.View):
     grok.name('submission-status')
 
     @property
+    def wfstates(self):
+        context = aq_inner(self.context)
+        tools = getMultiAdapter((context, self.request), name=u'plone_tools')
+        workflow = tools.workflow()
+        pasurvey_wf = workflow.getWorkflowById('iqbio.pasurvey.workflow')
+        if pasurvey_wf:
+            return pasurvey_wf.states
+        return {}
+    
+    @property
     def gtool(self):
         return getToolByName(self.context, 'portal_groups')
     
@@ -75,9 +88,30 @@ class SubmissionStatus(grok.View):
         contentFilter = dict(object_provides=IPasurvey.__identifier__)
         surveys = context.getFolderContents(contentFilter)
         if surveys:
-            return surveys
+            return [(survey, survey.getObject()) for survey in surveys]
 
         return []
+    
+    def getAttribute(self, object, name):
+        obj = aq_inner(object)
+        value = getattr(obj, name, None)
+        if value:
+            return value
+        return '(blank)'
+    
+    def getStateTitle(self, state):
+        try:
+            return self.wfstates[state].title
+        except KeyError:
+            return '(blank)'
+        
+    def getProgramTitle(self, token):
+        term = None
+        if token:
+            term = degreeprograms_vocab.getTermByToken(token)
+        if term:
+            return term.title
+        return '(blank)'
     
     def getGroupEmail(self, groupid):
         group = self.gtool.getGroupById(groupid)
