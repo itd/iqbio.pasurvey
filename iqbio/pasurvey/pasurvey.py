@@ -852,7 +852,7 @@ class EditForm(dexterity.EditForm):
     
     def hideWidget(self, widget, username, program):
         if not self.checkPermission('Manage portal'):
-            if program and not self.isUserInGroup(username, program):
+            if not self.isUserInGroup(username, program):
                 widget.mode = HIDDEN_MODE
                 
     def isUserInGroup(self, userid, groupid):
