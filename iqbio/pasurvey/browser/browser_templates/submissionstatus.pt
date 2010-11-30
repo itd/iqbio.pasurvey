@@ -61,7 +61,12 @@
                            surveyobj python: survey[1]">
             <td> <span tal:replace="repeat/survey/number" /> </td>
             <td tal:define="mname python: surveyobj.mname and ' ' + surveyobj.mname or ''">
-              <a tal:attributes="href surveybrain/getURL"><span tal:replace="string:${surveyobj/lname} ${surveyobj/fname}$mname" /></a>
+              <a tal:attributes="href string:${surveybrain/getURL}/edit"><span
+              tal:replace="string:${surveyobj/lname} ${surveyobj/fname}$mname" /></a>
+                <br />
+              <a tal:attributes="href string:${surveybrain/getURL}/printable"><span
+              class="discreet"><em>(printable)</em></span></a>
+
             </td>
             <td> <span tal:replace="python: view.getStateTitle(surveybrain.review_state)" /> </td>
             <td> <span tal:replace="python: view.getAttribute(surveyobj, 'survey_complete')" /> </td>
