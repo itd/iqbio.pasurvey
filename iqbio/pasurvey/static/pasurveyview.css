@@ -88,3 +88,7 @@ fieldset legend {
   border-left: 2px solid black;
 }
 
+#form-widgets-iqbioadmissionsround1faculty,
+#form-widgets-admittedtowhichdept {
+  width: 40em;
+}
