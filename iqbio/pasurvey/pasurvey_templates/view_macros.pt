@@ -34,11 +34,15 @@
 
             <tal:block tal:condition="python: dp == 'ComputerScience'">
                 <h3>Computer Science</h3>
-                <p><b>Interests:</b>
+                <h4>Interests:</h4>
+				<p class="desc">Which areas represented at the University of Colorado are you interested in? Please pick up to three areas.</p>
+				<p>
                     <span tal:repeat="i context/csinterests">
                     <span tal:replace="i" />,</span>
                 </p>
-                <p><b>Willing to accept Financial Aid?</b>
+                <h4>Financial Aid</h4>
+				<p class="desc">Indicate your need for financial aid (e.g., Research or Teaching Assistantships) after your second year. Students accepted to the IQ Biology program will have the first two years of funding guaranteed through the IQ Biology program. </p>
+				<p>
                     <span tal:replace="context/csfinancialaid" />
                 </p>
             </tal:block>
@@ -46,57 +50,110 @@
 
             <tal:block tal:condition="python: dp == 'Biochemistry'">
                 <h3>Supplementary Information for the Biochemistry Degree Program</h3>
-                <p><b>Research Interests:</b>
-                    <span tal:repeat="i context/biochemteachingexperience">
-                    <span tal:replace="i" />,</span>
+                <h4>Biochemistry Research Interests:</h4>
+				<p class="desc">Please check off as many of the research areas as interest you.</p>
+				<p>
+                    <span tal:replace="context/biochemteachingexperience" />
                 </p>
-                <p><b>Teaching Experience</b>:<br /><span tal:replace="context/biochemteachingexperience"/></p>
-                <p><b>Research Experience</b>:<br /><span tal:replace="context/biochemresearchexperience"/></p>
+                <h4>Teaching Experience</h4>
+				<p class="desc">Please list all previous teaching experience including the subject, start date, end date, and institution.</p>
+				<p><span tal:replace="context/biochemteachingexperience"/></p>
+                <h4>Research Experience</h4>
+				<p class="desc">Please list all previous research experience including the project name/short description, start date, end date, and institution/company.</p>
+				<p><span tal:replace="context/biochemresearchexperience"/></p>
             </tal:block>
 
 
             <tal:block tal:condition="python: dp == 'ChemBioEngineering'">
                 <h3>Chemical and Biological Engineering</h3>
-                 <p><b>Fellowship Support</b>: <span tal:replace="context/bioengfellowshipsupport"/></p>
-                <p><b>Research Interests:</b>
-                    <span tal:repeat="i context/bioengresearchinterests">
+                 <h4>Fellowship Support</h4>
+				<p class="desc">Have you applied for or do you have any other
+					fellowship support?</p>
+				<p><span tal:replace="context/bioengfellowshipsupport"/></p>
+                <h4>Research Interests</h4>
+				<p class="desc">Check multiple boxes (up to three):</p>
+				<p><span tal:repeat="i context/bioengresearchinterests">
                     <span tal:replace="i" />,</span>
                 </p>
-                <p><b>Educational Goals</b>: <span tal:replace="context/bioengducationalgoals"/></p>
+                <h4>Educational Goals</h4>
+				<p class="desc">write in - 2,000 characters max</p>
+				<p><span tal:replace="context/bioengducationalgoals"/></p>
            </tal:block>
 
 
             <tal:block tal:condition="python: dp == 'Ecology'">
                 <h3>Ecology and Evolutionary Biology</h3>
-                 <p><b>Fellowship Support / Financial Aid</b>: <span tal:replace="context/ecofinancialaid"/></p>
-                <p><b>Undergrad GPA</b>: <span tal:replace="context/ecoundergradgpa"/></p>
-                <p><b>Undergrad GPA - Biology Courses</b>: <span tal:replace="context/ecoundergradgpabio"/></p>
-                <p><b>Graduate GPA</b>: <span tal:replace="context/ecogradgpa"/></p>
-                <p><b>Graduate GPA - Biology Courses</b>: <span tal:replace="context/ecogradgpabio"/></p>
-                <p><b>GRE</b>: <span tal:replace="context/ecogre"/></p>
-                <p><b>Courses Bio</b>:<br /><span tal:replace="context/ecocoursebio"/></p>
-                <p><b>Courses Chemistry</b>:<br /><span tal:replace="context/ecocoursechem"/></p>
-                <p><b>Courses Math</b>:<br /><span tal:replace="context/ecocoursemath"/></p>
-                <p><b>Courses Physics</b>:<br /><span tal:replace="context/ecocoursephysics"/></p>
-                <p><b>Courses Other</b>:<br /><span tal:replace="context/ecocourseother"/></p>
-                <p><b>Research Interests</b>:<br /><span tal:replace="context/ecoresearchinterests"/></p>
-                <p><b>Faculty of interest</b>:<br /><span tal:replace="context/ecofaculty"/></p>
-                <p><b>Publications</b>:<br/><span tal:replace="context/ecopublications"/></p>
+                 <h4>Financial Aid</h4>
+				<p class="desc">"Will you be requesting financial support in the form of a fellowship teaching assistantship or research assistantship beyond what is provided for IQ Biology students? (Students accepted to the IQ Biology program will have two years of funding through the IQ Biology program guaranteed).</p>
+				<p><span tal:replace="context/ecofinancialaid"/></p>
+                <h4>Undergraduate GPA (overall)</h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)</p>
+				<p><span tal:replace="context/ecoundergradgpa"/></p>
+                <h4>Undergraduate GPA: biological science courses only</h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0. (up to 1 decimal place.)</p>
+				<p><span tal:replace="context/ecoundergradgpabio"/></p>
+                <h4>Overall Graduate GPA <span class="optional">(optional)</span></h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank.</p>
+				<p><span tal:replace="context/ecogradgpa"/></p>
+                <h4>Overall Graduate GPA <span class="optional">(optional)</span></h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.  If you have not yet taken any graduate level courses, leave this question blank.</p>
+				<p><span tal:replace="context/ecogradgpabio"/></p>
+                <h4>GRE Score: Biology Subject Exam <span class="optional">(optional)</span></h4>
+				<p class="desc">If you have taken a Biology Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test.</p>
+				<p><span tal:replace="context/ecogre"/></p>
+                <h4>Biology Courses</h4>
+				<p class="desc">Please list the names of biology courses you have taken (and your grade in each course).</p>
+				<p><span tal:replace="context/ecocoursebio"/></p>
+                <h4>Chemistry Courses</h4>
+				<p class="desc">Please list the names of chemistry courses you have taken (and your grade in each course). </p>
+				<p><span tal:replace="context/ecocoursechem"/></p>
+                <h4>Math and Statistics Courses</h4>
+				<p class="desc">Please list the names of math and statistics courses you have taken (and your grade in each course).</p>
+				<p><span tal:replace="context/ecocoursemath"/></p>
+                <h4>Physics Courses</h4>
+				<p class="desc">Please list the names of physics courses you have taken (and your grade in each course).</p>
+				<p><span tal:replace="context/ecocoursephysics"/></p>
+                <h4>Other Sciences and Relevant Courses</h4>
+				<p class="desc"></p>
+				<p><span tal:replace="context/ecocourseother"/></p>
+                <h4>Research Interests</h4>
+				<p class="desc">Please list the names of other science and relevant courses you have taken (and your grade in each course).</p>
+				<p><span tal:replace="context/ecoresearchinterests"/></p>
+                <h4>Faculty</h4>
+				<p class="desc">Have you made contact with any Ecology or Evolutionary Biology Faculty? Whose research interests you? Please list names of a few faculty.</p>
+				<p><span tal:replace="context/ecofaculty"/></p>
+                <h4>Publications</h4>
+				<p class="desc">Please list the complete citations of any scientific publications that you have authored.</p>
+				<p><span tal:replace="context/ecopublications"/></p>
            </tal:block>
 
 
             <tal:block tal:condition="python: dp == 'ChemicalPhysics'">
                 <h3>Chemical Physics</h3>
-                <p><b>Research Interests</b>:<br /> <span tal:replace="context/chemphresearchinterests"/></p>
-                <p><b>Research Interests: experimental or theoretical</b>:
+                <h4>Research Interests</h4>
+				<p class="desc">Please write in a few phrases that describe your area(s) of interest or specialization.</p>
+				<p><span tal:replace="context/chemphresearchinterests"/></p>
+                <h4>Research Interests: experimental or theoretical</h4>
+				<p class="desc"></p>
+				<p>
 					<span tal:repeat="i context/chemphexperimental">
                     <span tal:replace="i" />, </span>
 				</p>
-                <p><b>GPA Physics</b>: <span tal:replace="context/chemphgpaphysics"/></p>
-                <p><b>GPA Math</b>: <span tal:replace="context/chemphgpamath"/></p>
-                <p><b>GPA Combimed</b>: <span tal:replace="context/chemphgpacombined"/></p>
-                <p><b>GPA Overall</b>: <span tal:replace="context/chemphgpaoverall"/></p>
-                <p><b>GRE</b>:<br /><span tal:replace="context/chemphgre"/></p>
+                <h4>Undergraduate GPA: physics courses only</h4>
+				<p class="desc">Check one or both boxes depending on your interests.</p>
+				<p><span tal:replace="context/chemphgpaphysics"/></p>
+                <h4>Undergraduate GPA: math courses only</h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.</p>
+				<p><span tal:replace="context/chemphgpamath"/></p>
+                <h4>Undergraduate GPA: combined math and physics courses</h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.</p>
+				<p><span tal:replace="context/chemphgpacombined"/></p>
+                <h4>Undergraduate GPA: overall (all courses)</h4>
+				<p class="desc">Calculate your GPA based on the following scale: A=4.0, B=3.0, C=2.0, D=1.0, F=0.0.</p>
+				<p><span tal:replace="context/chemphgpaoverall"/></p>
+                <h4>GRE Score: Physics Subject Exam <span class="optional">(optional)</span></h4>
+				<p class="desc">If you have taken a Physics Subject Exam please write in the name of the exam, your raw score, your percentile, and the month and year (MM/YY) you took the test.</p>
+				<p><span tal:replace="context/chemphgre"/></p>
            </tal:block>
 
 
@@ -105,8 +162,3 @@
     </div>
 </body>
 </html>
-
-
-<span tal:repeat="fac context/facultyofinterest">
-                    <span tal:replace="fac" />,
-                </span>

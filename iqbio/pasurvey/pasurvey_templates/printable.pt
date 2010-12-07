@@ -5,10 +5,14 @@
 <head>
 
 <style type="text/css">
-body, p {
+body {
     width: 7.5in;
     font-family: helvetica, arial, sans-serif;
     font-size: 90%;
+}
+p {
+margin-top: 3px;
+padding: 0px 0px 0px 10px;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: helvetica, arial, sans-serif;
@@ -16,6 +20,16 @@ h1, h2, h3, h4, h5, h6 {
 h1{font-size: 150%;}
 h2{font-size: 140%;}
 h3{font-size: 120%; font-style:oblique;}
+h4{
+    font-size: 110%;
+    margin-bottom: 0px;
+}
+
+.desc {
+  font-style: oblique;
+  margin: 0px 0px 0px 0px;
+  font-size: 90%;
+}
 
 th {
     text-align: left;
@@ -37,9 +51,9 @@ th em {
     margin-top: 1.5em;
 }
 </style>
-
+<title></title>
 </head>
-<body>
+<body class="printable">
 
 <metal:main-macro define-macro="main">
 
