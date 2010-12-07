@@ -11,7 +11,7 @@ body {
     font-size: 90%;
 }
 p {
-margin-top: 3px;
+margin: 5px 0px;
 padding: 0px 0px 0px 10px;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -41,10 +41,11 @@ th em {
     font-weight: 100;
     font-size: 80%;
 }
-#person-info{
+
+#person-info {
 }
 
-#page-title{
+#page-title {
 }
 .dp-header {
     border-bottom: 1px solid #333;
@@ -102,15 +103,16 @@ th em {
             tal:replace="context/degreeprogram3">
         </tal:dp3><span tal:condition="not: context/degreeprogram3">None selected</span>
     </p>
-    <p><em>(The student has formally filled out the CU Graduate School Application for the first degree program of interest. The first, second and third rankings do not necessarily indicate the applicant’s preference.)</em></p>
+    <p class="desc">(The student has formally filled out the CU Graduate School Application for the first degree program of interest. The first, second and third rankings do not necessarily indicate the applicant’s preference.)</p>
 
 
     <p><b>Consideration by Individual Degree Programs:</b>
         <span tal:replace="context/alsoapply" />
     </p>
-    <p><em>(If the applicant is not accepted by the IQ Biology program, would s/he like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?)</em></p>
+    <p class="desc">(If the applicant is not accepted by the IQ Biology program, would s/he like to be considered independently by one or more of your Degree Programs of Interest for admission directly to their program?)</p>
     <p tal:condition="context/degreeprograms"><b>Which ones?</b>
-        <span tal:replace="context/degreeprograms" />
+        <span tal:repeat="i context/degreeprograms">
+            <span tal:replace="i" />,</span>
     </p>
 
     <h2>Supplementary Information<br/>
